@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/devel
+
+Name: manipulator_h_manager
+Description: Description of manipulator_h_manager
+Version: 0.3.1
+Cflags: 
+Libs: -L/home/andy/wrs_ws/devel/lib 
+Requires: roscpp robotis_controller manipulator_h_base_module
