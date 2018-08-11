@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/install
+
+Name: robotis_device
+Description: Description of robotis_device
+Version: 0.2.9
+Cflags: -I/home/andy/wrs_ws/install/include
+Libs: -L/home/andy/wrs_ws/install/lib -lrobotis_device
+Requires: roscpp dynamixel_sdk

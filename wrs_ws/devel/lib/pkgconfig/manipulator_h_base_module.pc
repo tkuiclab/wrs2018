@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/devel
+
+Name: manipulator_h_base_module
+Description: Description of manipulator_h_base_module
+Version: 0.3.1
+Cflags: -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_base_module/include -I/usr/include -I/usr/include/eigen3
+Libs: -L/home/andy/wrs_ws/devel/lib -lmanipulator_h_base_module /usr/lib/x86_64-linux-gnu/libboost_thread.so /usr/lib/x86_64-linux-gnu/libboost_chrono.so /usr/lib/x86_64-linux-gnu/libboost_system.so /usr/lib/x86_64-linux-gnu/libboost_date_time.so /usr/lib/x86_64-linux-gnu/libboost_atomic.so /usr/lib/x86_64-linux-gnu/libpthread.so
+Requires: roscpp roslib std_msgs geometry_msgs robotis_controller_msgs manipulator_h_base_module_msgs cmake_modules robotis_math robotis_framework_common manipulator_h_kinematics_dynamics
