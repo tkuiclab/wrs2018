@@ -1,8 +1,0 @@
-prefix=/home/andy/wrs_ws/install
-
-Name: robotis_controller_msgs
-Description: Description of robotis_controller_msgs
-Version: 0.1.4
-Cflags: -I/home/andy/wrs_ws/install/include
-Libs: -L/home/andy/wrs_ws/install/lib 
-Requires: std_msgs sensor_msgs message_runtime

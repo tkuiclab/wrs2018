@@ -1,8 +1,0 @@
-prefix=/home/andy/wrs_ws/devel
-
-Name: dual_arm_control
-Description: Description of dual_arm_control
-Version: 0.0.0
-Cflags: -I/home/andy/wrs_ws/devel/include
-Libs: -L/home/andy/wrs_ws/devel/lib 
-Requires: 
