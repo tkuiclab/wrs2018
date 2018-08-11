@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/devel
+
+Name: urdf_0129
+Description: Description of urdf_0129
+Version: 1.0.0
+Cflags: 
+Libs: -L/home/andy/wrs_ws/devel/lib 
+Requires: 

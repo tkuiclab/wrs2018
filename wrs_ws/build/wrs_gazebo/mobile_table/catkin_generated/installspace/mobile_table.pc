@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/install
+
+Name: mobile_table
+Description: Description of mobile_table
+Version: 1.0.0
+Cflags: 
+Libs: -L/home/andy/wrs_ws/install/lib 
+Requires: 

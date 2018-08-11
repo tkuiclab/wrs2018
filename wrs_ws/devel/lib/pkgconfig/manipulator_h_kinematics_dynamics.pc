@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/devel
+
+Name: manipulator_h_kinematics_dynamics
+Description: Description of manipulator_h_kinematics_dynamics
+Version: 0.3.1
+Cflags: -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include -I/usr/include/eigen3
+Libs: -L/home/andy/wrs_ws/devel/lib -lmanipulator_h_kinematics_dynamics
+Requires: roscpp robotis_math cmake_modules

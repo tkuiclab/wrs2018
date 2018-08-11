@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/install
+
+Name: testcpp
+Description: Description of testcpp
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/andy/wrs_ws/install/lib 
+Requires: 

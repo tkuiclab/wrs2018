@@ -1,0 +1,8 @@
+prefix=/home/andy/wrs_ws/install
+
+Name: manipulator_h_base_module_msgs
+Description: Description of manipulator_h_base_module_msgs
+Version: 0.3.1
+Cflags: -I/home/andy/wrs_ws/install/include
+Libs: -L/home/andy/wrs_ws/install/lib 
+Requires: std_msgs geometry_msgs message_runtime
