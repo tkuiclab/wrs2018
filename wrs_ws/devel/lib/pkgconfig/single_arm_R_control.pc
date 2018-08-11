@@ -1,8 +1,0 @@
-prefix=/home/andy/wrs_ws/devel
-
-Name: single_arm_R_control
-Description: Description of single_arm_R_control
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/andy/wrs_ws/devel/lib 
-Requires: 

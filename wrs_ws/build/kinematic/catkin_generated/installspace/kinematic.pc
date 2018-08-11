@@ -1,8 +1,0 @@
-prefix=/home/andy/wrs_ws/install
-
-Name: kinematic
-Description: Description of kinematic
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/andy/wrs_ws/install/lib 
-Requires: 

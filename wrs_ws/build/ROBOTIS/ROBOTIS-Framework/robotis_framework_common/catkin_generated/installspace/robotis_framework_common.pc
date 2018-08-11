@@ -1,8 +1,0 @@
-prefix=/home/andy/wrs_ws/install
-
-Name: robotis_framework_common
-Description: Description of robotis_framework_common
-Version: 0.2.9
-Cflags: -I/home/andy/wrs_ws/install/include
-Libs: -L/home/andy/wrs_ws/install/lib -lrobotis_framework_common
-Requires: roscpp robotis_device

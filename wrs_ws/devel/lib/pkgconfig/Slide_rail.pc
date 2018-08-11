@@ -1,8 +1,0 @@
-prefix=/home/andy/wrs_ws/devel
-
-Name: Slide_rail
-Description: Description of Slide_rail
-Version: 1.0.0
-Cflags: 
-Libs: -L/home/andy/wrs_ws/devel/lib 
-Requires: 
