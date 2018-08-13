@@ -1,8 +1,0 @@
-prefix=/home/wrs/wrs2018/wrs_ws/devel
-
-Name: mobile_dual_arm
-Description: Description of mobile_dual_arm
-Version: 0.1.0
-Cflags: 
-Libs: -L/home/wrs/wrs2018/wrs_ws/devel/lib 
-Requires: 

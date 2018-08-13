@@ -1,8 +1,0 @@
-prefix=/home/wrs/wrs2018/wrs_ws/devel
-
-Name: manipulator_h_bringup
-Description: Description of manipulator_h_bringup
-Version: 0.3.1
-Cflags: 
-Libs: -L/home/wrs/wrs2018/wrs_ws/devel/lib 
-Requires: 

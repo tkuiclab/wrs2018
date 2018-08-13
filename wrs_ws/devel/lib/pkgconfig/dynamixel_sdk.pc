@@ -1,8 +1,0 @@
-prefix=/home/wrs/wrs2018/wrs_ws/devel
-
-Name: dynamixel_sdk
-Description: Description of dynamixel_sdk
-Version: 3.6.0
-Cflags: -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include
-Libs: -L/home/wrs/wrs2018/wrs_ws/devel/lib -ldynamixel_sdk
-Requires: 

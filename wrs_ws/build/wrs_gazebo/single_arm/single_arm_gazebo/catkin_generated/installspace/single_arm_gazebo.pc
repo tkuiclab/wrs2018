@@ -1,8 +1,0 @@
-prefix=/home/wrs/wrs2018/wrs_ws/install
-
-Name: single_arm_gazebo
-Description: Description of single_arm_gazebo
-Version: 0.1.0
-Cflags: 
-Libs: -L/home/wrs/wrs2018/wrs_ws/install/lib 
-Requires: 

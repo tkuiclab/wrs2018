@@ -1,8 +1,0 @@
-prefix=/home/wrs/wrs2018/wrs_ws/devel
-
-Name: testcpp
-Description: Description of testcpp
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/wrs/wrs2018/wrs_ws/devel/lib 
-Requires: 

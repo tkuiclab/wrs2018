@@ -1,8 +1,0 @@
-prefix=/home/wrs/wrs2018/wrs_ws/install
-
-Name: linear_motion
-Description: Description of linear_motion
-Version: 0.0.0
-Cflags: -I/home/wrs/wrs2018/wrs_ws/install/include
-Libs: -L/home/wrs/wrs2018/wrs_ws/install/lib 
-Requires: message_runtime roscpp rospy std_msgs
