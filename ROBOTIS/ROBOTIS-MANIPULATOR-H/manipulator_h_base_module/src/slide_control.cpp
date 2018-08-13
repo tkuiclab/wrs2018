@@ -1,10 +1,15 @@
 #include "manipulator_h_base_module/slide_control.h"
+#include <string>
 
 using namespace robotis_manipulator_h;
 
 slide_control::slide_control()
 {
-    slide_pos_pub = n.advertise<std_msgs::Float64>("/mobile_dual_arm/r_slide_position/command", 5);
+    ros::NodeHandle nh_private("~");
+    std::string side_str  = nh_private.param<std::string>("side", "");
+    std::string side_label = "right" == side_str ? "r": "l";
+
+    slide_pos_pub = n.advertise<std_msgs::Float64>("/mobile_dual_arm/" + side_label + "_slide_position/command", 5);
 
     slide_pos = 0;
     goal_slide_pos = 0;

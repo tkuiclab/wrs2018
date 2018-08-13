@@ -155,13 +155,14 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
 
 void ManipulatorKinematicsDynamics::load_LinkParam()
 {
-    std::string path = ros::package::getPath("manipulator_h_kinematics_dynamics") + "/config/link_param.yaml";
+    ros::NodeHandle nh_private("~");
+    std::string file_path  = nh_private.param<std::string>("link_file_path", "");
     
     YAML::Node doc;
     try
     {
         // load yaml
-        doc = YAML::LoadFile(path.c_str());
+        doc = YAML::LoadFile(file_path.c_str());
     }
     catch (const std::exception &e)
     {

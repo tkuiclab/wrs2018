@@ -32,15 +32,15 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "Robotis_Manipulator_H_Manager");
   ros::NodeHandle nh;
+  ros::NodeHandle nh_private("~");
 
   ROS_INFO("manager->init");
   robotis_framework::RobotisController *controller = robotis_framework::RobotisController::getInstance();
 
   /* Load ROS Parameter */
   std::string offset_file = nh.param<std::string>("offset_table", "");
-  std::string robot_file  = nh.param<std::string>("robot_file_path", "");
-
   std::string init_file   = nh.param<std::string>("init_file_path", "");
+  std::string robot_file  = nh_private.param<std::string>("robot_file_path", "");
 
   /* gazebo simulation */
   controller->gazebo_mode_ = nh.param<bool>("gazebo", false);

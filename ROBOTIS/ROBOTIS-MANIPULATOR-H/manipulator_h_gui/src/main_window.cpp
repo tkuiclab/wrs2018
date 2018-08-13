@@ -206,6 +206,7 @@ void MainWindow::updateCurrJointPoseSpinbox( manipulator_h_base_module_msgs::Joi
       }
     }
   }
+  ui.slide_spinbox->setValue( msg.slide_pos );
 }
 
 void MainWindow::updateCurrKinematicsPoseSpinbox( manipulator_h_base_module_msgs::KinematicsPose msg )

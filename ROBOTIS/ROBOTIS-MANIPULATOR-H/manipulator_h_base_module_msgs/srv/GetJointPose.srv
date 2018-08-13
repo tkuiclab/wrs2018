@@ -2,3 +2,4 @@ string[]    joint_name
 ---
 string[]    joint_name
 float64[]   joint_value
+float64     slide_pos

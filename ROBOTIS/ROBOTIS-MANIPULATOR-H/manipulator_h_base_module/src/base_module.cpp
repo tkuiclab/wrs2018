@@ -199,6 +199,7 @@ bool BaseModule::getJointPoseCallback(manipulator_h_base_module_msgs::GetJointPo
       }
     }
   }
+  res.slide_pos = slide_->slide_pos;
 
   return true;
 }

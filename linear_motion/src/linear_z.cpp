@@ -184,15 +184,17 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "linear_z");
     
     ros::NodeHandle nh_param("~");
-    std::string port_right;
+    std::string side_str;
     int  baud_rate;
+    
 
-    nh_param.param<std::string>("port_right", port_right,"/dev/wrs/slide_right");
+    nh_param.param<std::string>("side", side_str, "");
     nh_param.param<int>("baud", baud_rate, 9600);
   
     //========================= Initialize Modbus_RTU ============================= 
     bool Connect_X_OK = false;
-    ctx     = Init_Modus_RTU(Connect_X_OK   , 1, port_right, 9600);
+    int  ID = side_str == "right" ? 1 : 3;
+    ctx     = Init_Modus_RTU(Connect_X_OK   , ID, "/dev/wrs/slide_" + side_str, 9600);
 
     if(Connect_X_OK == false)
     {
@@ -205,8 +207,9 @@ int main(int argc, char **argv)
     }
 
     // ============================= Subscribe message =============================
+    std::string side_label = "right" == side_str ? "r": "l";
     ros::NodeHandle n;
-    ros::Subscriber sub = n.subscribe("/mobile_dual_arm/r_slide_position/command", 10, slide_callback);
+    ros::Subscriber sub = n.subscribe("/mobile_dual_arm/" + side_label + "_slide_position/command", 10, slide_callback);
     ros::Publisher  pub = n.advertise<linear_motion::LM_Cmd>("/LM_FeedBack", 1);
     ros::Rate loop_rate(50);
 

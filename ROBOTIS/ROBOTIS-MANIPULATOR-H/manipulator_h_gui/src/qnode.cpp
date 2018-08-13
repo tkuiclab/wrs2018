@@ -193,7 +193,8 @@ void QNode::getJointPose( std::vector<std::string> joint_name )
       _joint_pose.name.push_back( _get_joint_pose.response.joint_name[ _id ] );
       _joint_pose.value.push_back( _get_joint_pose.response.joint_value[ _id ]);
     }
-
+    _joint_pose.slide_pos = _get_joint_pose.response.slide_pos;
+    
     Q_EMIT updateCurrentJointPose( _joint_pose );
   }
   else
