@@ -1,1 +1,1 @@
-/usr/bin/c++  -fPIC   -shared -Wl,-soname,libkinematic.so -o /home/andy/wrs_ws/devel/lib/libkinematic.so CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o 
+/usr/bin/c++  -fPIC   -shared -Wl,-soname,libkinematic.so -o /home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o 

@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/wrs_gazebo/testcpp
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/testcpp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,17 +33,17 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/wrs_gazebo/testcpp/catkin_generated/installspace/testcpp.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/testcpp/catkin_generated/installspace/testcpp.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/testcpp/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/wrs_gazebo/testcpp/catkin_generated/installspace/testcppConfig.cmake"
-    "/home/andy/wrs_ws/build/wrs_gazebo/testcpp/catkin_generated/installspace/testcppConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/testcpp/catkin_generated/installspace/testcppConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/testcpp/catkin_generated/installspace/testcppConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/testcpp" TYPE FILE FILES "/home/andy/wrs_ws/src/wrs_gazebo/testcpp/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/testcpp" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/testcpp/package.xml")
 endif()
 

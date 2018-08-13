@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,18 +33,18 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/catkin_generated/installspace/robotis_math.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/catkin_generated/installspace/robotis_math.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_math/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/catkin_generated/installspace/robotis_mathConfig.cmake"
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/catkin_generated/installspace/robotis_mathConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/catkin_generated/installspace/robotis_mathConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/catkin_generated/installspace/robotis_mathConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_math" TYPE FILE FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_math" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,7 +54,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_math.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/andy/wrs_ws/devel/lib/librobotis_math.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_math.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_math.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_math.so")
     file(RPATH_CHANGE
@@ -68,6 +68,6 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/robotis_math" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/robotis_math" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/")
 endif()
 

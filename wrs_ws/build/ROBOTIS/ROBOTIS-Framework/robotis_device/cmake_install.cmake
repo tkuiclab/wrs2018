@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,18 +33,18 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_device/catkin_generated/installspace/robotis_device.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_device/catkin_generated/installspace/robotis_device.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_device/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_device/catkin_generated/installspace/robotis_deviceConfig.cmake"
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_device/catkin_generated/installspace/robotis_deviceConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_device/catkin_generated/installspace/robotis_deviceConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_device/catkin_generated/installspace/robotis_deviceConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_device" TYPE FILE FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_device" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,12 +54,12 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_device.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/andy/wrs_ws/devel/lib/librobotis_device.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_device.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_device.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_device.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_device.so"
-         OLD_RPATH "/opt/ros/kinetic/lib:/home/andy/wrs_ws/devel/lib:"
+         OLD_RPATH "/opt/ros/kinetic/lib:/home/wrs/wrs2018/wrs_ws/devel/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_device.so")
@@ -68,10 +68,10 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/robotis_device" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/robotis_device" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_device" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/devices")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_device" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/devices")
 endif()
 

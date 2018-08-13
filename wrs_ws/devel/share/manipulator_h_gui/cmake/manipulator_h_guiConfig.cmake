@@ -67,14 +67,14 @@ set(manipulator_h_gui_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(manipulator_h_gui_SOURCE_PREFIX /home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui)
-  set(manipulator_h_gui_DEVEL_PREFIX /home/andy/wrs_ws/devel)
+  set(manipulator_h_gui_SOURCE_PREFIX /home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui)
+  set(manipulator_h_gui_DEVEL_PREFIX /home/wrs/wrs2018/wrs_ws/devel)
   set(manipulator_h_gui_INSTALL_PREFIX "")
   set(manipulator_h_gui_PREFIX ${manipulator_h_gui_DEVEL_PREFIX})
 else()
   set(manipulator_h_gui_SOURCE_PREFIX "")
   set(manipulator_h_gui_DEVEL_PREFIX "")
-  set(manipulator_h_gui_INSTALL_PREFIX /home/andy/wrs_ws/install)
+  set(manipulator_h_gui_INSTALL_PREFIX /home/wrs/wrs2018/wrs_ws/install)
   set(manipulator_h_gui_PREFIX ${manipulator_h_gui_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(manipulator_h_gui_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include;/usr/include/eigen3 " STREQUAL " ")
+if(NOT "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include;/usr/include/eigen3 " STREQUAL " ")
   set(manipulator_h_gui_INCLUDE_DIRS "")
-  set(_include_dirs "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include;/usr/include/eigen3")
+  set(_include_dirs "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include;/usr/include/eigen3")
   if(NOT "https://github.com/ROBOTIS-GIT/ROBOTIS-MANIPULATOR-H/issues " STREQUAL " ")
     set(_report "Check the issue tracker 'https://github.com/ROBOTIS-GIT/ROBOTIS-MANIPULATOR-H/issues' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT "http://wiki.ros.org/manipulator_h_gui " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/in
         message(FATAL_ERROR "Project 'manipulator_h_gui' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'manipulator_h_gui' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'manipulator_h_gui' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/${idir}'.  ${_report}")
     endif()
     _list_append_unique(manipulator_h_gui_INCLUDE_DIRS ${include})
   endforeach()
@@ -129,7 +129,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/andy/wrs_ws/devel/lib;/home/andy/wrs_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/wrs/wrs2018/wrs_ws/devel/lib;/home/wrs/wrs2018/wrs_ws/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

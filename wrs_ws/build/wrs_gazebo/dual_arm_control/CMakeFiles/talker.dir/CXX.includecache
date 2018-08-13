@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/src/robot_pub.cpp
+/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/src/robot_pub.cpp
 ros/ros.h
-/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/src/ros/ros.h
+/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/src/ros/ros.h
 std_msgs/String.h
-/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/src/std_msgs/String.h
+/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/src/std_msgs/String.h
 dual_arm_control/robot_msg.h
-/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/src/dual_arm_control/robot_msg.h
+/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/src/dual_arm_control/robot_msg.h
 sstream
 -
 

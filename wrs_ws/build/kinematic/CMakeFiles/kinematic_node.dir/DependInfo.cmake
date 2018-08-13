@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/andy/wrs_ws/src/kinematic/src/IKKI.cpp" "/home/andy/wrs_ws/build/kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o"
+  "/home/wrs/wrs2018/wrs_ws/src/kinematic/src/IKKI.cpp" "/home/wrs/wrs2018/wrs_ws/build/kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,15 +17,15 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/andy/wrs_ws/src/kinematic/include"
-  "/home/andy/wrs_ws/src/kinematic/include/kinematic"
+  "/home/wrs/wrs2018/wrs_ws/src/kinematic/include"
+  "/home/wrs/wrs2018/wrs_ws/src/kinematic/include/kinematic"
   "/opt/ros/kinetic/include"
   "/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/andy/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/DependInfo.cmake"
+  "/home/wrs/wrs2018/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

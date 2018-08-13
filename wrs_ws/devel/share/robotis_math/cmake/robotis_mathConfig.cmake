@@ -67,14 +67,14 @@ set(robotis_math_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(robotis_math_SOURCE_PREFIX /home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math)
-  set(robotis_math_DEVEL_PREFIX /home/andy/wrs_ws/devel)
+  set(robotis_math_SOURCE_PREFIX /home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math)
+  set(robotis_math_DEVEL_PREFIX /home/wrs/wrs2018/wrs_ws/devel)
   set(robotis_math_INSTALL_PREFIX "")
   set(robotis_math_PREFIX ${robotis_math_DEVEL_PREFIX})
 else()
   set(robotis_math_SOURCE_PREFIX "")
   set(robotis_math_DEVEL_PREFIX "")
-  set(robotis_math_INSTALL_PREFIX /home/andy/wrs_ws/install)
+  set(robotis_math_INSTALL_PREFIX /home/wrs/wrs2018/wrs_ws/install)
   set(robotis_math_PREFIX ${robotis_math_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(robotis_math_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include;/usr/include/eigen3 " STREQUAL " ")
+if(NOT "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include;/usr/include/eigen3 " STREQUAL " ")
   set(robotis_math_INCLUDE_DIRS "")
-  set(_include_dirs "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include;/usr/include/eigen3")
+  set(_include_dirs "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include;/usr/include/eigen3")
   if(NOT "https://github.com/ROBOTIS-GIT/ROBOTIS-Math/issues " STREQUAL " ")
     set(_report "Check the issue tracker 'https://github.com/ROBOTIS-GIT/ROBOTIS-Math/issues' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT "http://wiki.ros.org/robotis_math " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include;/usr/inc
         message(FATAL_ERROR "Project 'robotis_math' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'robotis_math' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'robotis_math' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/${idir}'.  ${_report}")
     endif()
     _list_append_unique(robotis_math_INCLUDE_DIRS ${include})
   endforeach()
@@ -129,7 +129,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/andy/wrs_ws/devel/lib;/home/andy/wrs_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/wrs/wrs2018/wrs_ws/devel/lib;/home/wrs/wrs2018/wrs_ws/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

@@ -6,15 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
 stdint.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 stdint.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
 map
 -
 string
@@ -22,9 +22,9 @@ string
 vector
 -
 control_table_item.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
 map
 -
 vector
@@ -32,29 +32,29 @@ vector
 string
 -
 control_table_item.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 device.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
 dynamixel_state.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
 stdint.h
 -
 time_stamp.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/robot.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/robot.h
 vector
 -
 sensor.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
 dynamixel.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
 dynamixel_sdk/port_handler.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_sdk/port_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_sdk/port_handler.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
 map
 -
 string
@@ -62,23 +62,23 @@ string
 stdint.h
 -
 device.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
 sensor_state.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
 control_table_item.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
 time_stamp.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/dynamixel.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/dynamixel.cpp
 robotis_device/dynamixel.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robotis_device/dynamixel.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robotis_device/dynamixel.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robot.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robot.cpp
 fstream
 -
 iostream
@@ -86,9 +86,9 @@ iostream
 algorithm
 -
 robotis_device/robot.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robotis_device/robot.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robotis_device/robot.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/sensor.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/sensor.cpp
 robotis_device/sensor.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robotis_device/sensor.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/src/robotis_device/robotis_device/sensor.h
 

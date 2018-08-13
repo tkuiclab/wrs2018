@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/devel/include/linear_motion/LM_Cmd.h
+/home/wrs/wrs2018/wrs_ws/devel/include/linear_motion/LM_Cmd.h
 string
 -
 vector
@@ -22,7 +22,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/src/linear_motion/src/linear_z.cpp
+/home/wrs/wrs2018/wrs_ws/src/linear_motion/src/linear_z.cpp
 stdio.h
 -
 stdlib.h
@@ -36,15 +36,15 @@ unistd.h
 std_msgs/Float64.h
 -
 ros/ros.h
-/home/andy/wrs_ws/src/linear_motion/src/ros/ros.h
+/home/wrs/wrs2018/wrs_ws/src/linear_motion/src/ros/ros.h
 std_msgs/Int32.h
-/home/andy/wrs_ws/src/linear_motion/src/std_msgs/Int32.h
+/home/wrs/wrs2018/wrs_ws/src/linear_motion/src/std_msgs/Int32.h
 std_msgs/String.h
-/home/andy/wrs_ws/src/linear_motion/src/std_msgs/String.h
+/home/wrs/wrs2018/wrs_ws/src/linear_motion/src/std_msgs/String.h
 linear_motion/LM_Cmd.h
-/home/andy/wrs_ws/src/linear_motion/src/linear_motion/LM_Cmd.h
+/home/wrs/wrs2018/wrs_ws/src/linear_motion/src/linear_motion/LM_Cmd.h
 modbus/modbus.h
-/home/andy/wrs_ws/src/linear_motion/src/modbus/modbus.h
+/home/wrs/wrs2018/wrs_ws/src/linear_motion/src/modbus/modbus.h
 
 /opt/ros/kinetic/include/ros/advertise_options.h
 ros/forwards.h

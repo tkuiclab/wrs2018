@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,18 +33,18 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/catkin_generated/installspace/manipulator_h_manager.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/catkin_generated/installspace/manipulator_h_manager.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/manipulator_h_manager/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/catkin_generated/installspace/manipulator_h_managerConfig.cmake"
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/catkin_generated/installspace/manipulator_h_managerConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/catkin_generated/installspace/manipulator_h_managerConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/catkin_generated/installspace/manipulator_h_managerConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/manipulator_h_manager" TYPE FILE FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/manipulator_h_manager" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,12 +54,12 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/manipulator_h_manager/manipulator_h_manager"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/manipulator_h_manager" TYPE EXECUTABLE FILES "/home/andy/wrs_ws/devel/lib/manipulator_h_manager/manipulator_h_manager")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/manipulator_h_manager" TYPE EXECUTABLE FILES "/home/wrs/wrs2018/wrs_ws/devel/lib/manipulator_h_manager/manipulator_h_manager")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/manipulator_h_manager/manipulator_h_manager" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/manipulator_h_manager/manipulator_h_manager")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/manipulator_h_manager/manipulator_h_manager"
-         OLD_RPATH "/home/andy/wrs_ws/devel/lib:/opt/ros/kinetic/lib:"
+         OLD_RPATH "/home/wrs/wrs2018/wrs_ws/devel/lib:/opt/ros/kinetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/manipulator_h_manager/manipulator_h_manager")
@@ -69,8 +69,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/manipulator_h_manager" TYPE DIRECTORY FILES
-    "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/config"
-    "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/launch"
+    "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/config"
+    "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_manager/launch"
     )
 endif()
 

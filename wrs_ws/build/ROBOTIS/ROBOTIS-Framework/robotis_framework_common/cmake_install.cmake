@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,18 +33,18 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/catkin_generated/installspace/robotis_framework_common.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/catkin_generated/installspace/robotis_framework_common.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_framework_common/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/catkin_generated/installspace/robotis_framework_commonConfig.cmake"
-    "/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/catkin_generated/installspace/robotis_framework_commonConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/catkin_generated/installspace/robotis_framework_commonConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/catkin_generated/installspace/robotis_framework_commonConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_framework_common" TYPE FILE FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robotis_framework_common" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,7 +54,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_framework_common.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/andy/wrs_ws/devel/lib/librobotis_framework_common.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_framework_common.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_framework_common.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/librobotis_framework_common.so")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -64,6 +64,6 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/robotis_framework_common" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/robotis_framework_common" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/")
 endif()
 

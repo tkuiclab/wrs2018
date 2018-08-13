@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o"
   "CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o"
-  "/home/andy/wrs_ws/devel/lib/libkinematic.pdb"
-  "/home/andy/wrs_ws/devel/lib/libkinematic.so"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.pdb"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so"
 )
 
 # Per-language clean rules from dependency scanning.

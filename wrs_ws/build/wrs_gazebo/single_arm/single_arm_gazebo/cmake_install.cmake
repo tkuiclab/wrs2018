@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,25 +33,25 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/wrs_gazebo/single_arm/single_arm_gazebo/catkin_generated/installspace/single_arm_gazebo.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/single_arm/single_arm_gazebo/catkin_generated/installspace/single_arm_gazebo.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/single_arm_gazebo/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/wrs_gazebo/single_arm/single_arm_gazebo/catkin_generated/installspace/single_arm_gazeboConfig.cmake"
-    "/home/andy/wrs_ws/build/wrs_gazebo/single_arm/single_arm_gazebo/catkin_generated/installspace/single_arm_gazeboConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/single_arm/single_arm_gazebo/catkin_generated/installspace/single_arm_gazeboConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/single_arm/single_arm_gazebo/catkin_generated/installspace/single_arm_gazeboConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/single_arm_gazebo" TYPE FILE FILES "/home/andy/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/single_arm_gazebo" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/single_arm_gazebo" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo/launch")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/single_arm_gazebo" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo/launch")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/single_arm_gazebo" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo/worlds")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/single_arm_gazebo" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/single_arm/single_arm_gazebo/worlds")
 endif()
 

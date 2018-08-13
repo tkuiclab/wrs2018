@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/andy/wrs_ws/devel/lib/librobotis_framework_common.pdb"
-  "/home/andy/wrs_ws/devel/lib/librobotis_framework_common.so"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_framework_common.pdb"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_framework_common.so"
 )
 
 # Per-language clean rules from dependency scanning.

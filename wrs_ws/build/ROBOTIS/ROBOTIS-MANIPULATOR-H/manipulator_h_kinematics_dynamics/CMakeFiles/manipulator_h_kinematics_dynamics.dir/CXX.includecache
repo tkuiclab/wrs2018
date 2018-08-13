@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/link_data.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/link_data.h
 robotis_math/robotis_math.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/robotis_math/robotis_math.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/robotis_math/robotis_math.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics.h
 vector
 -
 cmath
@@ -20,47 +20,47 @@ map
 string
 -
 link_data.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/link_data.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/link_data.h
 manipulator_h_kinematics_dynamics_define.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics_define.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics_define.h
 ros/package.h
 -
 yaml-cpp/yaml.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics_define.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics_define.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/link_data.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/link_data.cpp
 manipulator_h_kinematics_dynamics/link_data.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/manipulator_h_kinematics_dynamics/link_data.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/manipulator_h_kinematics_dynamics/link_data.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/manipulator_h_kinematics_dynamics.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/manipulator_h_kinematics_dynamics.cpp
 assert.h
 -
 iostream
 -
 manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/src/manipulator_h_kinematics_dynamics/manipulator_h_kinematics_dynamics.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/bezier_curve.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/bezier_curve.h
 vector
 -
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 ros/ros.h
 -
 stdint.h
@@ -68,11 +68,11 @@ stdint.h
 vector
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory_with_via_point.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory_with_via_point.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 ros/ros.h
 -
 stdint.h
@@ -80,11 +80,11 @@ stdint.h
 vector
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/preview_control.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/preview_control.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 ros/ros.h
 -
 stdint.h
@@ -92,49 +92,49 @@ stdint.h
 vector
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 cmath
 -
 eigen3/Eigen/Dense
 -
 step_data_define.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math.h
 robotis_trajectory_calculator.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_trajectory_calculator.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_trajectory_calculator.h
 bezier_curve.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/bezier_curve.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/bezier_curve.h
 preview_control.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/preview_control.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/preview_control.h
 minimum_jerk_trajectory.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory.h
 minimum_jerk_trajectory_with_via_point.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory_with_via_point.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory_with_via_point.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 iostream
 -
 cmath
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_trajectory_calculator.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_trajectory_calculator.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 fifth_order_polynomial_trajectory.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
 simple_trapezoidal_velocity_profile.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
 ostream
 -
 

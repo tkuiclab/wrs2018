@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/andy/wrs_ws/src/kinematic/src/kinematic_left.cpp" "/home/andy/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o"
-  "/home/andy/wrs_ws/src/kinematic/src/kinematic_right.cpp" "/home/andy/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o"
+  "/home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_left.cpp" "/home/wrs/wrs2018/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o"
+  "/home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_right.cpp" "/home/wrs/wrs2018/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -18,8 +18,8 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/andy/wrs_ws/src/kinematic/include"
-  "/home/andy/wrs_ws/src/kinematic/include/kinematic"
+  "/home/wrs/wrs2018/wrs_ws/src/kinematic/include"
+  "/home/wrs/wrs2018/wrs_ws/src/kinematic/include/kinematic"
   "/opt/ros/kinetic/include"
   "/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   )

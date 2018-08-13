@@ -1,8 +1,8 @@
-prefix=/home/andy/wrs_ws/devel
+prefix=/home/wrs/wrs2018/wrs_ws/devel
 
 Name: manipulator_h_gui
 Description: Description of manipulator_h_gui
 Version: 0.3.1
-Cflags: -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include -I/usr/include/eigen3
-Libs: -L/home/andy/wrs_ws/devel/lib 
+Cflags: -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include -I/usr/include/eigen3
+Libs: -L/home/wrs/wrs2018/wrs_ws/devel/lib 
 Requires: roscpp robotis_controller_msgs manipulator_h_base_module_msgs qt_build cmake_modules eigen_conversions

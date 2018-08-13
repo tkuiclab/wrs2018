@@ -1,14 +1,14 @@
 
 "use strict";
 
-let JointCtrlModule = require('./JointCtrlModule.js');
 let WriteControlTable = require('./WriteControlTable.js');
-let StatusMsg = require('./StatusMsg.js');
 let SyncWriteItem = require('./SyncWriteItem.js');
+let StatusMsg = require('./StatusMsg.js');
+let JointCtrlModule = require('./JointCtrlModule.js');
 
 module.exports = {
-  JointCtrlModule: JointCtrlModule,
   WriteControlTable: WriteControlTable,
-  StatusMsg: StatusMsg,
   SyncWriteItem: SyncWriteItem,
+  StatusMsg: StatusMsg,
+  JointCtrlModule: JointCtrlModule,
 };

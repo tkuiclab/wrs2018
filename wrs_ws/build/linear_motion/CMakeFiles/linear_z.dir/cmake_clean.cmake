@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/linear_z.dir/src/linear_z.cpp.o"
-  "/home/andy/wrs_ws/devel/lib/linear_motion/linear_z.pdb"
-  "/home/andy/wrs_ws/devel/lib/linear_motion/linear_z"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/linear_motion/linear_z.pdb"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/linear_motion/linear_z"
 )
 
 # Per-language clean rules from dependency scanning.

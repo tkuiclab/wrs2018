@@ -6,25 +6,25 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/bezier_curve.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/bezier_curve.h
 vector
 -
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 ros/ros.h
 -
 stdint.h
@@ -32,11 +32,11 @@ stdint.h
 vector
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory_with_via_point.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/minimum_jerk_trajectory_with_via_point.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 ros/ros.h
 -
 stdint.h
@@ -44,11 +44,11 @@ stdint.h
 vector
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/preview_control.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/preview_control.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 ros/ros.h
 -
 stdint.h
@@ -56,81 +56,81 @@ stdint.h
 vector
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 cmath
 -
 eigen3/Eigen/Dense
 -
 step_data_define.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 iostream
 -
 cmath
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_trajectory_calculator.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_trajectory_calculator.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 fifth_order_polynomial_trajectory.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/fifth_order_polynomial_trajectory.h
 simple_trapezoidal_velocity_profile.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/simple_trapezoidal_velocity_profile.h
 robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_linear_algebra.h
 robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/robotis_math_base.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include/robotis_math/step_data_define.h
 ostream
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/bezier_curve.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/bezier_curve.cpp
 robotis_math/bezier_curve.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/bezier_curve.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/bezier_curve.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/fifth_order_polynomial_trajectory.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/fifth_order_polynomial_trajectory.cpp
 robotis_math/fifth_order_polynomial_trajectory.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/fifth_order_polynomial_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/fifth_order_polynomial_trajectory.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/minimum_jerk_trajectory.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/minimum_jerk_trajectory.cpp
 robotis_math/minimum_jerk_trajectory.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/minimum_jerk_trajectory.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/minimum_jerk_trajectory.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/minimum_jerk_trajectory_with_via_point.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/minimum_jerk_trajectory_with_via_point.cpp
 robotis_math/minimum_jerk_trajectory_with_via_point.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/minimum_jerk_trajectory_with_via_point.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/minimum_jerk_trajectory_with_via_point.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/preview_control.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/preview_control.cpp
 robotis_math/preview_control.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/preview_control.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/preview_control.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_linear_algebra.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_linear_algebra.cpp
 robotis_math/robotis_linear_algebra.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/robotis_linear_algebra.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/robotis_linear_algebra.h
 iostream
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math_base.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math_base.cpp
 robotis_math/robotis_math_base.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/robotis_math_base.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/robotis_math_base.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_trajectory_calculator.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_trajectory_calculator.cpp
 robotis_math/robotis_trajectory_calculator.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/robotis_trajectory_calculator.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/robotis_trajectory_calculator.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/simple_trapezoidal_velocity_profile.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/simple_trapezoidal_velocity_profile.cpp
 iostream
 -
 robotis_math/simple_trapezoidal_velocity_profile.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/simple_trapezoidal_velocity_profile.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/robotis_math/simple_trapezoidal_velocity_profile.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/step_data_define.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/src/step_data_define.cpp
 robotis_math/step_data_define.h
 -
 iostream

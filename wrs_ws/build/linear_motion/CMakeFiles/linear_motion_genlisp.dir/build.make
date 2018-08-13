@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/andy/wrs_ws/src
+CMAKE_SOURCE_DIR = /home/wrs/wrs2018/wrs_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/andy/wrs_ws/build
+CMAKE_BINARY_DIR = /home/wrs/wrs2018/wrs_ws/build
 
 # Utility rule file for linear_motion_genlisp.
 
@@ -63,10 +63,10 @@ linear_motion/CMakeFiles/linear_motion_genlisp.dir/build: linear_motion_genlisp
 .PHONY : linear_motion/CMakeFiles/linear_motion_genlisp.dir/build
 
 linear_motion/CMakeFiles/linear_motion_genlisp.dir/clean:
-	cd /home/andy/wrs_ws/build/linear_motion && $(CMAKE_COMMAND) -P CMakeFiles/linear_motion_genlisp.dir/cmake_clean.cmake
+	cd /home/wrs/wrs2018/wrs_ws/build/linear_motion && $(CMAKE_COMMAND) -P CMakeFiles/linear_motion_genlisp.dir/cmake_clean.cmake
 .PHONY : linear_motion/CMakeFiles/linear_motion_genlisp.dir/clean
 
 linear_motion/CMakeFiles/linear_motion_genlisp.dir/depend:
-	cd /home/andy/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/andy/wrs_ws/src /home/andy/wrs_ws/src/linear_motion /home/andy/wrs_ws/build /home/andy/wrs_ws/build/linear_motion /home/andy/wrs_ws/build/linear_motion/CMakeFiles/linear_motion_genlisp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/wrs/wrs2018/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wrs/wrs2018/wrs_ws/src /home/wrs/wrs2018/wrs_ws/src/linear_motion /home/wrs/wrs2018/wrs_ws/build /home/wrs/wrs2018/wrs_ws/build/linear_motion /home/wrs/wrs2018/wrs_ws/build/linear_motion/CMakeFiles/linear_motion_genlisp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : linear_motion/CMakeFiles/linear_motion_genlisp.dir/depend
 

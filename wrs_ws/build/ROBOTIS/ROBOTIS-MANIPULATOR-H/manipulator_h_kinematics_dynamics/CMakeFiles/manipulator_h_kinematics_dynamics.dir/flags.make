@@ -6,5 +6,5 @@ CXX_FLAGS = -fPIC   -std=c++11
 
 CXX_DEFINES = -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"manipulator_h_kinematics_dynamics\" -Dmanipulator_h_kinematics_dynamics_EXPORTS
 
-CXX_INCLUDES = -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 
+CXX_INCLUDES = -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_kinematics_dynamics/include -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Math/robotis_math/include -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 
 

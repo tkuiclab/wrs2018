@@ -6,21 +6,21 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/src/kinematic/include/kinematic/dual_arm.h
+/home/wrs/wrs2018/wrs_ws/src/kinematic/include/kinematic/dual_arm.h
 eigen3/Eigen/Dense
 -
 sstream
 -
 ros/ros.h
-/home/andy/wrs_ws/src/kinematic/include/kinematic/ros/ros.h
+/home/wrs/wrs2018/wrs_ws/src/kinematic/include/kinematic/ros/ros.h
 std_msgs/Float64.h
-/home/andy/wrs_ws/src/kinematic/include/kinematic/std_msgs/Float64.h
+/home/wrs/wrs2018/wrs_ws/src/kinematic/include/kinematic/std_msgs/Float64.h
 std_msgs/Float64MultiArray.h
-/home/andy/wrs_ws/src/kinematic/include/kinematic/std_msgs/Float64MultiArray.h
+/home/wrs/wrs2018/wrs_ws/src/kinematic/include/kinematic/std_msgs/Float64MultiArray.h
 
-/home/andy/wrs_ws/src/kinematic/src/IKKI.cpp
+/home/wrs/wrs2018/wrs_ws/src/kinematic/src/IKKI.cpp
 dual_arm.h
-/home/andy/wrs_ws/src/kinematic/src/dual_arm.h
+/home/wrs/wrs2018/wrs_ws/src/kinematic/src/dual_arm.h
 boost/thread.hpp
 -
 boost/lambda/lambda.hpp

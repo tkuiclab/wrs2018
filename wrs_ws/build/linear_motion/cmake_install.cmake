@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/linear_motion
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/linear_motion
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,53 +33,53 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion/msg" TYPE FILE FILES "/home/andy/wrs_ws/src/linear_motion/msg/LM_Cmd.msg")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion/msg" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/linear_motion/msg/LM_Cmd.msg")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion/cmake" TYPE FILE FILES "/home/andy/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motion-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion/cmake" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motion-msg-paths.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/include/linear_motion")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/include/linear_motion")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/share/roseus/ros/linear_motion")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/share/roseus/ros/linear_motion")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/share/common-lisp/ros/linear_motion")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/share/common-lisp/ros/linear_motion")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/share/gennodejs/ros/linear_motion")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/share/gennodejs/ros/linear_motion")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/andy/wrs_ws/devel/lib/python2.7/dist-packages/linear_motion")
+  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/wrs/wrs2018/wrs_ws/devel/lib/python2.7/dist-packages/linear_motion")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/lib/python2.7/dist-packages/linear_motion")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/lib/python2.7/dist-packages/linear_motion")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motion.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motion.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion/cmake" TYPE FILE FILES "/home/andy/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motion-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion/cmake" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motion-msg-extras.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motionConfig.cmake"
-    "/home/andy/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motionConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motionConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/linear_motion/catkin_generated/installspace/linear_motionConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion" TYPE FILE FILES "/home/andy/wrs_ws/src/linear_motion/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/linear_motion" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/linear_motion/package.xml")
 endif()
 

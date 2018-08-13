@@ -1,8 +1,8 @@
-prefix=/home/andy/wrs_ws/install
+prefix=/home/wrs/wrs2018/wrs_ws/install
 
 Name: manipulator_h_gazebo
 Description: Description of manipulator_h_gazebo
 Version: 0.3.1
 Cflags: 
-Libs: -L/home/andy/wrs_ws/install/lib 
+Libs: -L/home/wrs/wrs2018/wrs_ws/install/lib 
 Requires: 

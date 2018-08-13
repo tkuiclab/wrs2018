@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/andy/wrs_ws/src
+CMAKE_SOURCE_DIR = /home/wrs/wrs2018/wrs_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/andy/wrs_ws/build
+CMAKE_BINARY_DIR = /home/wrs/wrs2018/wrs_ws/build
 
 # Include any dependencies generated for this target.
 include kinematic/CMakeFiles/kinematic_node.dir/depend.make
@@ -58,17 +58,17 @@ include kinematic/CMakeFiles/kinematic_node.dir/progress.make
 include kinematic/CMakeFiles/kinematic_node.dir/flags.make
 
 kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o: kinematic/CMakeFiles/kinematic_node.dir/flags.make
-kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o: /home/andy/wrs_ws/src/kinematic/src/IKKI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andy/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o -c /home/andy/wrs_ws/src/kinematic/src/IKKI.cpp
+kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o: /home/wrs/wrs2018/wrs_ws/src/kinematic/src/IKKI.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wrs/wrs2018/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o"
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o -c /home/wrs/wrs2018/wrs_ws/src/kinematic/src/IKKI.cpp
 
 kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kinematic_node.dir/src/IKKI.cpp.i"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andy/wrs_ws/src/kinematic/src/IKKI.cpp > CMakeFiles/kinematic_node.dir/src/IKKI.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wrs/wrs2018/wrs_ws/src/kinematic/src/IKKI.cpp > CMakeFiles/kinematic_node.dir/src/IKKI.cpp.i
 
 kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kinematic_node.dir/src/IKKI.cpp.s"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andy/wrs_ws/src/kinematic/src/IKKI.cpp -o CMakeFiles/kinematic_node.dir/src/IKKI.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wrs/wrs2018/wrs_ws/src/kinematic/src/IKKI.cpp -o CMakeFiles/kinematic_node.dir/src/IKKI.cpp.s
 
 kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o.requires:
 
@@ -88,41 +88,41 @@ kinematic_node_OBJECTS = \
 # External object files for target kinematic_node
 kinematic_node_EXTERNAL_OBJECTS =
 
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: kinematic/CMakeFiles/kinematic_node.dir/build.make
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libroscpp.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_signals.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librosconsole.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librosconsole_log4cxx.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librosconsole_backend_interface.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_regex.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libxmlrpcpp.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libroscpp_serialization.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librostime.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libcpp_common.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_system.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_thread.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libpthread.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /home/andy/wrs_ws/devel/lib/libkinematic.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_thread.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_system.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libpthread.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so
-/home/andy/wrs_ws/devel/lib/kinematic/kinematic_node: kinematic/CMakeFiles/kinematic_node.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/andy/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable /home/andy/wrs_ws/devel/lib/kinematic/kinematic_node"
-	cd /home/andy/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kinematic_node.dir/link.txt --verbose=$(VERBOSE)
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: kinematic/CMakeFiles/kinematic_node.dir/src/IKKI.cpp.o
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: kinematic/CMakeFiles/kinematic_node.dir/build.make
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libroscpp.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_signals.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librosconsole.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librosconsole_log4cxx.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librosconsole_backend_interface.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libxmlrpcpp.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libroscpp_serialization.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/librostime.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /opt/ros/kinetic/lib/libcpp_common.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_system.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_system.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so
+/home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node: kinematic/CMakeFiles/kinematic_node.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wrs/wrs2018/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable /home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node"
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kinematic_node.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-kinematic/CMakeFiles/kinematic_node.dir/build: /home/andy/wrs_ws/devel/lib/kinematic/kinematic_node
+kinematic/CMakeFiles/kinematic_node.dir/build: /home/wrs/wrs2018/wrs_ws/devel/lib/kinematic/kinematic_node
 
 .PHONY : kinematic/CMakeFiles/kinematic_node.dir/build
 
@@ -131,10 +131,10 @@ kinematic/CMakeFiles/kinematic_node.dir/requires: kinematic/CMakeFiles/kinematic
 .PHONY : kinematic/CMakeFiles/kinematic_node.dir/requires
 
 kinematic/CMakeFiles/kinematic_node.dir/clean:
-	cd /home/andy/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -P CMakeFiles/kinematic_node.dir/cmake_clean.cmake
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -P CMakeFiles/kinematic_node.dir/cmake_clean.cmake
 .PHONY : kinematic/CMakeFiles/kinematic_node.dir/clean
 
 kinematic/CMakeFiles/kinematic_node.dir/depend:
-	cd /home/andy/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/andy/wrs_ws/src /home/andy/wrs_ws/src/kinematic /home/andy/wrs_ws/build /home/andy/wrs_ws/build/kinematic /home/andy/wrs_ws/build/kinematic/CMakeFiles/kinematic_node.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/wrs/wrs2018/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wrs/wrs2018/wrs_ws/src /home/wrs/wrs2018/wrs_ws/src/kinematic /home/wrs/wrs2018/wrs_ws/build /home/wrs/wrs2018/wrs_ws/build/kinematic /home/wrs/wrs2018/wrs_ws/build/kinematic/CMakeFiles/kinematic_node.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : kinematic/CMakeFiles/kinematic_node.dir/depend
 

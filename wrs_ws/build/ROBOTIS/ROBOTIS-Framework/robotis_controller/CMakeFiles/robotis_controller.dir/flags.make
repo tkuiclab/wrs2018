@@ -6,5 +6,5 @@ CXX_FLAGS = -fPIC   -std=c++11
 
 CXX_DEFINES = -DHAVE_NEW_YAMLCPP -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"robotis_controller\" -Drobotis_controller_EXPORTS
 
-CXX_INCLUDES = -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include -I/home/andy/wrs_ws/devel/include -I/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include -I/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp 
+CXX_INCLUDES = -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include -I/home/wrs/wrs2018/wrs_ws/devel/include -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include -I/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp 
 

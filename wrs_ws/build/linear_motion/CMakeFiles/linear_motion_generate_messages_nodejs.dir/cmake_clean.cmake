@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/linear_motion_generate_messages_nodejs"
-  "/home/andy/wrs_ws/devel/share/gennodejs/ros/linear_motion/msg/LM_Cmd.js"
+  "/home/wrs/wrs2018/wrs_ws/devel/share/gennodejs/ros/linear_motion/msg/LM_Cmd.js"
 )
 
 # Per-language clean rules from dependency scanning.

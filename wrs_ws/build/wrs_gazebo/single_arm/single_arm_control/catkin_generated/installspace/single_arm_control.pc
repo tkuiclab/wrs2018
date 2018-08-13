@@ -1,8 +1,8 @@
-prefix=/home/andy/wrs_ws/install
+prefix=/home/wrs/wrs2018/wrs_ws/install
 
 Name: single_arm_control
 Description: Description of single_arm_control
 Version: 0.0.0
 Cflags: 
-Libs: -L/home/andy/wrs_ws/install/lib 
+Libs: -L/home/wrs/wrs2018/wrs_ws/install/lib 
 Requires: 

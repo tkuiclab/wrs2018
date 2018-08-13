@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/wrs_gazebo/Slide_rail
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/Slide_rail
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,33 +33,33 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/wrs_gazebo/Slide_rail/catkin_generated/installspace/Slide_rail.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/Slide_rail/catkin_generated/installspace/Slide_rail.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/wrs_gazebo/Slide_rail/catkin_generated/installspace/Slide_railConfig.cmake"
-    "/home/andy/wrs_ws/build/wrs_gazebo/Slide_rail/catkin_generated/installspace/Slide_railConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/Slide_rail/catkin_generated/installspace/Slide_railConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/Slide_rail/catkin_generated/installspace/Slide_railConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail" TYPE FILE FILES "/home/andy/wrs_ws/src/wrs_gazebo/Slide_rail/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/Slide_rail/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/config" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/Slide_rail/config/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/config" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/Slide_rail/config/")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/launch" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/Slide_rail/launch/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/launch" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/Slide_rail/launch/")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/meshes" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/Slide_rail/meshes/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/meshes" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/Slide_rail/meshes/")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/urdf" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/Slide_rail/urdf/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Slide_rail/urdf" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/Slide_rail/urdf/")
 endif()
 

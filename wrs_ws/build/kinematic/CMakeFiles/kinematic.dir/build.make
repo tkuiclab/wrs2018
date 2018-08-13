@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/andy/wrs_ws/src
+CMAKE_SOURCE_DIR = /home/wrs/wrs2018/wrs_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/andy/wrs_ws/build
+CMAKE_BINARY_DIR = /home/wrs/wrs2018/wrs_ws/build
 
 # Include any dependencies generated for this target.
 include kinematic/CMakeFiles/kinematic.dir/depend.make
@@ -58,17 +58,17 @@ include kinematic/CMakeFiles/kinematic.dir/progress.make
 include kinematic/CMakeFiles/kinematic.dir/flags.make
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o: kinematic/CMakeFiles/kinematic.dir/flags.make
-kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o: /home/andy/wrs_ws/src/kinematic/src/kinematic_right.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andy/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o -c /home/andy/wrs_ws/src/kinematic/src/kinematic_right.cpp
+kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o: /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_right.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wrs/wrs2018/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o"
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o -c /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_right.cpp
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kinematic.dir/src/kinematic_right.cpp.i"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andy/wrs_ws/src/kinematic/src/kinematic_right.cpp > CMakeFiles/kinematic.dir/src/kinematic_right.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_right.cpp > CMakeFiles/kinematic.dir/src/kinematic_right.cpp.i
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kinematic.dir/src/kinematic_right.cpp.s"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andy/wrs_ws/src/kinematic/src/kinematic_right.cpp -o CMakeFiles/kinematic.dir/src/kinematic_right.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_right.cpp -o CMakeFiles/kinematic.dir/src/kinematic_right.cpp.s
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o.requires:
 
@@ -82,17 +82,17 @@ kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o.provides.build: kin
 
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o: kinematic/CMakeFiles/kinematic.dir/flags.make
-kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o: /home/andy/wrs_ws/src/kinematic/src/kinematic_left.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andy/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o -c /home/andy/wrs_ws/src/kinematic/src/kinematic_left.cpp
+kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o: /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_left.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wrs/wrs2018/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o"
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o -c /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_left.cpp
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kinematic.dir/src/kinematic_left.cpp.i"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andy/wrs_ws/src/kinematic/src/kinematic_left.cpp > CMakeFiles/kinematic.dir/src/kinematic_left.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_left.cpp > CMakeFiles/kinematic.dir/src/kinematic_left.cpp.i
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kinematic.dir/src/kinematic_left.cpp.s"
-	cd /home/andy/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andy/wrs_ws/src/kinematic/src/kinematic_left.cpp -o CMakeFiles/kinematic.dir/src/kinematic_left.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wrs/wrs2018/wrs_ws/src/kinematic/src/kinematic_left.cpp -o CMakeFiles/kinematic.dir/src/kinematic_left.cpp.s
 
 kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o.requires:
 
@@ -113,15 +113,15 @@ kinematic_OBJECTS = \
 # External object files for target kinematic
 kinematic_EXTERNAL_OBJECTS =
 
-/home/andy/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o
-/home/andy/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o
-/home/andy/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/build.make
-/home/andy/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/andy/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library /home/andy/wrs_ws/devel/lib/libkinematic.so"
-	cd /home/andy/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kinematic.dir/link.txt --verbose=$(VERBOSE)
+/home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/src/kinematic_right.cpp.o
+/home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/src/kinematic_left.cpp.o
+/home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/build.make
+/home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so: kinematic/CMakeFiles/kinematic.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wrs/wrs2018/wrs_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library /home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so"
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kinematic.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-kinematic/CMakeFiles/kinematic.dir/build: /home/andy/wrs_ws/devel/lib/libkinematic.so
+kinematic/CMakeFiles/kinematic.dir/build: /home/wrs/wrs2018/wrs_ws/devel/lib/libkinematic.so
 
 .PHONY : kinematic/CMakeFiles/kinematic.dir/build
 
@@ -131,10 +131,10 @@ kinematic/CMakeFiles/kinematic.dir/requires: kinematic/CMakeFiles/kinematic.dir/
 .PHONY : kinematic/CMakeFiles/kinematic.dir/requires
 
 kinematic/CMakeFiles/kinematic.dir/clean:
-	cd /home/andy/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -P CMakeFiles/kinematic.dir/cmake_clean.cmake
+	cd /home/wrs/wrs2018/wrs_ws/build/kinematic && $(CMAKE_COMMAND) -P CMakeFiles/kinematic.dir/cmake_clean.cmake
 .PHONY : kinematic/CMakeFiles/kinematic.dir/clean
 
 kinematic/CMakeFiles/kinematic.dir/depend:
-	cd /home/andy/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/andy/wrs_ws/src /home/andy/wrs_ws/src/kinematic /home/andy/wrs_ws/build /home/andy/wrs_ws/build/kinematic /home/andy/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/wrs/wrs2018/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/wrs/wrs2018/wrs_ws/src /home/wrs/wrs2018/wrs_ws/src/kinematic /home/wrs/wrs2018/wrs_ws/build /home/wrs/wrs2018/wrs_ws/build/kinematic /home/wrs/wrs2018/wrs_ws/build/kinematic/CMakeFiles/kinematic.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : kinematic/CMakeFiles/kinematic.dir/depend
 

@@ -1,8 +1,8 @@
-# Install script for directory: /home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control
+# Install script for directory: /home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/andy/wrs_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/wrs/wrs2018/wrs_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,65 +33,65 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/srv" TYPE FILE FILES "/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/srv/robot.srv")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/srv" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/srv/robot.srv")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/msg" TYPE FILE FILES "/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/msg/robot_msg.msg")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/msg" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/msg/robot_msg.msg")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/cmake" TYPE FILE FILES "/home/andy/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_control-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/cmake" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_control-msg-paths.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/include/dual_arm_control")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/include/dual_arm_control")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/share/roseus/ros/dual_arm_control")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/share/roseus/ros/dual_arm_control")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/share/common-lisp/ros/dual_arm_control")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/share/common-lisp/ros/dual_arm_control")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/share/gennodejs/ros/dual_arm_control")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/share/gennodejs/ros/dual_arm_control")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/andy/wrs_ws/devel/lib/python2.7/dist-packages/dual_arm_control")
+  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/wrs/wrs2018/wrs_ws/devel/lib/python2.7/dist-packages/dual_arm_control")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/andy/wrs_ws/devel/lib/python2.7/dist-packages/dual_arm_control")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/devel/lib/python2.7/dist-packages/dual_arm_control")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/andy/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_control.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_control.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/cmake" TYPE FILE FILES "/home/andy/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_control-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/cmake" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_control-msg-extras.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control/cmake" TYPE FILE FILES
-    "/home/andy/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_controlConfig.cmake"
-    "/home/andy/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_controlConfig-version.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_controlConfig.cmake"
+    "/home/wrs/wrs2018/wrs_ws/build/wrs_gazebo/dual_arm_control/catkin_generated/installspace/dual_arm_controlConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control" TYPE FILE FILES "/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control" TYPE FILE FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/package.xml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/config")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/config")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control" TYPE DIRECTORY FILES "/home/andy/wrs_ws/src/wrs_gazebo/dual_arm_control/launch")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/dual_arm_control" TYPE DIRECTORY FILES "/home/wrs/wrs2018/wrs_ws/src/wrs_gazebo/dual_arm_control/launch")
 endif()
 

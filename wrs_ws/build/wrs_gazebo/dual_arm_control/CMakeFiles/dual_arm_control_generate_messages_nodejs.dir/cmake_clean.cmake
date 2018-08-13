@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/dual_arm_control_generate_messages_nodejs"
-  "/home/andy/wrs_ws/devel/share/gennodejs/ros/dual_arm_control/msg/robot_msg.js"
-  "/home/andy/wrs_ws/devel/share/gennodejs/ros/dual_arm_control/srv/robot.js"
+  "/home/wrs/wrs2018/wrs_ws/devel/share/gennodejs/ros/dual_arm_control/msg/robot_msg.js"
+  "/home/wrs/wrs2018/wrs_ws/devel/share/gennodejs/ros/dual_arm_control/srv/robot.js"
 )
 
 # Per-language clean rules from dependency scanning.

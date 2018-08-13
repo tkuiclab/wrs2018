@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/robotis_controller.dir/src/robotis_controller/robotis_controller.cpp.o"
-  "/home/andy/wrs_ws/devel/lib/librobotis_controller.pdb"
-  "/home/andy/wrs_ws/devel/lib/librobotis_controller.so"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_controller.pdb"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_controller.so"
 )
 
 # Per-language clean rules from dependency scanning.

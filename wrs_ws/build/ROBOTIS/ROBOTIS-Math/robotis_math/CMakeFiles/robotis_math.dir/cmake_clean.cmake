@@ -9,8 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/robotis_math.dir/src/bezier_curve.cpp.o"
   "CMakeFiles/robotis_math.dir/src/step_data_define.cpp.o"
   "CMakeFiles/robotis_math.dir/src/preview_control.cpp.o"
-  "/home/andy/wrs_ws/devel/lib/librobotis_math.pdb"
-  "/home/andy/wrs_ws/devel/lib/librobotis_math.so"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_math.pdb"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/librobotis_math.so"
 )
 
 # Per-language clean rules from dependency scanning.

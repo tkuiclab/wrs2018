@@ -33,8 +33,8 @@ bool is_x_busy = false;
 
 void slide_callback(const std_msgs::Float64 &slide_command)
 {
-    int pos = 100*slide_command.data;
-    SendCmd(true, ctx    , slide_command.data);
+    int pos = -(double)100000.0*slide_command.data;
+    SendCmd(true, ctx    , pos);
     LM_x_state = "execute";
     pub_flag = true;
 }
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
     std::string port_right;
     int  baud_rate;
 
-    nh_param.param<std::string>("port_right", port_right,"/dev/arc/LM1");
+    nh_param.param<std::string>("port_right", port_right,"/dev/wrs/slide_right");
     nh_param.param<int>("baud", baud_rate, 9600);
   
     //========================= Initialize Modbus_RTU ============================= 

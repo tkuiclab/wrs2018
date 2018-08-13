@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/manipulator_h_manager.dir/src/manipulator_h_manager.cpp.o"
-  "/home/andy/wrs_ws/devel/lib/manipulator_h_manager/manipulator_h_manager.pdb"
-  "/home/andy/wrs_ws/devel/lib/manipulator_h_manager/manipulator_h_manager"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/manipulator_h_manager/manipulator_h_manager.pdb"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/manipulator_h_manager/manipulator_h_manager"
 )
 
 # Per-language clean rules from dependency scanning.

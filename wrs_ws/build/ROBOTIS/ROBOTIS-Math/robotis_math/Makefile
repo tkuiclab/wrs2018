@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/andy/wrs_ws/src
+CMAKE_SOURCE_DIR = /home/wrs/wrs2018/wrs_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/andy/wrs_ws/build
+CMAKE_BINARY_DIR = /home/wrs/wrs2018/wrs_ws/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -135,14 +135,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/andy/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/andy/wrs_ws/build/CMakeFiles /home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/progress.marks
-	cd /home/andy/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/andy/wrs_ws/build/CMakeFiles 0
+	cd /home/wrs/wrs2018/wrs_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/wrs/wrs2018/wrs_ws/build/CMakeFiles /home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/progress.marks
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wrs/wrs2018/wrs_ws/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/clean
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/clean
 .PHONY : clean
 
 # The main clean target
@@ -152,22 +152,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/andy/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/preinstall
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/preinstall
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/andy/wrs_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/wrs/wrs2018/wrs_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/rule:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/rule
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f CMakeFiles/Makefile2 ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/rule
 .PHONY : ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/rule
 
 # Convenience name for target.
@@ -177,7 +177,7 @@ robotis_math: ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/rule
 
 # fast build rule for target.
 robotis_math/fast:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build
 .PHONY : robotis_math/fast
 
 src/bezier_curve.o: src/bezier_curve.cpp.o
@@ -186,7 +186,7 @@ src/bezier_curve.o: src/bezier_curve.cpp.o
 
 # target to build an object file
 src/bezier_curve.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/bezier_curve.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/bezier_curve.cpp.o
 .PHONY : src/bezier_curve.cpp.o
 
 src/bezier_curve.i: src/bezier_curve.cpp.i
@@ -195,7 +195,7 @@ src/bezier_curve.i: src/bezier_curve.cpp.i
 
 # target to preprocess a source file
 src/bezier_curve.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/bezier_curve.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/bezier_curve.cpp.i
 .PHONY : src/bezier_curve.cpp.i
 
 src/bezier_curve.s: src/bezier_curve.cpp.s
@@ -204,7 +204,7 @@ src/bezier_curve.s: src/bezier_curve.cpp.s
 
 # target to generate assembly for a file
 src/bezier_curve.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/bezier_curve.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/bezier_curve.cpp.s
 .PHONY : src/bezier_curve.cpp.s
 
 src/fifth_order_polynomial_trajectory.o: src/fifth_order_polynomial_trajectory.cpp.o
@@ -213,7 +213,7 @@ src/fifth_order_polynomial_trajectory.o: src/fifth_order_polynomial_trajectory.c
 
 # target to build an object file
 src/fifth_order_polynomial_trajectory.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/fifth_order_polynomial_trajectory.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/fifth_order_polynomial_trajectory.cpp.o
 .PHONY : src/fifth_order_polynomial_trajectory.cpp.o
 
 src/fifth_order_polynomial_trajectory.i: src/fifth_order_polynomial_trajectory.cpp.i
@@ -222,7 +222,7 @@ src/fifth_order_polynomial_trajectory.i: src/fifth_order_polynomial_trajectory.c
 
 # target to preprocess a source file
 src/fifth_order_polynomial_trajectory.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/fifth_order_polynomial_trajectory.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/fifth_order_polynomial_trajectory.cpp.i
 .PHONY : src/fifth_order_polynomial_trajectory.cpp.i
 
 src/fifth_order_polynomial_trajectory.s: src/fifth_order_polynomial_trajectory.cpp.s
@@ -231,7 +231,7 @@ src/fifth_order_polynomial_trajectory.s: src/fifth_order_polynomial_trajectory.c
 
 # target to generate assembly for a file
 src/fifth_order_polynomial_trajectory.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/fifth_order_polynomial_trajectory.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/fifth_order_polynomial_trajectory.cpp.s
 .PHONY : src/fifth_order_polynomial_trajectory.cpp.s
 
 src/minimum_jerk_trajectory.o: src/minimum_jerk_trajectory.cpp.o
@@ -240,7 +240,7 @@ src/minimum_jerk_trajectory.o: src/minimum_jerk_trajectory.cpp.o
 
 # target to build an object file
 src/minimum_jerk_trajectory.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory.cpp.o
 .PHONY : src/minimum_jerk_trajectory.cpp.o
 
 src/minimum_jerk_trajectory.i: src/minimum_jerk_trajectory.cpp.i
@@ -249,7 +249,7 @@ src/minimum_jerk_trajectory.i: src/minimum_jerk_trajectory.cpp.i
 
 # target to preprocess a source file
 src/minimum_jerk_trajectory.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory.cpp.i
 .PHONY : src/minimum_jerk_trajectory.cpp.i
 
 src/minimum_jerk_trajectory.s: src/minimum_jerk_trajectory.cpp.s
@@ -258,7 +258,7 @@ src/minimum_jerk_trajectory.s: src/minimum_jerk_trajectory.cpp.s
 
 # target to generate assembly for a file
 src/minimum_jerk_trajectory.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory.cpp.s
 .PHONY : src/minimum_jerk_trajectory.cpp.s
 
 src/minimum_jerk_trajectory_with_via_point.o: src/minimum_jerk_trajectory_with_via_point.cpp.o
@@ -267,7 +267,7 @@ src/minimum_jerk_trajectory_with_via_point.o: src/minimum_jerk_trajectory_with_v
 
 # target to build an object file
 src/minimum_jerk_trajectory_with_via_point.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory_with_via_point.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory_with_via_point.cpp.o
 .PHONY : src/minimum_jerk_trajectory_with_via_point.cpp.o
 
 src/minimum_jerk_trajectory_with_via_point.i: src/minimum_jerk_trajectory_with_via_point.cpp.i
@@ -276,7 +276,7 @@ src/minimum_jerk_trajectory_with_via_point.i: src/minimum_jerk_trajectory_with_v
 
 # target to preprocess a source file
 src/minimum_jerk_trajectory_with_via_point.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory_with_via_point.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory_with_via_point.cpp.i
 .PHONY : src/minimum_jerk_trajectory_with_via_point.cpp.i
 
 src/minimum_jerk_trajectory_with_via_point.s: src/minimum_jerk_trajectory_with_via_point.cpp.s
@@ -285,7 +285,7 @@ src/minimum_jerk_trajectory_with_via_point.s: src/minimum_jerk_trajectory_with_v
 
 # target to generate assembly for a file
 src/minimum_jerk_trajectory_with_via_point.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory_with_via_point.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/minimum_jerk_trajectory_with_via_point.cpp.s
 .PHONY : src/minimum_jerk_trajectory_with_via_point.cpp.s
 
 src/preview_control.o: src/preview_control.cpp.o
@@ -294,7 +294,7 @@ src/preview_control.o: src/preview_control.cpp.o
 
 # target to build an object file
 src/preview_control.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/preview_control.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/preview_control.cpp.o
 .PHONY : src/preview_control.cpp.o
 
 src/preview_control.i: src/preview_control.cpp.i
@@ -303,7 +303,7 @@ src/preview_control.i: src/preview_control.cpp.i
 
 # target to preprocess a source file
 src/preview_control.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/preview_control.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/preview_control.cpp.i
 .PHONY : src/preview_control.cpp.i
 
 src/preview_control.s: src/preview_control.cpp.s
@@ -312,7 +312,7 @@ src/preview_control.s: src/preview_control.cpp.s
 
 # target to generate assembly for a file
 src/preview_control.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/preview_control.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/preview_control.cpp.s
 .PHONY : src/preview_control.cpp.s
 
 src/robotis_linear_algebra.o: src/robotis_linear_algebra.cpp.o
@@ -321,7 +321,7 @@ src/robotis_linear_algebra.o: src/robotis_linear_algebra.cpp.o
 
 # target to build an object file
 src/robotis_linear_algebra.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_linear_algebra.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_linear_algebra.cpp.o
 .PHONY : src/robotis_linear_algebra.cpp.o
 
 src/robotis_linear_algebra.i: src/robotis_linear_algebra.cpp.i
@@ -330,7 +330,7 @@ src/robotis_linear_algebra.i: src/robotis_linear_algebra.cpp.i
 
 # target to preprocess a source file
 src/robotis_linear_algebra.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_linear_algebra.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_linear_algebra.cpp.i
 .PHONY : src/robotis_linear_algebra.cpp.i
 
 src/robotis_linear_algebra.s: src/robotis_linear_algebra.cpp.s
@@ -339,7 +339,7 @@ src/robotis_linear_algebra.s: src/robotis_linear_algebra.cpp.s
 
 # target to generate assembly for a file
 src/robotis_linear_algebra.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_linear_algebra.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_linear_algebra.cpp.s
 .PHONY : src/robotis_linear_algebra.cpp.s
 
 src/robotis_math_base.o: src/robotis_math_base.cpp.o
@@ -348,7 +348,7 @@ src/robotis_math_base.o: src/robotis_math_base.cpp.o
 
 # target to build an object file
 src/robotis_math_base.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_math_base.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_math_base.cpp.o
 .PHONY : src/robotis_math_base.cpp.o
 
 src/robotis_math_base.i: src/robotis_math_base.cpp.i
@@ -357,7 +357,7 @@ src/robotis_math_base.i: src/robotis_math_base.cpp.i
 
 # target to preprocess a source file
 src/robotis_math_base.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_math_base.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_math_base.cpp.i
 .PHONY : src/robotis_math_base.cpp.i
 
 src/robotis_math_base.s: src/robotis_math_base.cpp.s
@@ -366,7 +366,7 @@ src/robotis_math_base.s: src/robotis_math_base.cpp.s
 
 # target to generate assembly for a file
 src/robotis_math_base.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_math_base.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_math_base.cpp.s
 .PHONY : src/robotis_math_base.cpp.s
 
 src/robotis_trajectory_calculator.o: src/robotis_trajectory_calculator.cpp.o
@@ -375,7 +375,7 @@ src/robotis_trajectory_calculator.o: src/robotis_trajectory_calculator.cpp.o
 
 # target to build an object file
 src/robotis_trajectory_calculator.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_trajectory_calculator.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_trajectory_calculator.cpp.o
 .PHONY : src/robotis_trajectory_calculator.cpp.o
 
 src/robotis_trajectory_calculator.i: src/robotis_trajectory_calculator.cpp.i
@@ -384,7 +384,7 @@ src/robotis_trajectory_calculator.i: src/robotis_trajectory_calculator.cpp.i
 
 # target to preprocess a source file
 src/robotis_trajectory_calculator.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_trajectory_calculator.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_trajectory_calculator.cpp.i
 .PHONY : src/robotis_trajectory_calculator.cpp.i
 
 src/robotis_trajectory_calculator.s: src/robotis_trajectory_calculator.cpp.s
@@ -393,7 +393,7 @@ src/robotis_trajectory_calculator.s: src/robotis_trajectory_calculator.cpp.s
 
 # target to generate assembly for a file
 src/robotis_trajectory_calculator.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_trajectory_calculator.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/robotis_trajectory_calculator.cpp.s
 .PHONY : src/robotis_trajectory_calculator.cpp.s
 
 src/simple_trapezoidal_velocity_profile.o: src/simple_trapezoidal_velocity_profile.cpp.o
@@ -402,7 +402,7 @@ src/simple_trapezoidal_velocity_profile.o: src/simple_trapezoidal_velocity_profi
 
 # target to build an object file
 src/simple_trapezoidal_velocity_profile.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/simple_trapezoidal_velocity_profile.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/simple_trapezoidal_velocity_profile.cpp.o
 .PHONY : src/simple_trapezoidal_velocity_profile.cpp.o
 
 src/simple_trapezoidal_velocity_profile.i: src/simple_trapezoidal_velocity_profile.cpp.i
@@ -411,7 +411,7 @@ src/simple_trapezoidal_velocity_profile.i: src/simple_trapezoidal_velocity_profi
 
 # target to preprocess a source file
 src/simple_trapezoidal_velocity_profile.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/simple_trapezoidal_velocity_profile.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/simple_trapezoidal_velocity_profile.cpp.i
 .PHONY : src/simple_trapezoidal_velocity_profile.cpp.i
 
 src/simple_trapezoidal_velocity_profile.s: src/simple_trapezoidal_velocity_profile.cpp.s
@@ -420,7 +420,7 @@ src/simple_trapezoidal_velocity_profile.s: src/simple_trapezoidal_velocity_profi
 
 # target to generate assembly for a file
 src/simple_trapezoidal_velocity_profile.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/simple_trapezoidal_velocity_profile.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/simple_trapezoidal_velocity_profile.cpp.s
 .PHONY : src/simple_trapezoidal_velocity_profile.cpp.s
 
 src/step_data_define.o: src/step_data_define.cpp.o
@@ -429,7 +429,7 @@ src/step_data_define.o: src/step_data_define.cpp.o
 
 # target to build an object file
 src/step_data_define.cpp.o:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/step_data_define.cpp.o
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/step_data_define.cpp.o
 .PHONY : src/step_data_define.cpp.o
 
 src/step_data_define.i: src/step_data_define.cpp.i
@@ -438,7 +438,7 @@ src/step_data_define.i: src/step_data_define.cpp.i
 
 # target to preprocess a source file
 src/step_data_define.cpp.i:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/step_data_define.cpp.i
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/step_data_define.cpp.i
 .PHONY : src/step_data_define.cpp.i
 
 src/step_data_define.s: src/step_data_define.cpp.s
@@ -447,7 +447,7 @@ src/step_data_define.s: src/step_data_define.cpp.s
 
 # target to generate assembly for a file
 src/step_data_define.cpp.s:
-	cd /home/andy/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/step_data_define.cpp.s
+	cd /home/wrs/wrs2018/wrs_ws/build && $(MAKE) -f ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/build.make ROBOTIS/ROBOTIS-Math/robotis_math/CMakeFiles/robotis_math.dir/src/step_data_define.cpp.s
 .PHONY : src/step_data_define.cpp.s
 
 # Help Target
@@ -505,6 +505,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/andy/wrs_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/wrs/wrs2018/wrs_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/talker.dir/src/robot_pub.cpp.o"
-  "/home/andy/wrs_ws/devel/lib/dual_arm_control/talker.pdb"
-  "/home/andy/wrs_ws/devel/lib/dual_arm_control/talker"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/dual_arm_control/talker.pdb"
+  "/home/wrs/wrs2018/wrs_ws/devel/lib/dual_arm_control/talker"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -6,19 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/moc_main_window.cxx
+/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/moc_main_window.cxx
 ../../../../../../src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/main_window.hpp
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/main_window.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/main_window.hpp
 
-/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/moc_qnode.cxx
+/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/moc_qnode.cxx
 ../../../../../../src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/qnode.hpp
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/qnode.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/qnode.hpp
 
-/home/andy/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/qrc_images.cxx
+/home/wrs/wrs2018/wrs_ws/build/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/qrc_images.cxx
 QtCore/qglobal.h
 -
 
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetJointPose.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetJointPose.h
 ros/service_traits.h
 -
 manipulator_h_base_module_msgs/GetJointPoseRequest.h
@@ -26,7 +26,7 @@ manipulator_h_base_module_msgs/GetJointPoseRequest.h
 manipulator_h_base_module_msgs/GetJointPoseResponse.h
 -
 
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetJointPoseRequest.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetJointPoseRequest.h
 string
 -
 vector
@@ -42,7 +42,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetJointPoseResponse.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetJointPoseResponse.h
 string
 -
 vector
@@ -58,7 +58,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetKinematicsPose.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetKinematicsPose.h
 ros/service_traits.h
 -
 manipulator_h_base_module_msgs/GetKinematicsPoseRequest.h
@@ -66,7 +66,7 @@ manipulator_h_base_module_msgs/GetKinematicsPoseRequest.h
 manipulator_h_base_module_msgs/GetKinematicsPoseResponse.h
 -
 
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetKinematicsPoseRequest.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetKinematicsPoseRequest.h
 string
 -
 vector
@@ -82,41 +82,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetKinematicsPoseResponse.h
-string
--
-vector
--
-map
--
-ros/types.h
--
-ros/serialization.h
--
-ros/builtin_message_traits.h
--
-ros/message_operations.h
--
-geometry_msgs/Pose.h
--
-
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/JointPose.h
-string
--
-vector
--
-map
--
-ros/types.h
--
-ros/serialization.h
--
-ros/builtin_message_traits.h
--
-ros/message_operations.h
--
-
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/KinematicsPose.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/GetKinematicsPoseResponse.h
 string
 -
 vector
@@ -134,7 +100,23 @@ ros/message_operations.h
 geometry_msgs/Pose.h
 -
 
-/home/andy/wrs_ws/devel/include/manipulator_h_base_module_msgs/P2PPose.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/JointPose.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/KinematicsPose.h
 string
 -
 vector
@@ -152,7 +134,25 @@ ros/message_operations.h
 geometry_msgs/Pose.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/JointCtrlModule.h
+/home/wrs/wrs2018/wrs_ws/devel/include/manipulator_h_base_module_msgs/P2PPose.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+geometry_msgs/Pose.h
+-
+
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/JointCtrlModule.h
 string
 -
 vector
@@ -168,7 +168,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/StatusMsg.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/StatusMsg.h
 string
 -
 vector
@@ -186,17 +186,17 @@ ros/message_operations.h
 std_msgs/Header.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/main_window.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/main_window.hpp
 ros/ros.h
 -
 QtGui/QMainWindow
 -
 ui_main_window.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/ui_main_window.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/ui_main_window.h
 qnode.hpp
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/qnode.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/qnode.hpp
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/qnode.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/qnode.hpp
 ros/ros.h
 -
 string
@@ -210,9 +210,9 @@ eigen3/Eigen/Eigen
 std_msgs/String.h
 -
 robotis_controller_msgs/JointCtrlModule.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/robotis_controller_msgs/JointCtrlModule.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/robotis_controller_msgs/JointCtrlModule.h
 robotis_controller_msgs/StatusMsg.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/robotis_controller_msgs/StatusMsg.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/include/manipulator_h_gui/robotis_controller_msgs/StatusMsg.h
 manipulator_h_base_module_msgs/JointPose.h
 -
 manipulator_h_base_module_msgs/KinematicsPose.h
@@ -224,15 +224,15 @@ manipulator_h_base_module_msgs/GetJointPose.h
 manipulator_h_base_module_msgs/GetKinematicsPose.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/main.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/main.cpp
 QtGui
 -
 QApplication
 -
 manipulator_h_gui/main_window.hpp
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/manipulator_h_gui/main_window.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/manipulator_h_gui/main_window.hpp
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/main_window.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/main_window.cpp
 QtGui
 -
 QMessageBox
@@ -240,9 +240,9 @@ QMessageBox
 iostream
 -
 manipulator_h_gui/main_window.hpp
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/manipulator_h_gui/main_window.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/manipulator_h_gui/main_window.hpp
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/qnode.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/qnode.cpp
 ros/ros.h
 -
 ros/network.h
@@ -252,7 +252,7 @@ string
 sstream
 -
 manipulator_h_gui/qnode.hpp
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/manipulator_h_gui/qnode.hpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-MANIPULATOR-H/manipulator_h_gui/src/manipulator_h_gui/qnode.hpp
 
 /opt/ros/kinetic/include/geometry_msgs/Point.h
 string

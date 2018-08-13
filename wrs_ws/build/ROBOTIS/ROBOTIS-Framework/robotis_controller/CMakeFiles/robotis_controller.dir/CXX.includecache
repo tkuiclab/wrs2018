@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/GetJointModule.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/GetJointModule.h
 ros/service_traits.h
 -
 robotis_controller_msgs/GetJointModuleRequest.h
@@ -14,7 +14,7 @@ robotis_controller_msgs/GetJointModuleRequest.h
 robotis_controller_msgs/GetJointModuleResponse.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/GetJointModuleRequest.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/GetJointModuleRequest.h
 string
 -
 vector
@@ -30,7 +30,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/GetJointModuleResponse.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/GetJointModuleResponse.h
 string
 -
 vector
@@ -46,7 +46,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/JointCtrlModule.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/JointCtrlModule.h
 string
 -
 vector
@@ -62,7 +62,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/SetJointModule.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/SetJointModule.h
 ros/service_traits.h
 -
 robotis_controller_msgs/SetJointModuleRequest.h
@@ -70,7 +70,7 @@ robotis_controller_msgs/SetJointModuleRequest.h
 robotis_controller_msgs/SetJointModuleResponse.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/SetJointModuleRequest.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/SetJointModuleRequest.h
 string
 -
 vector
@@ -86,7 +86,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/SetJointModuleResponse.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/SetJointModuleResponse.h
 string
 -
 vector
@@ -102,7 +102,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/SetModule.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/SetModule.h
 ros/service_traits.h
 -
 robotis_controller_msgs/SetModuleRequest.h
@@ -110,7 +110,7 @@ robotis_controller_msgs/SetModuleRequest.h
 robotis_controller_msgs/SetModuleResponse.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/SetModuleRequest.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/SetModuleRequest.h
 string
 -
 vector
@@ -126,7 +126,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/SetModuleResponse.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/SetModuleResponse.h
 string
 -
 vector
@@ -142,7 +142,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/SyncWriteItem.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/SyncWriteItem.h
 string
 -
 vector
@@ -158,7 +158,7 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/devel/include/robotis_controller_msgs/WriteControlTable.h
+/home/wrs/wrs2018/wrs_ws/devel/include/robotis_controller_msgs/WriteControlTable.h
 string
 -
 vector
@@ -174,27 +174,27 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/group_bulk_read.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/group_bulk_read.h
 map
 -
 vector
 -
 port_handler.h
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
 packet_handler.h
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/packet_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/packet_handler.h
 
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/group_sync_write.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/group_sync_write.h
 map
 -
 vector
 -
 port_handler.h
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
 packet_handler.h
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/packet_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/packet_handler.h
 
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/packet_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/packet_handler.h
 Arduino.h
 -
 stdio.h
@@ -202,13 +202,13 @@ stdio.h
 vector
 -
 port_handler.h
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
 
-/home/andy/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/DynamixelSDK/c++/include/dynamixel_sdk/port_handler.h
 stdint.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller.h
 ros/ros.h
 -
 boost/thread.hpp
@@ -222,41 +222,41 @@ std_msgs/Float64.h
 sensor_msgs/JointState.h
 -
 robotis_controller_msgs/WriteControlTable.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/WriteControlTable.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/WriteControlTable.h
 robotis_controller_msgs/SyncWriteItem.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/SyncWriteItem.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/SyncWriteItem.h
 robotis_controller_msgs/JointCtrlModule.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/JointCtrlModule.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/JointCtrlModule.h
 robotis_controller_msgs/GetJointModule.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/GetJointModule.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/GetJointModule.h
 robotis_controller_msgs/SetJointModule.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/SetJointModule.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/SetJointModule.h
 robotis_controller_msgs/SetModule.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/SetModule.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_controller_msgs/SetModule.h
 robotis_device/robot.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_device/robot.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_device/robot.h
 robotis_framework_common/motion_module.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_framework_common/motion_module.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_framework_common/motion_module.h
 robotis_framework_common/sensor_module.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_framework_common/sensor_module.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/robotis_framework_common/sensor_module.h
 dynamixel_sdk/group_bulk_read.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/dynamixel_sdk/group_bulk_read.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/dynamixel_sdk/group_bulk_read.h
 dynamixel_sdk/group_sync_write.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/dynamixel_sdk/group_sync_write.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/include/robotis_controller/dynamixel_sdk/group_sync_write.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/src/robotis_controller/robotis_controller.cpp
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/src/robotis_controller/robotis_controller.cpp
 ros/package.h
 -
 ros/callback_queue.h
 -
 robotis_controller/robotis_controller.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/src/robotis_controller/robotis_controller/robotis_controller.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_controller/src/robotis_controller/robotis_controller/robotis_controller.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 stdint.h
 -
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
 map
 -
 string
@@ -264,9 +264,9 @@ string
 vector
 -
 control_table_item.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
 map
 -
 vector
@@ -274,29 +274,29 @@ vector
 string
 -
 control_table_item.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 device.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
 dynamixel_state.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_state.h
 stdint.h
 -
 time_stamp.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/robot.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/robot.h
 vector
 -
 sensor.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
 dynamixel.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel.h
 dynamixel_sdk/port_handler.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_sdk/port_handler.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/dynamixel_sdk/port_handler.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor.h
 map
 -
 string
@@ -304,43 +304,43 @@ string
 stdint.h
 -
 device.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/device.h
 sensor_state.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
 control_table_item.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/control_table_item.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/sensor_state.h
 time_stamp.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_device/include/robotis_device/time_stamp.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/motion_module.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/motion_module.h
 map
 -
 string
 -
 singleton.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/singleton.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/singleton.h
 robotis_device/robot.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/robot.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/robot.h
 robotis_device/dynamixel.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/dynamixel.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/dynamixel.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/sensor_module.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/sensor_module.h
 map
 -
 string
 -
 singleton.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/singleton.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/singleton.h
 robotis_device/robot.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/robot.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/robot.h
 robotis_device/dynamixel.h
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/dynamixel.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/robotis_device/dynamixel.h
 
-/home/andy/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/singleton.h
+/home/wrs/wrs2018/wrs_ws/src/ROBOTIS/ROBOTIS-Framework/robotis_framework_common/include/robotis_framework_common/singleton.h
 
 /opt/ros/kinetic/include/boost_161_condition_variable.h
 boost/thread/detail/platform.hpp
