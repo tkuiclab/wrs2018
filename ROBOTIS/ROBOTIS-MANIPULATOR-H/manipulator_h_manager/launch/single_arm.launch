@@ -51,5 +51,7 @@
         <remap from="/robotis/base/get_kinematics_pose"   to="/$(arg side)_arm/get_kinematics_pose"	  />
     </node>
 
-    <node pkg="linear_motion" type="linear_z" name="slide_$(arg side)" output="screen" unless="$(arg en_sim)" />
+    <node pkg="linear_motion" type="linear_z" name="slide_$(arg side)" output="screen" unless="$(arg en_sim)">
+        <param name="side"            value="$(arg side)" />
+    </node>
 </launch>
