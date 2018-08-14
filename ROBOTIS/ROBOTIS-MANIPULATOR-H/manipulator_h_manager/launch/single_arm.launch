@@ -2,7 +2,7 @@
 
 <launch>
 
-    <arg name="en_sim" default="true"  />
+    <arg name="en_sim" default="false"  />
     <arg name="side"   default="right" />
 	
     <param name="gazebo"                   value="$(arg en_sim)"     type="bool" />
