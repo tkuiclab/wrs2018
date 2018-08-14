@@ -545,7 +545,7 @@ Eigen::Vector3d ManipulatorKinematicsDynamics::forwardKinematics_7(int joint_ID,
   return T.block(0,3,3,1);
 }
 bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_position, Eigen::Matrix3d rotation, 
-                                                            double Phi, double slide_position, Eigen::VectorXd &Old_JointAngle)
+                                                            double Phi, double slide_position, Eigen::VectorXd Old_JointAngle)
 {
 
   // std::cout<<"rotationrotationrotationrotation"<<std::endl<<rotation<<std::endl;

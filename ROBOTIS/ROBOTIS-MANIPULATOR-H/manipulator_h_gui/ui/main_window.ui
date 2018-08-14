@@ -162,7 +162,7 @@
            <item>
             <widget class="QDoubleSpinBox" name="pos_x_spinbox">
              <property name="decimals">
-              <number>3</number>
+              <number>4</number>
              </property>
              <property name="minimum">
               <double>-10.000000000000000</double>
@@ -185,7 +185,7 @@
            <item>
             <widget class="QDoubleSpinBox" name="pos_y_spinbox">
              <property name="decimals">
-              <number>3</number>
+              <number>4</number>
              </property>
              <property name="minimum">
               <double>-10.000000000000000</double>
@@ -208,7 +208,7 @@
            <item>
             <widget class="QDoubleSpinBox" name="pos_z_spinbox">
              <property name="decimals">
-              <number>3</number>
+              <number>4 </number>
              </property>
              <property name="minimum">
               <double>-10.000000000000000</double>

@@ -67,7 +67,7 @@ public:
                          int max_iter, double ik_err);
   Eigen::MatrixXd Trans( double &Theta, Eigen::VectorXd &DH );
   Eigen::Vector3d forwardKinematics_7(int joint_ID, Eigen::VectorXd angle);
-  bool InverseKinematics_7( Eigen::VectorXd position, Eigen::Matrix3d rotation, double phi, double slide_position, Eigen::VectorXd &Old_JointAngle );
+  bool InverseKinematics_7( Eigen::VectorXd position, Eigen::Matrix3d rotation, double phi, double slide_position, Eigen::VectorXd Old_JointAngle );
   bool slideInverseKinematics(Eigen::Vector3d goal_position, Eigen::Matrix3d rotation, 
                                                             double slide_pos, double& goal_slide_pos);
   void load_LinkParam();

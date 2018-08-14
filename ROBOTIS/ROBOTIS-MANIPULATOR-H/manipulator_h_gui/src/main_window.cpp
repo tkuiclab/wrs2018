@@ -86,6 +86,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
   qRegisterMetaType<manipulator_h_base_module_msgs::KinematicsPose>("manipulator_h_base_module_msgs::KinematicsPose");
   QObject::connect(&qnode, SIGNAL(updateCurrentKinematicsPose(manipulator_h_base_module_msgs::KinematicsPose)), this, SLOT(updateCurrKinematicsPoseSpinbox(manipulator_h_base_module_msgs::KinematicsPose)));
 
+  
   /*********************
     ** Auto Start
     **********************/
