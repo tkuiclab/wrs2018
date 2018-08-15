@@ -40,7 +40,7 @@ public:
   ~RobotisState();
 
   bool    is_moving_;
-
+  bool    is_ik;
   // trajectory
   int     cnt_;
   int     all_time_steps_;

@@ -284,6 +284,8 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
   manipulator_->forwardKinematics(7);
   // std::cout<<"p2p_positoinp2p_positoin"<<std::endl<<p2p_positoin<<std::endl;
   // std::cout<<"p2p_rotationp2p_rotation"<<std::endl<<p2p_rotation<<std::endl;
+
+  robotis_->is_ik = true;
   
   bool    slide_success = manipulator_->slideInverseKinematics(p2p_positoin, p2p_rotation, 
                                                             slide_->slide_pos, slide_->goal_slide_pos);
@@ -321,6 +323,7 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
     publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory (p2p IK Failed)");
     return;
   }
+  robotis_->is_ik = false;
   return;
 }
 // =======================================================================================================================
@@ -557,10 +560,12 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
   }
 
   /*----- forward kinematics -----*/
-
-  manipulator_->manipulator_link_data_[0]->slide_position_ = slide_->slide_pos;
-  for (int id = 1; id <= MAX_JOINT_ID; id++)
-    manipulator_->manipulator_link_data_[id]->joint_angle_ = joint_state_->goal_joint_state_[id].position_;
+  if( robotis_->is_ik == false )
+  {
+    manipulator_->manipulator_link_data_[0]->slide_position_ = slide_->slide_pos;
+    for (int id = 1; id <= MAX_JOINT_ID; id++)
+      manipulator_->manipulator_link_data_[id]->joint_angle_ = joint_state_->goal_joint_state_[id].position_;
+  }
 
   manipulator_->forwardKinematics(7);  // 0 chang to 7 : how many joint
 
@@ -582,18 +587,12 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
       int     max_iter      = 30;
       double  ik_tol        = 1e-3;
       double  tar_slide_pos = robotis_->calc_slide_tra_(robotis_->cnt_, 0);
-      // bool    ik_success  = manipulator_->inverseKinematics(robotis_->ik_id_start_, robotis_->ik_id_end_,
-      //                                                       robotis_->ik_target_position_, robotis_->ik_target_rotation_, max_iter, ik_tol);
-      // std::cout<<"robotis_ik_target_rotation"<<std::endl<<robotis_->ik_target_rotation_<<std::endl;
+
+      robotis_->is_ik = true;
+      
       bool    ik_success  = manipulator_->inverseKinematics(robotis_->ik_id_end_,robotis_->ik_target_position_, 
                                                               robotis_->ik_target_rotation_, robotis_->ik_target_phi_, tar_slide_pos, max_iter, ik_tol);
-      
-      // std::cout<<"robotis_ik_target_rotation"<<std::endl<<robotis_->ik_target_rotation_<<std::endl;
-      // std::cout<<"++++++++++++++++++++++++roangle++++++++++++++++++++++++++"<<std::endl;
-      // for (int id = 1; id <= MAX_JOINT_ID; id++)
-      //   std::cout<<manipulator_->manipulator_link_data_[id]->joint_angle_<<" ";
-      // std::cout<<std::endl<<std::endl;
-
+    
       if (ik_success == true)
       {
         for (int id = 1; id <= MAX_JOINT_ID; id++)
@@ -613,6 +612,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
         robotis_->ik_solve_ = false;
         robotis_->cnt_ = 0;
       }
+      robotis_->is_ik = false;
     }
     else
     {

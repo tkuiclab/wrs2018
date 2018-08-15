@@ -28,6 +28,7 @@ using namespace robotis_manipulator_h;
 RobotisState::RobotisState()
 {
   is_moving_ = false;
+  is_ik = false;
 
   cnt_      = 0;
   mov_time_ = 1.0;

@@ -13,10 +13,9 @@ slide_control::slide_control()
 
     slide_pos = 0;
     goal_slide_pos = 0;
+    result_slide_pos = 0;
 }
-slide_control::~slide_control()
-{
-}
+slide_control::~slide_control(){}
 
 void slide_control::slide_pub()
 {
