@@ -6,7 +6,7 @@
 #include <std_msgs/Float64.h>
 #include "ros/ros.h"
 #include "std_msgs/Int32.h"
-
+#include <boost/thread.hpp>
 #include "std_msgs/String.h"
 #include "linear_motion/LM_Cmd.h"
 #include "modbus/modbus.h"
@@ -17,15 +17,13 @@
 #define ADDRESS_END 99
 // #define position
 
-std_msgs::Int32 std_msg;
-std_msgs::Int32 feedback;
-ros::Publisher feedback_pub;
 linear_motion::LM_Cmd LM_Msg;
-bool pub_flag = false;
-modbus_t *ctx, *ctz, *ct_left, *tmp_ct;
+modbus_t *ct;
 int curr_state = 10;
+int goal_pos;
+boost::thread  *tra_gene_thread_;
 
-void SendCmd(bool Is_Pub, modbus_t* ct, int pos);
+void SendCmd();
 std::string LM_x_state = "idle";
 
 bool is_x_busy = false;
@@ -33,10 +31,12 @@ bool is_x_busy = false;
 
 void slide_callback(const std_msgs::Float64 &slide_command)
 {
-    int pos = -(double)100000.0*slide_command.data;
-    SendCmd(true, ctx    , pos);
+    goal_pos = -(double)100000.0*slide_command.data;
+    tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
+    delete tra_gene_thread_;
+    //SendCmd();
     LM_x_state = "execute";
-    pub_flag = true;
+    
 }
 
 modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRate)
@@ -59,7 +59,7 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
     return ct;
 }
 
-void SendCmd(bool Is_Pub, modbus_t* ct, int pos)
+void SendCmd()
 {
     int rc;
     //輸入寫入
@@ -70,11 +70,11 @@ void SendCmd(bool Is_Pub, modbus_t* ct, int pos)
     // rc = modbus_write_register(ct, 6145, 1);
 
     //位置
-    int up_pos = pos-65535;
+    int up_pos = goal_pos-65535;
     if(up_pos<=0)
     {
         rc = modbus_write_register(ct, 6146, 0);
-        rc = modbus_write_register(ct, 6147, pos);
+        rc = modbus_write_register(ct, 6147, goal_pos);
     }
     else
     {
@@ -83,35 +83,13 @@ void SendCmd(bool Is_Pub, modbus_t* ct, int pos)
         std::cout<<"up pos = "<<up_pos<<"\n";
     }
 
-    // //最大速度
-    // rc = modbus_write_register(ct, 6148, 0);
-    // rc = modbus_write_register(ct, 6149, 10000);
-
-    // //加速度
-    // rc = modbus_write_register(ct, 6150, 0);
-    // rc = modbus_write_register(ct, 6151, 80000);
-
-    // //減速度
-    // rc = modbus_write_register(ct, 6152, 0);
-    // printf("6152 rc=%d\n",rc);
-    // rc = modbus_write_register(ct, 6153, 80000);
-    // printf("6153 rc=%d\n",rc);
-
-    // //運轉電流
-    // rc = modbus_write_register(ct, 6154, 0);
-    // rc = modbus_write_register(ct, 6155, 500);
-
-    // //結合
-    // rc = modbus_write_register(ct, 6158, 0);
-    // rc = modbus_write_register(ct, 6159, 0);
-
     //輸入啟動
     rc = modbus_write_register(ct, 125, 8);
 
     //輸出結束
     rc = modbus_write_register(ct, 127, 8);
 
-    pub_flag = false;
+    
 }
 
 bool Is_LMBusy(modbus_t* ct, uint16_t * tab_rp_registers, uint16_t * tab_rq_registers)
@@ -131,9 +109,9 @@ linear_motion::LM_Cmd Update_LMMsg(uint16_t * tab_rp_registers, uint16_t * tab_r
 {
     linear_motion::LM_Cmd LM;
 
-    is_x_busy    = Is_LMBusy(ctx    , tab_rp_registers, tab_rq_registers);
+    is_x_busy    = Is_LMBusy(ct    , tab_rp_registers, tab_rq_registers);
    
-    LM.x_curr_pos    = Get_CurrPos(ctx    , tab_rp_registers, tab_rq_registers);
+    LM.x_curr_pos    = Get_CurrPos(ct    , tab_rp_registers, tab_rq_registers);
    
     if (LM_x_state == "execute")
     {
@@ -193,7 +171,7 @@ int main(int argc, char **argv)
     //========================= Initialize Modbus_RTU ============================= 
     bool Connect_X_OK = false;
     int  ID = side_str == "right" ? 1 : 3;
-    ctx     = Init_Modus_RTU(Connect_X_OK   , ID, "/dev/wrs/slide_" + side_str, 9600);
+    ct     = Init_Modus_RTU(Connect_X_OK   , ID, "/dev/wrs/slide_" + side_str, 9600);
 
     if(Connect_X_OK == false)
     {
@@ -217,39 +195,39 @@ int main(int argc, char **argv)
 
     int rc;
 
-    rc = modbus_write_register(ctx, 125, 0);
+    rc = modbus_write_register(ct, 125, 0);
 
     //運轉方式
-    rc = modbus_write_register(ctx, 6144, 0);
-    rc = modbus_write_register(ctx, 6145, 1);
+    rc = modbus_write_register(ct, 6144, 0);
+    rc = modbus_write_register(ct, 6145, 1);
 
     //最大速度
-    rc = modbus_write_register(ctx, 6148, 0);
-    rc = modbus_write_register(ctx, 6149, 10000);
+    rc = modbus_write_register(ct, 6148, 0);
+    rc = modbus_write_register(ct, 6149, 10000);
 
     //加速度
-    rc = modbus_write_register(ctx, 6150, 0);
-    rc = modbus_write_register(ctx, 6151, 80000);
+    rc = modbus_write_register(ct, 6150, 0);
+    rc = modbus_write_register(ct, 6151, 80000);
 
     //減速度
-    rc = modbus_write_register(ctx, 6152, 0);
+    rc = modbus_write_register(ct, 6152, 0);
     printf("6152 rc=%d\n",rc);
-    rc = modbus_write_register(ctx, 6153, 80000);
+    rc = modbus_write_register(ct, 6153, 80000);
     printf("6153 rc=%d\n",rc);
 
     //運轉電流
-    rc = modbus_write_register(ctx, 6154, 0);
-    rc = modbus_write_register(ctx, 6155, 500);
+    rc = modbus_write_register(ct, 6154, 0);
+    rc = modbus_write_register(ct, 6155, 500);
 
     //結合
-    rc = modbus_write_register(ctx, 6158, 0);
-    rc = modbus_write_register(ctx, 6159, 0);
+    rc = modbus_write_register(ct, 6158, 0);
+    rc = modbus_write_register(ct, 6159, 0);
 
     //輸入啟動
-    rc = modbus_write_register(ctx, 125, 8);
+    rc = modbus_write_register(ct, 125, 8);
 
     //輸出結束
-    rc = modbus_write_register(ctx, 127, 8);
+    rc = modbus_write_register(ct, 127, 8);
 
     while (ros::ok())
     {
