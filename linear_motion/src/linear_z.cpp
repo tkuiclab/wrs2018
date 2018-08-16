@@ -61,14 +61,13 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
 
 void SendCmd(bool Is_Pub, modbus_t* ct, int pos)
 {
-    std::cout<<"ininininininininininini = "<<pos<<"\n";
     int rc;
     //輸入寫入
     rc = modbus_write_register(ct, 125, 0);
 
-    //運轉方式
-    rc = modbus_write_register(ct, 6144, 0);
-    rc = modbus_write_register(ct, 6145, 1);
+    // //運轉方式
+    // rc = modbus_write_register(ct, 6144, 0);
+    // rc = modbus_write_register(ct, 6145, 1);
 
     //位置
     int up_pos = pos-65535;
@@ -84,27 +83,27 @@ void SendCmd(bool Is_Pub, modbus_t* ct, int pos)
         std::cout<<"up pos = "<<up_pos<<"\n";
     }
 
-    //最大速度
-    rc = modbus_write_register(ct, 6148, 0);
-    rc = modbus_write_register(ct, 6149, 10000);
+    // //最大速度
+    // rc = modbus_write_register(ct, 6148, 0);
+    // rc = modbus_write_register(ct, 6149, 10000);
 
-    //加速度
-    rc = modbus_write_register(ct, 6150, 0);
-    rc = modbus_write_register(ct, 6151, 80000);
+    // //加速度
+    // rc = modbus_write_register(ct, 6150, 0);
+    // rc = modbus_write_register(ct, 6151, 80000);
 
-    //減速度
-    rc = modbus_write_register(ct, 6152, 0);
-    printf("6152 rc=%d\n",rc);
-    rc = modbus_write_register(ct, 6153, 80000);
-    printf("6153 rc=%d\n",rc);
+    // //減速度
+    // rc = modbus_write_register(ct, 6152, 0);
+    // printf("6152 rc=%d\n",rc);
+    // rc = modbus_write_register(ct, 6153, 80000);
+    // printf("6153 rc=%d\n",rc);
 
-    //運轉電流
-    rc = modbus_write_register(ct, 6154, 0);
-    rc = modbus_write_register(ct, 6155, 500);
+    // //運轉電流
+    // rc = modbus_write_register(ct, 6154, 0);
+    // rc = modbus_write_register(ct, 6155, 500);
 
-    //結合
-    rc = modbus_write_register(ct, 6158, 0);
-    rc = modbus_write_register(ct, 6159, 0);
+    // //結合
+    // rc = modbus_write_register(ct, 6158, 0);
+    // rc = modbus_write_register(ct, 6159, 0);
 
     //輸入啟動
     rc = modbus_write_register(ct, 125, 8);
@@ -215,6 +214,41 @@ int main(int argc, char **argv)
 
     // ============================= ROS Loop =============================
     bool is_send1 = false;
+
+    rc = modbus_write_register(ct, 125, 0);
+
+    //運轉方式
+    rc = modbus_write_register(ct, 6144, 0);
+    rc = modbus_write_register(ct, 6145, 1);
+
+    //最大速度
+    rc = modbus_write_register(ct, 6148, 0);
+    rc = modbus_write_register(ct, 6149, 10000);
+
+    //加速度
+    rc = modbus_write_register(ct, 6150, 0);
+    rc = modbus_write_register(ct, 6151, 80000);
+
+    //減速度
+    rc = modbus_write_register(ct, 6152, 0);
+    printf("6152 rc=%d\n",rc);
+    rc = modbus_write_register(ct, 6153, 80000);
+    printf("6153 rc=%d\n",rc);
+
+    //運轉電流
+    rc = modbus_write_register(ct, 6154, 0);
+    rc = modbus_write_register(ct, 6155, 500);
+
+    //結合
+    rc = modbus_write_register(ct, 6158, 0);
+    rc = modbus_write_register(ct, 6159, 0);
+
+    //輸入啟動
+    rc = modbus_write_register(ct, 125, 8);
+
+    //輸出結束
+    rc = modbus_write_register(ct, 127, 8);
+
     while (ros::ok())
     {
         pub.publish(LM_Msg);
