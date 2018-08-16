@@ -34,8 +34,9 @@ bool is_x_busy = false;
 void slide_callback(const std_msgs::Float64 &slide_command)
 {
     goal_pos = -(double)100000.0*slide_command.data;
-    tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
-    delete tra_gene_thread_;
+    SendCmd();
+    // tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
+    // delete tra_gene_thread_;
     //SendCmd();
     LM_x_state = "execute";
     
