@@ -203,10 +203,10 @@ int main(int argc, char **argv)
 
     //運轉方式
     rc = modbus_write_register(ct, 6144, 0);
-    rc = modbus_write_register(ct, 6145, 7);
+    rc = modbus_write_register(ct, 6145, 1);
 
-    rc = modbus_write_register(ct, 6146, 0);
-    rc = modbus_write_register(ct, 6147, 0);
+    // rc = modbus_write_register(ct, 6146, 0);
+    // rc = modbus_write_register(ct, 6147, 0);
 
     //最大速度
     rc = modbus_write_register(ct, 6148, 0);
