@@ -17,6 +17,8 @@
 #define ADDRESS_END 99
 // #define position
 
+int test = 0;
+
 linear_motion::LM_Cmd LM_Msg;
 modbus_t *ct;
 int curr_state = 10;
@@ -61,6 +63,7 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
 
 void SendCmd()
 {
+    std::cout<<test++<<std::endl;
     int rc;
     //輸入寫入
     rc = modbus_write_register(ct, 125, 0);
