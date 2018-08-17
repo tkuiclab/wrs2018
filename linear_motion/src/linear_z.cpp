@@ -64,14 +64,14 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
 
 void SendCmd()
 {
-    std::cout<<test++<<std::endl;
+    const clock_t begin_time = clock();
     int rc;
     //輸入寫入
-    rc = modbus_write_register(ct, 125, 0);
+    // rc = modbus_write_register(ct, 125, 0);
 
     //運轉方式
-    rc = modbus_write_register(ct, 6144, 0);
-    rc = modbus_write_register(ct, 6145, 7);
+    // rc = modbus_write_register(ct, 6144, 0);
+    // rc = modbus_write_register(ct, 6145, 7);
 
     //位置
     int up_pos = goal_pos-65535;
@@ -88,11 +88,11 @@ void SendCmd()
     }
 
     //輸入啟動
-    rc = modbus_write_register(ct, 125, 8);
+    // rc = modbus_write_register(ct, 125, 8);
 
     //輸出結束
-    rc = modbus_write_register(ct, 127, 8);
-
+    // rc = modbus_write_register(ct, 127, 8);
+    std::cout <<"command time"<< float(clock() - begin_time) / CLOCKS_PER_SEC;
     
 }
 
@@ -198,12 +198,12 @@ int main(int argc, char **argv)
     bool is_send1 = false;
 
     int rc;
-
+    const clock_t begin_time = clock();
     rc = modbus_write_register(ct, 125, 0);
 
     // //運轉方式
-    // rc = modbus_write_register(ct, 6144, 0);
-    // rc = modbus_write_register(ct, 6145, 1);
+    rc = modbus_write_register(ct, 6144, 0);
+    rc = modbus_write_register(ct, 6145, 1);
 
     // rc = modbus_write_register(ct, 6146, 0);
     // rc = modbus_write_register(ct, 6147, 0);
@@ -233,12 +233,16 @@ int main(int argc, char **argv)
     rc = modbus_write_register(ct, 6158, 0);
     rc = modbus_write_register(ct, 6159, 0);
 
+    //下一連結資料
+    rc = modbus_write_register(ct, 6160, 0);
+    rc = modbus_write_register(ct, 6161, -256);
+
     //輸入啟動
     rc = modbus_write_register(ct, 125, 8);
 
     //輸出結束
     rc = modbus_write_register(ct, 127, 8);
-
+    std::cout <<"setting time"<< float(clock() - begin_time) / CLOCKS_PER_SEC;
     while (ros::ok())
     {
         pub.publish(LM_Msg);
