@@ -67,7 +67,7 @@ void SendCmd()
     const clock_t begin_time = clock();
     int rc;
     //輸入寫入
-    // rc = modbus_write_register(ct, 125, 0);
+     rc = modbus_write_register(ct, 125, 0);
 
     //運轉方式
     // rc = modbus_write_register(ct, 6144, 0);
@@ -88,10 +88,10 @@ void SendCmd()
     }
 
     //輸入啟動
-    // rc = modbus_write_register(ct, 125, 8);
+     rc = modbus_write_register(ct, 125, 8);
 
     //輸出結束
-    // rc = modbus_write_register(ct, 127, 8);
+     rc = modbus_write_register(ct, 127, 8);
     std::cout <<"command time"<< float(clock() - begin_time) / CLOCKS_PER_SEC;
     
 }
