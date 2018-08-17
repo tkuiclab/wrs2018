@@ -35,8 +35,12 @@ bool is_x_busy = false;
 void slide_callback(const std_msgs::Float64 &slide_command)
 {
     goal_pos = -(double)100000.0*slide_command.data;
+    std::cout<<"goal_pos : "<<goal_pos<<std::endl;
     if(address <= 6144 + 64*5)//8064)
+    {
+        std::cout<<"goal_pos is send : "<<goal_pos<<std::endl;
         SendCmd();
+    }
     // tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
     // delete tra_gene_thread_;
     //SendCmd();
@@ -67,7 +71,7 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
 void SendCmd()
 {
     int rc;
-        rc = modbus_write_register(ct, 125, 0);
+    rc = modbus_write_register(ct, 125, 0);
 
     // //運轉方式
     rc = modbus_write_register(ct, address + 0, 0);
@@ -105,18 +109,26 @@ void SendCmd()
     rc = modbus_write_register(ct, address + 10, 0);
     rc = modbus_write_register(ct, address + 11, 500);
 
+    //運轉延遲
     rc = modbus_write_register(ct, address + 12, 0);
     rc = modbus_write_register(ct, address + 13, 0);
 
-    //結合
+    
     if(address <= 6144 + 64*5)
     {
+        //結合
         rc = modbus_write_register(ct, address + 14, 0);
         rc = modbus_write_register(ct, address + 15, 3);
 
         //下一連結資料
         rc = modbus_write_register(ct, address + 16, 0);
         rc = modbus_write_register(ct, address + 17, -1);
+    }
+    else
+    {
+        //結合
+        rc = modbus_write_register(ct, address + 14, 0);
+        rc = modbus_write_register(ct, address + 15, 0);
     }
     //輸入啟動
     rc = modbus_write_register(ct, 125, 8);
