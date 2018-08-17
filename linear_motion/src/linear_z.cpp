@@ -9,16 +9,18 @@
 #include <boost/thread.hpp>
 #include "std_msgs/String.h"
 #include "linear_motion/LM_Cmd.h"
+#include "manipulator_h_base_module_msgs/SlideCommand.h"   //new
+
 #include "modbus/modbus.h"
 
 #define LOOP 1
 #define MODE_GET_CURR_POS 291
-#define ADDRESS_START 0
-#define ADDRESS_END 99
+#define ADDRESS_START 6144
+#define ADDRESS_DISTANCE 64
+#define ADDRESS_END 22464
 // #define position
 
-int test = 0;
-int address = 6144;
+int address = ADDRESS_START;
 
 linear_motion::LM_Cmd LM_Msg;
 modbus_t *ct;
@@ -26,21 +28,25 @@ int curr_state = 10;
 int goal_pos;
 boost::thread  *tra_gene_thread_;
 
-void SendCmd();
+void SendCmd(int is_end);
 std::string LM_x_state = "idle";
 
 bool is_x_busy = false;
 
 
-void slide_callback(const std_msgs::Float64 &slide_command)
+void slide_callback(const manipulator_h_base_module_msgs::SlideCommand::ConstPtr& msg)
 {
-    goal_pos = -(double)100000.0*slide_command.data;
+    goal_pos = -(double)100000.0*msg->pos;
+    
     std::cout<<"goal_pos : "<<goal_pos<<std::endl;
-    if(address <= 6144 + 64*5)//8064)
-    {
-        std::cout<<"goal_pos is send : "<<goal_pos<<std::endl;
-        SendCmd();
-    }
+    
+    std::cout<<"goal_pos is send : "<<goal_pos<<std::endl;
+    SendCmd(msg->end);
+
+    if(address < ADDRESS_END)
+        address += ADDRESS_DISTANCE;
+    else
+        address = ADDRESS_START;
     // tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
     // delete tra_gene_thread_;
     //SendCmd();
@@ -68,7 +74,7 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
     return ct;
 }
 
-void SendCmd()
+void SendCmd(int is_end)
 {
     int rc;
     rc = modbus_write_register(ct, 125, 0);
@@ -114,7 +120,13 @@ void SendCmd()
     rc = modbus_write_register(ct, address + 13, 0);
 
     
-    if(address <= 6144 + 64*5)
+    if(is_end)
+    {
+        //結合
+        rc = modbus_write_register(ct, address + 14, 0);
+        rc = modbus_write_register(ct, address + 15, 0);        
+    }
+    else
     {
         //結合
         rc = modbus_write_register(ct, address + 14, 0);
@@ -123,12 +135,6 @@ void SendCmd()
         //下一連結資料
         rc = modbus_write_register(ct, address + 16, 0);
         rc = modbus_write_register(ct, address + 17, -1);
-    }
-    else
-    {
-        //結合
-        rc = modbus_write_register(ct, address + 14, 0);
-        rc = modbus_write_register(ct, address + 15, 0);
     }
     //輸入啟動
     rc = modbus_write_register(ct, 125, 8);
@@ -139,8 +145,6 @@ void SendCmd()
     //運轉方式
     // rc = modbus_write_register(ct, 6144, 0);
     // rc = modbus_write_register(ct, 6145, 7);
-
-    address += 64;
 
 }
 
@@ -163,7 +167,7 @@ linear_motion::LM_Cmd Update_LMMsg(uint16_t * tab_rp_registers, uint16_t * tab_r
 
     is_x_busy    = Is_LMBusy(ct    , tab_rp_registers, tab_rq_registers);
    
-    LM.x_curr_pos    = Get_CurrPos(ct    , tab_rp_registers, tab_rq_registers);
+    LM.curr_pos    = Get_CurrPos(ct    , tab_rp_registers, tab_rq_registers);
    
     if (LM_x_state == "execute")
     {
@@ -236,9 +240,9 @@ int main(int argc, char **argv)
     }
 
     // ============================= Subscribe message =============================
-    std::string side_label = "right" == side_str ? "r": "l";
+    // std::string side_label = "right" == side_str ? "r": "l";
     ros::NodeHandle n;
-    ros::Subscriber sub = n.subscribe("/mobile_dual_arm/" + side_label + "_slide_position/command", 10, slide_callback);
+    ros::Subscriber sub = n.subscribe("/slide_command_msg", 10, slide_callback);
     ros::Publisher  pub = n.advertise<linear_motion::LM_Cmd>("/LM_FeedBack", 1);
     ros::Rate loop_rate(50);
 

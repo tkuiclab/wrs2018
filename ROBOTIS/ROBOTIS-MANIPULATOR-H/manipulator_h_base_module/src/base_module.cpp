@@ -579,6 +579,8 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     {
       robotis_->ik_start_rotation_ = manipulator_->manipulator_link_data_[robotis_->ik_id_end_]->orientation_;
       robotis_->ik_start_phi_ = manipulator_->manipulator_link_data_[robotis_->ik_id_end_]->phi_;
+      //slide_->is_first = true;
+      slide_->is_end = false;
     }
     if (robotis_->ik_solve_ == true)
     {
@@ -633,7 +635,6 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     std::string joint_name = state_iter->first;
     result_[joint_name]->goal_position_ = joint_state_->goal_joint_state_[joint_name_to_id_[joint_name]].position_;
   }
-  // std::cout<<"<<<<<<<<<<<<<<<<<<<slide_->goal_slide_pos<<<<<<<<<<<<<<<<<"<<std::endl<<slide_->goal_slide_pos<<std::endl;
   slide_->slide_pub();
   /*---------- initialize count number ----------*/
 
@@ -642,6 +643,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     ROS_INFO("[end] send trajectory");
     publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");
 
+    slide_->is_end = true;
     robotis_->is_moving_ = false;
     robotis_->ik_solve_ = false;
     robotis_->cnt_ = 0;

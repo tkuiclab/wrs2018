@@ -29,6 +29,9 @@
 #include <ros/package.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/String.h>
+#include "linear_motion/LM_Cmd.h"
+#include "manipulator_h_base_module_msgs/SlideCommand.h"   //new
+
 
 namespace robotis_manipulator_h
 {
@@ -36,14 +39,18 @@ class slide_control
 {
   ros::NodeHandle n;
   ros::Publisher  slide_pos_pub; 
-
+  ros::Publisher  slide_cmd_pub;
+  ros::Subscriber slide_fdb_sub;
 public:
   slide_control();
   ~slide_control();
 
   /* ROS Topic Callback Functions */
-  
+  bool is_first;
+  bool is_end;
+
   void slide_pub ();
+  void slideFeedback(const linear_motion::LM_Cmd::ConstPtr& msg);
 
   double goal_slide_pos;
   double result_slide_pos;

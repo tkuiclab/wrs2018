@@ -25,6 +25,7 @@ add_message_files(
   JointPose.msg
   KinematicsPose.msg
   P2PPose.msg
+  SlideCommand.msg
 )
 
 add_service_files(
