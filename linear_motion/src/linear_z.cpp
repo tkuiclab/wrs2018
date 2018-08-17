@@ -18,6 +18,7 @@
 // #define position
 
 int test = 0;
+int addtess = 6144;
 
 linear_motion::LM_Cmd LM_Msg;
 modbus_t *ct;
@@ -34,7 +35,8 @@ bool is_x_busy = false;
 void slide_callback(const std_msgs::Float64 &slide_command)
 {
     goal_pos = -(double)100000.0*slide_command.data;
-    SendCmd();
+    if(address <= 8064)
+        SendCmd();
     // tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
     // delete tra_gene_thread_;
     //SendCmd();
@@ -64,36 +66,70 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
 
 void SendCmd()
 {
-    const clock_t begin_time = clock();
     int rc;
-    //輸入寫入
-     rc = modbus_write_register(ct, 125, 0);
+        rc = modbus_write_register(ct, 125, 0);
 
-    //運轉方式
-    // rc = modbus_write_register(ct, 6144, 0);
-    // rc = modbus_write_register(ct, 6145, 7);
+    // //運轉方式
+    rc = modbus_write_register(ct, address + 0, 0);
+    rc = modbus_write_register(ct, address + 1, 1);
 
     //位置
     int up_pos = goal_pos-65535;
     if(up_pos<=0)
     {
-        rc = modbus_write_register(ct, 6146, 0);
-        rc = modbus_write_register(ct, 6147, goal_pos);
+        rc = modbus_write_register(ct, address + 2, 0);
+        rc = modbus_write_register(ct, address + 3, goal_pos);
     }
     else
     {
-        rc = modbus_write_register(ct, 6146, 1);
-        rc = modbus_write_register(ct, 6147, up_pos);
+        rc = modbus_write_register(ct, address + 2, 1);
+        rc = modbus_write_register(ct, address + 3, up_pos);
         std::cout<<"up pos = "<<up_pos<<"\n";
     }
 
+    //最大速度
+    rc = modbus_write_register(ct, address + 4, 0);
+    rc = modbus_write_register(ct, address + 5, 10000);
+
+    //加速度
+    rc = modbus_write_register(ct, address + 6, 0);
+    rc = modbus_write_register(ct, address + 7, 80000);
+
+    //減速度
+    rc = modbus_write_register(ct, address + 8, 0);
+    printf("6152 rc=%d\n",rc);
+    rc = modbus_write_register(ct, address + 9, 80000);
+    printf("6153 rc=%d\n",rc);
+
+    //運轉電流
+    rc = modbus_write_register(ct, address + 10, 0);
+    rc = modbus_write_register(ct, address + 11, 500);
+
+    rc = modbus_write_register(ct, address + 12, 0);
+    rc = modbus_write_register(ct, address + 13, 0);
+
+    //結合
+    if(address <= 8064)
+    {
+        rc = modbus_write_register(ct, address + 14, 0);
+        rc = modbus_write_register(ct, address + 15, 3);
+
+        //下一連結資料
+        rc = modbus_write_register(ct, address + 16, 0);
+        rc = modbus_write_register(ct, address + 17, -1);
+    }
     //輸入啟動
-     rc = modbus_write_register(ct, 125, 8);
+    rc = modbus_write_register(ct, 125, 8);
 
     //輸出結束
-     rc = modbus_write_register(ct, 127, 8);
-    std::cout <<"command time"<< float(clock() - begin_time) / CLOCKS_PER_SEC;
+    rc = modbus_write_register(ct, 127, 8);
     
+    //運轉方式
+    // rc = modbus_write_register(ct, 6144, 0);
+    // rc = modbus_write_register(ct, 6145, 7);
+
+    address += 64;
+
 }
 
 bool Is_LMBusy(modbus_t* ct, uint16_t * tab_rp_registers, uint16_t * tab_rq_registers)
@@ -196,53 +232,7 @@ int main(int argc, char **argv)
 
     // ============================= ROS Loop =============================
     bool is_send1 = false;
-
-    int rc;
-    const clock_t begin_time = clock();
-    rc = modbus_write_register(ct, 125, 0);
-
-    // //運轉方式
-    rc = modbus_write_register(ct, 6144, 0);
-    rc = modbus_write_register(ct, 6145, 1);
-
-    // rc = modbus_write_register(ct, 6146, 0);
-    // rc = modbus_write_register(ct, 6147, 0);
-
-    //最大速度
-    rc = modbus_write_register(ct, 6148, 0);
-    rc = modbus_write_register(ct, 6149, 10000);
-
-    //加速度
-    rc = modbus_write_register(ct, 6150, 0);
-    rc = modbus_write_register(ct, 6151, 80000);
-
-    //減速度
-    rc = modbus_write_register(ct, 6152, 0);
-    printf("6152 rc=%d\n",rc);
-    rc = modbus_write_register(ct, 6153, 80000);
-    printf("6153 rc=%d\n",rc);
-
-    //運轉電流
-    rc = modbus_write_register(ct, 6154, 0);
-    rc = modbus_write_register(ct, 6155, 500);
-
-    rc = modbus_write_register(ct, 6156, 0);
-    rc = modbus_write_register(ct, 6157, 0);
-
-    //結合
-    rc = modbus_write_register(ct, 6158, 0);
-    rc = modbus_write_register(ct, 6159, 0);
-
-    //下一連結資料
-    rc = modbus_write_register(ct, 6160, 0);
-    rc = modbus_write_register(ct, 6161, -256);
-
-    //輸入啟動
-    rc = modbus_write_register(ct, 125, 8);
-
-    //輸出結束
-    rc = modbus_write_register(ct, 127, 8);
-    std::cout <<"setting time"<< float(clock() - begin_time) / CLOCKS_PER_SEC;
+   
     while (ros::ok())
     {
         pub.publish(LM_Msg);
