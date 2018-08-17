@@ -69,9 +69,9 @@ void SendCmd()
     //輸入寫入
     rc = modbus_write_register(ct, 125, 0);
 
-    // //運轉方式
-    // rc = modbus_write_register(ct, 6144, 0);
-    // rc = modbus_write_register(ct, 6145, 1);
+    //運轉方式
+    rc = modbus_write_register(ct, 6144, 0);
+    rc = modbus_write_register(ct, 6145, 7);
 
     //位置
     int up_pos = goal_pos-65535;
@@ -201,9 +201,9 @@ int main(int argc, char **argv)
 
     rc = modbus_write_register(ct, 125, 0);
 
-    //運轉方式
-    rc = modbus_write_register(ct, 6144, 0);
-    rc = modbus_write_register(ct, 6145, 1);
+    // //運轉方式
+    // rc = modbus_write_register(ct, 6144, 0);
+    // rc = modbus_write_register(ct, 6145, 1);
 
     // rc = modbus_write_register(ct, 6146, 0);
     // rc = modbus_write_register(ct, 6147, 0);
@@ -225,6 +225,9 @@ int main(int argc, char **argv)
     //運轉電流
     rc = modbus_write_register(ct, 6154, 0);
     rc = modbus_write_register(ct, 6155, 500);
+
+    rc = modbus_write_register(ct, 6156, 0);
+    rc = modbus_write_register(ct, 6157, 0);
 
     //結合
     rc = modbus_write_register(ct, 6158, 0);
