@@ -35,7 +35,7 @@ bool is_x_busy = false;
 void slide_callback(const std_msgs::Float64 &slide_command)
 {
     goal_pos = -(double)100000.0*slide_command.data;
-    if(address <= 8064)
+    if(address <= 6144 + 64*5)//8064)
         SendCmd();
     // tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
     // delete tra_gene_thread_;
@@ -89,7 +89,7 @@ void SendCmd()
 
     //最大速度
     rc = modbus_write_register(ct, address + 4, 0);
-    rc = modbus_write_register(ct, address + 5, 10000);
+    rc = modbus_write_register(ct, address + 5, 2000);
 
     //加速度
     rc = modbus_write_register(ct, address + 6, 0);
@@ -109,7 +109,7 @@ void SendCmd()
     rc = modbus_write_register(ct, address + 13, 0);
 
     //結合
-    if(address <= 8064)
+    if(address <= 6144 + 64*5)
     {
         rc = modbus_write_register(ct, address + 14, 0);
         rc = modbus_write_register(ct, address + 15, 3);
