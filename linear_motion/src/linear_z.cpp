@@ -18,7 +18,7 @@
 // #define position
 
 int test = 0;
-int addtess = 6144;
+int address = 6144;
 
 linear_motion::LM_Cmd LM_Msg;
 modbus_t *ct;
