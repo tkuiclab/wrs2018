@@ -40,8 +40,10 @@ class slide_control
   ros::NodeHandle n;
   ros::Publisher  slide_pos_pub; 
   ros::Publisher  slide_cmd_pub;
-  ros::Subscriber slide_fdb_sub;
+
 public:
+  ros::Subscriber slide_fdb_sub;
+  
   slide_control();
   ~slide_control();
 
@@ -49,7 +51,7 @@ public:
   bool is_first;
   bool is_end;
 
-  void slide_pub ();
+  void slide_pub (bool is_end);
   void slideFeedback(const linear_motion::LM_Cmd::ConstPtr& msg);
 
   double goal_slide_pos;

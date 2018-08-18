@@ -33,6 +33,9 @@
         <remap from="/robotis/status" 			  to="/$(arg side)_arm/status"                    />
         <remap from="/robotis/sync_write_item" 		  to="/$(arg side)_arm/sync_write_item"	          />
 
+        <remap from="/LM_FeedBack"       to="/$(arg side)_arm/LM_FeedBack"       />
+        <remap from="/slide_command_msg" to="/$(arg side)_arm/slide_command_msg" />
+
         <!-- service -->
         <remap from="/robotis/base/get_joint_pose" 	  to="/$(arg side)_arm/get_joint_pose"	          />
         <remap from="/robotis/base/get_kinematics_pose"   to="/$(arg side)_arm/get_kinematics_pose"	  />
@@ -52,6 +55,8 @@
     </node>
 
     <node pkg="linear_motion" type="linear_z" name="slide_$(arg side)" output="screen" unless="$(arg en_sim)">
-        <param name="side"            value="$(arg side)" />
+        <param name="side"               value="$(arg side)" />
+        <remap from="/LM_FeedBack"       to="/$(arg side)_arm/LM_FeedBack"       />
+        <remap from="/slide_command_msg" to="/$(arg side)_arm/slide_command_msg" />
     </node>
 </launch>

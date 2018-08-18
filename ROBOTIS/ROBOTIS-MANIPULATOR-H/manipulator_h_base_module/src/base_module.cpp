@@ -137,6 +137,7 @@ void BaseModule::queueThread()
                                                                        &BaseModule::getJointPoseCallback, this);
   ros::ServiceServer get_kinematics_pose_server = ros_node.advertiseService("/robotis/base/get_kinematics_pose",
                                                                             &BaseModule::getKinematicsPoseCallback, this);
+  slide_->slide_fdb_sub = ros_node.subscribe("/LM_FeedBack", 10, &slide_control::slideFeedback, slide_);
 
   while (ros_node.ok())
   {
@@ -380,7 +381,7 @@ void BaseModule::generateJointTrajProcess()
 
   /* set movement time */
   double tol = 35 * DEGREE2RADIAN; // rad per sec
-  double mov_time = 2.0;
+  double mov_time = 4.0;
 
   double max_diff, abs_diff;
   max_diff = 0.0;
@@ -453,7 +454,7 @@ void BaseModule::generateTaskTrajProcess()
 {
   /* set movement time */
   double tol = 0.1; // m per sec
-  double mov_time = 2.0;
+  double mov_time = 4.0;
 
   double diff = sqrt(
                       pow(manipulator_->manipulator_link_data_[robotis_->ik_id_end_]->position_.coeff(0, 0)
@@ -625,6 +626,8 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     }
 
     robotis_->cnt_++;
+    slide_->slide_pub(robotis_->cnt_ >= robotis_->all_time_steps_);
+
   }
 
   /*----- set joint data -----*/
@@ -635,7 +638,6 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     std::string joint_name = state_iter->first;
     result_[joint_name]->goal_position_ = joint_state_->goal_joint_state_[joint_name_to_id_[joint_name]].position_;
   }
-  slide_->slide_pub();
   /*---------- initialize count number ----------*/
 
   if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true)
@@ -643,7 +645,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     ROS_INFO("[end] send trajectory");
     publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");
 
-    slide_->is_end = true;
+    // slide_->is_end = true;
     robotis_->is_moving_ = false;
     robotis_->ik_solve_ = false;
     robotis_->cnt_ = 0;
@@ -691,6 +693,8 @@ void BaseModule::generateSlideTrajProcess()
                                                                 robotis_->smp_time_, robotis_->mov_time_);
   robotis_->calc_slide_tra_.resize(robotis_->all_time_steps_, 1);
   robotis_->calc_slide_tra_ = tra;
+
+  std::cout<<"tra"<<tra<<std::endl;
 
   
   

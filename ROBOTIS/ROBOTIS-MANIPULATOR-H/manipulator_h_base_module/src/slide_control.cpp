@@ -11,7 +11,6 @@ slide_control::slide_control()
 
     slide_pos_pub = n.advertise<std_msgs::Float64>("/mobile_dual_arm/" + side_label + "_slide_position/command", 5);
     slide_cmd_pub = n.advertise<manipulator_h_base_module_msgs::SlideCommand>("/slide_command_msg", 10);
-    slide_fdb_sub = n.subscribe("/LM_FeedBack", 10, &slide_control::slideFeedback, this);
 
     slide_pos = 0;
     goal_slide_pos = 0;
@@ -19,7 +18,7 @@ slide_control::slide_control()
 }
 slide_control::~slide_control(){}
 
-void slide_control::slide_pub()
+void slide_control::slide_pub(bool is_end)
 {
     std_msgs::Float64 msg;
     manipulator_h_base_module_msgs::SlideCommand slide_msg;
@@ -33,5 +32,5 @@ void slide_control::slide_pub()
 
 void slide_control::slideFeedback(const linear_motion::LM_Cmd::ConstPtr& msg)
 {
-    slide_pos = (double)msg->curr_pos / 100000.0;
+    slide_pos = -(double)msg->curr_pos / 100000.0;
 }
