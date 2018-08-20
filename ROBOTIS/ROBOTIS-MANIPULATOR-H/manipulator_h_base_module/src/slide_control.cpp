@@ -18,12 +18,11 @@ slide_control::slide_control()
 }
 slide_control::~slide_control(){}
 
-void slide_control::slide_pub(bool is_end)
+void slide_control::slide_pub()
 {
     std_msgs::Float64 msg;
     manipulator_h_base_module_msgs::SlideCommand slide_msg;
 
-    slide_msg.end = (int)is_end;
     slide_msg.pos = result_slide_pos;
     msg.data = result_slide_pos;
     slide_pos_pub.publish(msg);

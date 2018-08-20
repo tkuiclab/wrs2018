@@ -48,10 +48,8 @@ public:
   ~slide_control();
 
   /* ROS Topic Callback Functions */
-  bool is_first;
-  bool is_end;
 
-  void slide_pub (bool is_end);
+  void slide_pub ();
   void slideFeedback(const linear_motion::Slide_Feedback::ConstPtr& msg);
 
   double goal_slide_pos;

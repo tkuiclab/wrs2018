@@ -306,6 +306,7 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
       p2p_msg.value.push_back( p2p_joint(id) );
     }
     p2p_msg.slide_pos = slide_->goal_slide_pos;
+    p2p_msg.speed     = robotis_->p2p_pose_msg_.speed;
     robotis_->joint_pose_msg_ = p2p_msg;
 
     if (robotis_->is_moving_ == false)
@@ -380,12 +381,15 @@ void BaseModule::generateJointTrajProcess()
     return;
 
   /* set movement time */
-  double tol = 35 * DEGREE2RADIAN; // rad per sec
-  double mov_time = 4.0;
+  double mov_speed = robotis_->joint_pose_msg_.speed;
+  double tol = 90 * (mov_speed / 100) * DEGREE2RADIAN; // rad per sec
+  double mov_time = 1.5;
 
-  double max_diff, abs_diff;
-  max_diff = 0.0;
+  double max_diff, abs_diff, slide_diff;
+  slide_diff = fabs(robotis_->joint_pose_msg_.slide_pos - slide_->slide_pos);
+  max_diff = slide_diff * 1000;  //slide 1 cm = motor 10 degree to calculate
 
+  
   for (int name_index = 0; name_index < robotis_->joint_pose_msg_.name.size(); name_index++)
   {
     double ini_value;
@@ -453,8 +457,27 @@ void BaseModule::generateJointTrajProcess()
 void BaseModule::generateTaskTrajProcess()
 {
   /* set movement time */
-  double tol = 0.1; // m per sec
-  double mov_time = 4.0;
+  double mov_speed = robotis_->kinematics_pose_msg_.speed;
+  double tol = 0.3 * (mov_speed / 100); // m per sec
+  double mov_time = 1.5;
+  double slide_diff;
+
+  Eigen::Vector3d goal_positoin;
+  goal_positoin << robotis_->kinematics_pose_msg_.pose.position.x, 
+                   robotis_->kinematics_pose_msg_.pose.position.y, 
+                   robotis_->kinematics_pose_msg_.pose.position.z;
+
+  Eigen::Quaterniond goal_quaterniond(robotis_->kinematics_pose_msg_.pose.orientation.w,
+                                      robotis_->kinematics_pose_msg_.pose.orientation.x,
+                                      robotis_->kinematics_pose_msg_.pose.orientation.y,
+                                      robotis_->kinematics_pose_msg_.pose.orientation.z);
+
+  Eigen::Matrix3d goal_rotation = robotis_framework::convertQuaternionToRotation(goal_quaterniond);
+
+  bool ik_success = manipulator_->slideInverseKinematics(goal_positoin, goal_rotation, 
+                                                            slide_->slide_pos, slide_->goal_slide_pos);
+
+  slide_diff = fabs(robotis_->joint_pose_msg_.slide_pos - slide_->slide_pos) * 2;  //slide 1 cm = arm 2 cm to calculate
 
   double diff = sqrt(
                       pow(manipulator_->manipulator_link_data_[robotis_->ik_id_end_]->position_.coeff(0, 0)
@@ -464,7 +487,8 @@ void BaseModule::generateTaskTrajProcess()
                     + pow(manipulator_->manipulator_link_data_[robotis_->ik_id_end_]->position_.coeff(2, 0)
                           - robotis_->kinematics_pose_msg_.pose.position.z, 2)
                 );
-
+  diff = (diff < slide_diff) ? slide_diff : diff;
+  
   robotis_->mov_time_ = diff / tol;
   int all_time_steps = int(floor((robotis_->mov_time_ / robotis_->smp_time_) + 1.0));
   robotis_->mov_time_ = double(all_time_steps - 1) * robotis_->smp_time_;
@@ -494,22 +518,6 @@ void BaseModule::generateTaskTrajProcess()
 
     robotis_->calc_task_tra_.block(0, dim, robotis_->all_time_steps_, 1) = tra;
   }
-  Eigen::Vector3d goal_positoin;
-  goal_positoin << robotis_->kinematics_pose_msg_.pose.position.x, 
-                   robotis_->kinematics_pose_msg_.pose.position.y, 
-                   robotis_->kinematics_pose_msg_.pose.position.z;
-
-  Eigen::Quaterniond goal_quaterniond(robotis_->kinematics_pose_msg_.pose.orientation.w,
-                                      robotis_->kinematics_pose_msg_.pose.orientation.x,
-                                      robotis_->kinematics_pose_msg_.pose.orientation.y,
-                                      robotis_->kinematics_pose_msg_.pose.orientation.z);
-
-  Eigen::Matrix3d goal_rotation = robotis_framework::convertQuaternionToRotation(goal_quaterniond);
-
-  bool ik_success = manipulator_->slideInverseKinematics(goal_positoin, goal_rotation, 
-                                                            slide_->slide_pos, slide_->goal_slide_pos);
-  
-  // std::cout<<"<<<<<<<<<<<<<<<<<<<slide_->goal_slide_pos<<<<<<<<<<<<<<<<<"<<std::endl<<slide_->goal_slide_pos<<std::endl;
 
   if (ik_success == true)
   {
@@ -580,8 +588,6 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     {
       robotis_->ik_start_rotation_ = manipulator_->manipulator_link_data_[robotis_->ik_id_end_]->orientation_;
       robotis_->ik_start_phi_ = manipulator_->manipulator_link_data_[robotis_->ik_id_end_]->phi_;
-      //slide_->is_first = true;
-      slide_->is_end = false;
     }
     if (robotis_->ik_solve_ == true)
     {
@@ -626,8 +632,6 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     }
 
     robotis_->cnt_++;
-    slide_->slide_pub(robotis_->cnt_ >= robotis_->all_time_steps_);
-
   }
 
   /*----- set joint data -----*/
@@ -638,6 +642,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
     std::string joint_name = state_iter->first;
     result_[joint_name]->goal_position_ = joint_state_->goal_joint_state_[joint_name_to_id_[joint_name]].position_;
   }
+  slide_->slide_pub();
   /*---------- initialize count number ----------*/
 
   if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true)

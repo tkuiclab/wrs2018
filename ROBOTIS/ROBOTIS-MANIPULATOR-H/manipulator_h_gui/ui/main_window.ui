@@ -153,6 +153,29 @@
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="speed">
+             <property name="text">
+              <string>speed [%]</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="speed_spinbox">
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="singleStep">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="pos_x">
              <property name="text">
               <string>position x [m]</string>
@@ -516,6 +539,13 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="ini_pose_button">
+              <property name="text">
+              <string>Initial Pose</string>
+              </property>
+            </widget>
+            </item>
           </layout>
          </widget>
         </item>
@@ -544,13 +574,6 @@
          <widget class="QPushButton" name="set_mode_button">
           <property name="text">
            <string>Set Mode</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="ini_pose_button">
-          <property name="text">
-           <string>Initial Pose</string>
           </property>
          </widget>
         </item>

@@ -114,6 +114,7 @@ void MainWindow::on_des_joint_button_clicked( bool check )
     msg.value.push_back( ((QDoubleSpinBox *) joint_spinbox[ _id ])->value() * M_PI / 180.0 );
   }
   msg.slide_pos = ui.slide_spinbox->value();
+  msg.speed     = ui.speed_spinbox->value();
   qnode.sendJointPoseMsg( msg );
 }
 
@@ -130,14 +131,15 @@ void MainWindow::on_des_pos_button_clicked( bool check )
 
   msg.name = "arm";
 
+  msg.speed           = ui.speed_spinbox->value();
   msg.pose.position.x = ui.pos_x_spinbox->value();
   msg.pose.position.y = ui.pos_y_spinbox->value();
   msg.pose.position.z = ui.pos_z_spinbox->value();
 
-  double roll = ui.ori_roll_spinbox->value() * M_PI / 180.0;
+  double roll  = ui.ori_roll_spinbox->value()  * M_PI / 180.0;
   double pitch = ui.ori_pitch_spinbox->value() * M_PI / 180.0;
-  double yaw = ui.ori_yaw_spinbox->value() * M_PI / 180.0;
-  double phi = ui.ori_phi_spinbox->value() * M_PI / 180.0;
+  double yaw   = ui.ori_yaw_spinbox->value()   * M_PI / 180.0;
+  double phi   = ui.ori_phi_spinbox->value()   * M_PI / 180.0;
   
   Eigen::Quaterniond QR = rpy2quaternion( roll, pitch, yaw );
 
@@ -146,7 +148,7 @@ void MainWindow::on_des_pos_button_clicked( bool check )
   msg.pose.orientation.z = QR.z();
   msg.pose.orientation.w = QR.w();
   msg.phi = phi;
-
+  
   qnode.sendKinematicsPoseMsg( msg );
 }
 
@@ -156,14 +158,15 @@ void MainWindow::on_des_p2p_button_clicked( bool check )
 
   msg.name = "arm";
 
+  msg.speed           = ui.speed_spinbox->value();
   msg.pose.position.x = ui.pos_x_spinbox->value();
   msg.pose.position.y = ui.pos_y_spinbox->value();
   msg.pose.position.z = ui.pos_z_spinbox->value();
-
-  double roll = ui.ori_roll_spinbox->value() * M_PI / 180.0;
+  
+  double roll  = ui.ori_roll_spinbox->value()  * M_PI / 180.0;
   double pitch = ui.ori_pitch_spinbox->value() * M_PI / 180.0;
-  double yaw = ui.ori_yaw_spinbox->value() * M_PI / 180.0;
-  double phi = ui.ori_phi_spinbox->value() * M_PI / 180.0;
+  double yaw   = ui.ori_yaw_spinbox->value()   * M_PI / 180.0;
+  double phi   = ui.ori_phi_spinbox->value()   * M_PI / 180.0;
   
   Eigen::Quaterniond QR = rpy2quaternion( roll, pitch, yaw );
 
@@ -220,9 +223,9 @@ void MainWindow::updateCurrKinematicsPoseSpinbox( manipulator_h_base_module_msgs
 
   Eigen::MatrixXd rpy = quaternion2rpy( QR );
 
-  double roll = rpy.coeff( 0 , 0 ) * 180.0 / M_PI;
-  double pitch = rpy.coeff( 1 , 0 ) * 180.0 / M_PI;
-  double yaw = rpy.coeff( 2, 0 ) * 180.0 /M_PI;
+  double roll  = rpy.coeff( 0, 0 ) * 180.0 / M_PI;
+  double pitch = rpy.coeff( 1, 0 ) * 180.0 / M_PI;
+  double yaw   = rpy.coeff( 2, 0 ) * 180.0 / M_PI;
 
   ui.ori_roll_spinbox->setValue( roll );
   ui.ori_pitch_spinbox->setValue( pitch );
@@ -231,7 +234,7 @@ void MainWindow::updateCurrKinematicsPoseSpinbox( manipulator_h_base_module_msgs
 
 Eigen::MatrixXd MainWindow::rotationX( double angle )
 {
-  Eigen::MatrixXd _rotation( 3 , 3 );
+  Eigen::MatrixXd _rotation( 3, 3 );
 
   _rotation << 1.0,          0.0,           0.0,
       0.0, cos( angle ), -sin( angle ),
