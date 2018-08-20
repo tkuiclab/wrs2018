@@ -30,7 +30,7 @@ void slide_control::slide_pub(bool is_end)
     slide_cmd_pub.publish(slide_msg);
 }
 
-void slide_control::slideFeedback(const linear_motion::LM_Cmd::ConstPtr& msg)
+void slide_control::slideFeedback(const linear_motion::Slide_Feedback::ConstPtr& msg)
 {
     slide_pos = -(double)msg->curr_pos / 100000.0;
 }

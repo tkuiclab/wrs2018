@@ -1,57 +1,19 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <std_msgs/Float64.h>
-#include "ros/ros.h"
-#include "std_msgs/Int32.h"
-#include <boost/thread.hpp>
-#include "std_msgs/String.h"
-#include "linear_motion/LM_Cmd.h"
-#include "manipulator_h_base_module_msgs/SlideCommand.h"   //new
-
-#include "modbus/modbus.h"
-
-#define LOOP 1
-#define MODE_GET_CURR_POS 291
-#define ADDRESS_START 6144
-#define ADDRESS_DISTANCE 64
-#define ADDRESS_END 22464
-// #define position
-
-int address = ADDRESS_START;
-
-linear_motion::LM_Cmd LM_Msg;
-modbus_t *ct;
-int curr_state = 10;
-int goal_pos;
-boost::thread  *tra_gene_thread_;
-
-void SendCmd(int is_end);
-std::string LM_x_state = "idle";
-
-bool is_x_busy = false;
-
+#include "linear_motion/slide.h"
 
 void slide_callback(const manipulator_h_base_module_msgs::SlideCommand::ConstPtr& msg)
 {
     goal_pos = -(double)100000.0*msg->pos;
-    
-    std::cout<<"goal_pos : "<<goal_pos<<std::endl;
-    
-    std::cout<<"goal_pos is send : "<<goal_pos<<std::endl;
-    SendCmd(msg->end);
 
-    if(address < ADDRESS_END)
-        address += ADDRESS_DISTANCE;
+    if(goal_pos <= FULL_16_BIT)
+    {
+        cmd_arr[4] = 0;
+        cmd_arr[5] = goal_pos;
+    }
     else
-        address = ADDRESS_START;
-    // tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));
-    // delete tra_gene_thread_;
-    //SendCmd();
-    LM_x_state = "execute";
-    
+    {
+        cmd_arr[4] = 1;
+        cmd_arr[5] = goal_pos - FULL_16_BIT;
+    }
 }
 
 modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRate)
@@ -70,149 +32,58 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
     {
         std::cout<<"init ok\n";
         Is_Success = true;
+        // modbus_set_debug(ct, true);
     }
+    int rc = modbus_read_registers(ct, ADDRESS_FDB, 2, fdb_val);
+        
+    curr_pos = fdb_val[0] * FULL_16_BIT + fdb_val[1];
+    goal_pos = curr_pos;
     return ct;
 }
 
-void SendCmd(int is_end)
+void SendCmd()
 {
-    int rc;
-    rc = modbus_write_register(ct, 125, 0);
-
-    // //運轉方式
-    rc = modbus_write_register(ct, address + 0, 0);
-    rc = modbus_write_register(ct, address + 1, 1);
-
-    //位置
-    int up_pos = goal_pos-65535;
-    if(up_pos<=0)
+    int rc, diff_pos, speed = 0, speed_tmp;
+    int smp_deleration = DECELERATION * smp_time;
+    ros::Rate loop_rate(1 / smp_time);
+    while(ros::ok())
     {
-        rc = modbus_write_register(ct, address + 2, 0);
-        rc = modbus_write_register(ct, address + 3, goal_pos);
-    }
-    else
-    {
-        rc = modbus_write_register(ct, address + 2, 1);
-        rc = modbus_write_register(ct, address + 3, up_pos);
-        std::cout<<"up pos = "<<up_pos<<"\n";
-    }
-
-    //最大速度
-    rc = modbus_write_register(ct, address + 4, 0);
-    rc = modbus_write_register(ct, address + 5, 2000);
-
-    //加速度
-    rc = modbus_write_register(ct, address + 6, 0);
-    rc = modbus_write_register(ct, address + 7, 80000);
-
-    //減速度
-    rc = modbus_write_register(ct, address + 8, 0);
-    printf("6152 rc=%d\n",rc);
-    rc = modbus_write_register(ct, address + 9, 80000);
-    printf("6153 rc=%d\n",rc);
-
-    //運轉電流
-    rc = modbus_write_register(ct, address + 10, 0);
-    rc = modbus_write_register(ct, address + 11, 500);
-
-    //運轉延遲
-    rc = modbus_write_register(ct, address + 12, 0);
-    rc = modbus_write_register(ct, address + 13, 0);
-
-    
-    if(is_end)
-    {
-        //結合
-        rc = modbus_write_register(ct, address + 14, 0);
-        rc = modbus_write_register(ct, address + 15, 0);        
-    }
-    else
-    {
-        //結合
-        rc = modbus_write_register(ct, address + 14, 0);
-        rc = modbus_write_register(ct, address + 15, 3);
-
-        //下一連結資料
-        rc = modbus_write_register(ct, address + 16, 0);
-        rc = modbus_write_register(ct, address + 17, -1);
-    }
-    //輸入啟動
-    rc = modbus_write_register(ct, 125, 8);
-
-    //輸出結束
-    rc = modbus_write_register(ct, 127, 8);
-    
-    //運轉方式
-    // rc = modbus_write_register(ct, 6144, 0);
-    // rc = modbus_write_register(ct, 6145, 7);
-
-}
-
-bool Is_LMBusy(modbus_t* ct, uint16_t * tab_rp_registers, uint16_t * tab_rq_registers)
-{
-    curr_state = modbus_write_register(ct, 257, 1);
-    curr_state = modbus_read_registers(ct, 257, 1, tab_rp_registers);
-    return (tab_rq_registers[0] != tab_rp_registers[0])?false:true;
-}
-int Get_CurrPos(modbus_t* ct, uint16_t * tab_rp_registers, uint16_t * tab_rq_registers)
-{
-    curr_state = modbus_write_register(ct, 291, 1);
-    curr_state = modbus_read_registers(ct, 291, 1, tab_rp_registers);
-    return tab_rp_registers[0];
-}
-
-linear_motion::LM_Cmd Update_LMMsg(uint16_t * tab_rp_registers, uint16_t * tab_rq_registers, std::string &LM_x_state)
-{
-    linear_motion::LM_Cmd LM;
-
-    is_x_busy    = Is_LMBusy(ct    , tab_rp_registers, tab_rq_registers);
-   
-    LM.curr_pos    = Get_CurrPos(ct    , tab_rp_registers, tab_rq_registers);
-   
-    if (LM_x_state == "execute")
-    {
-        if (is_x_busy == true)
+        if(goal_pos != curr_pos)
         {
-            // std::cout<<"=== 2 ===\n";
-            LM.status = "LM_busy";
-            if(is_x_busy == false)         LM_x_state       = "idle";
+            diff_pos = abs(goal_pos - curr_pos);
+            speed_tmp = diff_pos / smp_time;
+            speed_tmp = (speed_tmp < MAX_SPEED) ? speed_tmp : MAX_SPEED;
+            speed = (speed_tmp < speed) ? (((speed - speed_tmp) < smp_deleration) ? speed_tmp : speed - smp_deleration) : speed_tmp;
+            // speed = (speed_tmp < speed) ? speed : speed_tmp;
+            cmd_arr[7] = speed;
+
+            std::cout<<"speed = "<<cmd_arr[7]<<std::endl;
+            rc = modbus_write_registers(ct, ADDRESS_CMD, 16, cmd_arr);
+            if (rc != 16) {
+                fprintf(stderr, "modbus write failed: %d %s\n", errno, modbus_strerror(errno));
+                errno = 0;
+            }
+        }
+        else
+            speed = 0;
+
+        rc = modbus_read_registers(ct, ADDRESS_FDB, 2, fdb_val);
+        if (rc != 2) {
+            fprintf(stderr, "modbus read failed: %d %s\n", errno, modbus_strerror(errno));
+            errno = 0;
         }
 
-        // else if ((is_x_busy == false)&&(is_z_busy == false)&&(is_left_busy == false))
-        else if (is_x_busy == false)
-        {
-            // std::cout<<"=== 3 ===\n";
-            LM.status     = "LM_complete";
-            LM_x_state    = "idle";
-            LM.id = 5;
-        }
-        else 
-        {
-            std::cout<<"=== 4 ===\n";
-            LM.status  = "error";
-        }
+        curr_pos = fdb_val[0] * FULL_16_BIT + fdb_val[1];
+        
+        loop_rate.sleep();
+        ros::spinOnce();
     }
-    else
-    {
-        LM.status = "LM_idle";
-        LM_x_state = "idle";
-    }
-
-    return LM;
 }
+
+
 
 int main(int argc, char **argv)
 {
-    bool isbusy   = false;
-    int  curr_pos = -1;
-
-    // For Allocate_and_Init_MemorySpace
-    int nb = 99;
-    uint16_t *tab_rq_registers = (uint16_t *)malloc(nb * sizeof(uint16_t));
-    uint16_t *tab_rp_registers = (uint16_t *)malloc(nb * sizeof(uint16_t));
-    memset(tab_rq_registers, 0, nb * sizeof(uint16_t));
-    memset(tab_rp_registers, 0, nb * sizeof(uint16_t));
-
     //========================= Initialize ROS =============================
     ros::init(argc, argv, "linear_z");
     
@@ -227,31 +98,39 @@ int main(int argc, char **argv)
     //========================= Initialize Modbus_RTU ============================= 
     bool Connect_X_OK = false;
     int  ID = side_str == "right" ? 1 : 3;
-    ct     = Init_Modus_RTU(Connect_X_OK   , ID, "/dev/wrs/slide_" + side_str, 9600);
+
+    std::cout<<"Linear Start\n";
+
+    ct = Init_Modus_RTU(Connect_X_OK   , ID, "/dev/wrs/slide_" + side_str, 1000000);
+
+    std::cout<<"Linear Initted\n";
 
     if(Connect_X_OK == false)
     {
-        if(Connect_X_OK    == false)   std::cout<<"CONNECT X ERROR!!!!!\n";
+        if(Connect_X_OK    == false)   std::cout<<"CONNECT " + side_str + " ERROR!!!!!\n";
         //return -1;
     }
     else
     {
-        std::cout<<"All LM Connect ok\n";
+        std::cout<<side_str + " Slide Connect ok\n";
     }
+ 
+    tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));    
+    delete tra_gene_thread_;
 
     // ============================= Subscribe message =============================
     // std::string side_label = "right" == side_str ? "r": "l";
     ros::NodeHandle n;
-    ros::Subscriber sub = n.subscribe("/slide_command_msg", 10, slide_callback);
-    ros::Publisher  pub = n.advertise<linear_motion::LM_Cmd>("/LM_FeedBack", 1);
-    ros::Rate loop_rate(50);
+    ros::Subscriber sub = n.subscribe("/slide_command_msg", 1, slide_callback);
+    ros::Publisher  pub = n.advertise<linear_motion::Slide_Feedback>("/slide_feedback_msg", 1);
+    ros::Rate loop_rate(125);
 
     // ============================= ROS Loop =============================
-    bool is_send1 = false;
-   
+    // int i = 0;
     while (ros::ok())
     {
-        pub.publish(LM_Msg);
+        msg_fdb.curr_pos = curr_pos;
+        pub.publish(msg_fdb);
         loop_rate.sleep();
         ros::spinOnce();
     }

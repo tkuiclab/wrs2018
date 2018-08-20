@@ -137,7 +137,7 @@ void BaseModule::queueThread()
                                                                        &BaseModule::getJointPoseCallback, this);
   ros::ServiceServer get_kinematics_pose_server = ros_node.advertiseService("/robotis/base/get_kinematics_pose",
                                                                             &BaseModule::getKinematicsPoseCallback, this);
-  slide_->slide_fdb_sub = ros_node.subscribe("/LM_FeedBack", 10, &slide_control::slideFeedback, slide_);
+  slide_->slide_fdb_sub = ros_node.subscribe("/slide_feedback_msg", 10, &slide_control::slideFeedback, slide_);
 
   while (ros_node.ok())
   {
@@ -686,16 +686,9 @@ void BaseModule::generateSlideTrajProcess()
 
   ini_slide_value = slide_->slide_pos;
   tar_slide_value = slide_->goal_slide_pos;
-  std::cout<<"<<<<<<<<<<<<<<<<<<<slide_->slide_pos<<<<<<<<<<<<<<<<<"<<std::endl<<slide_->slide_pos<<std::endl;
-  std::cout<<"<<<<<<<<<<<<<<<<<<<slide_->goal_slide_pos<<<<<<<<<<<<<<<<<"<<std::endl<<slide_->goal_slide_pos<<std::endl;
 
   Eigen::MatrixXd tra = robotis_framework::calcMinimumJerkTra(ini_slide_value, 0.0, 0.0, tar_slide_value, 0.0, 0.0,
                                                                 robotis_->smp_time_, robotis_->mov_time_);
   robotis_->calc_slide_tra_.resize(robotis_->all_time_steps_, 1);
-  robotis_->calc_slide_tra_ = tra;
-
-  std::cout<<"tra"<<tra<<std::endl;
-
-  
-  
+  robotis_->calc_slide_tra_ = tra;  
 }

@@ -29,7 +29,7 @@
 #include <ros/package.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/String.h>
-#include "linear_motion/LM_Cmd.h"
+#include "linear_motion/Slide_Feedback.h"
 #include "manipulator_h_base_module_msgs/SlideCommand.h"   //new
 
 
@@ -52,7 +52,7 @@ public:
   bool is_end;
 
   void slide_pub (bool is_end);
-  void slideFeedback(const linear_motion::LM_Cmd::ConstPtr& msg);
+  void slideFeedback(const linear_motion::Slide_Feedback::ConstPtr& msg);
 
   double goal_slide_pos;
   double result_slide_pos;
