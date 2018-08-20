@@ -387,7 +387,7 @@ void BaseModule::generateJointTrajProcess()
 
   double max_diff, abs_diff, slide_diff;
   slide_diff = fabs(robotis_->joint_pose_msg_.slide_pos - slide_->slide_pos);
-  max_diff = slide_diff * 1000;  //slide 1 cm = motor 10 degree to calculate
+  max_diff = slide_diff * 1000 * DEGREE2RADIAN;  //slide 1 cm = motor 10 degree to calculate
 
   
   for (int name_index = 0; name_index < robotis_->joint_pose_msg_.name.size(); name_index++)
@@ -488,7 +488,7 @@ void BaseModule::generateTaskTrajProcess()
                           - robotis_->kinematics_pose_msg_.pose.position.z, 2)
                 );
   diff = (diff < slide_diff) ? slide_diff : diff;
-  
+
   robotis_->mov_time_ = diff / tol;
   int all_time_steps = int(floor((robotis_->mov_time_ / robotis_->smp_time_) + 1.0));
   robotis_->mov_time_ = double(all_time_steps - 1) * robotis_->smp_time_;
