@@ -56,6 +56,7 @@
 
     <node pkg="linear_motion" type="linear_z" name="slide_$(arg side)" output="screen" unless="$(arg en_sim)">
         <param name="side"               value="$(arg side)" />
+	<param name="gazebo"             value="$(arg en_sim)" />
         <remap from="/slide_feedback_msg"       to="/$(arg side)_arm/slide_feedback_msg"       />
         <remap from="/slide_command_msg" to="/$(arg side)_arm/slide_command_msg" />
     </node>

@@ -27,6 +27,7 @@
 #include <ros/package.h>
 #include <yaml-cpp/yaml.h>
 #define pi M_PI
+
 namespace robotis_manipulator_h
 {
 
@@ -38,7 +39,18 @@ enum TreeSelect
 class ManipulatorKinematicsDynamics
 {
 private:
-    Eigen::MatrixXd DHTABLE;
+  Eigen::MatrixXd DHTABLE;
+  double d1,d2,d3,d4,a1,a2;
+  double Lse, Lew;
+  double RL_prm;
+
+  Eigen::VectorXd JointAngle;
+  Eigen::VectorXd tmp_JointAngle;
+
+  Eigen::MatrixXd R03;
+  Eigen::MatrixXd R04;
+  Eigen::MatrixXd R07;
+  Eigen::MatrixXd R47;
 
 public:
   ManipulatorKinematicsDynamics();
