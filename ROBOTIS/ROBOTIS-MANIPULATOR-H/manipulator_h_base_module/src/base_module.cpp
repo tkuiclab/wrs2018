@@ -225,6 +225,11 @@ bool BaseModule::getKinematicsPoseCallback(manipulator_h_base_module_msgs::GetKi
   res.group_pose.orientation.y = quaternion.y();
   res.group_pose.orientation.z = quaternion.z();
 
+  for(int i=0; i<=2; i++)
+    res.euler.push_back(manipulator_->manipulator_link_data_[END_LINK]->euler(i));
+
+  // std::cout<<"euler = "<<manipulator_->manipulator_link_data_[END_LINK]->euler *180/M_PI<<std::endl;
+
   return true;
 }
 

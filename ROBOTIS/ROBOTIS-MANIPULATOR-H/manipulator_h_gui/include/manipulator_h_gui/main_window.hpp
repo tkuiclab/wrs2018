@@ -96,7 +96,7 @@ public Q_SLOTS:
     void updateLoggingView(); // no idea why this can't connect automatically
 
     void updateCurrJointPoseSpinbox( manipulator_h_base_module_msgs::JointPose msg );
-    void updateCurrKinematicsPoseSpinbox( manipulator_h_base_module_msgs::KinematicsPose msg );
+    void updateCurrKinematicsPoseSpinbox( manipulator_h_base_module_msgs::GetKinematicsPose );
 
 private:
     Ui::MainWindowDesign ui;

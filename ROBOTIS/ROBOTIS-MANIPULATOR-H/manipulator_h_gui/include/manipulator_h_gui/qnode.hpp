@@ -113,7 +113,7 @@ Q_SIGNALS:
     void rosShutdown();
 
     void updateCurrentJointPose(manipulator_h_base_module_msgs::JointPose);
-    void updateCurrentKinematicsPose(manipulator_h_base_module_msgs::KinematicsPose);
+    void updateCurrentKinematicsPose(manipulator_h_base_module_msgs::GetKinematicsPose);
 
 private:
     int     init_argc_;

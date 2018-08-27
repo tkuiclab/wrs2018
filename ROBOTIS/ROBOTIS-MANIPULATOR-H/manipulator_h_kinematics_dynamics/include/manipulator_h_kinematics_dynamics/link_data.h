@@ -40,6 +40,7 @@ public:
   Eigen::MatrixXd joint_axis_;
   Eigen::MatrixXd center_of_mass_;
   Eigen::MatrixXd inertia_;
+  Eigen::VectorXd euler;
 
   double joint_limit_max_;
   double joint_limit_min_;

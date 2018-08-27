@@ -1,4 +1,5 @@
 string    group_name
 ---
 geometry_msgs/Pose group_pose
-float64        phi
+float64[]          euler
+float64            phi

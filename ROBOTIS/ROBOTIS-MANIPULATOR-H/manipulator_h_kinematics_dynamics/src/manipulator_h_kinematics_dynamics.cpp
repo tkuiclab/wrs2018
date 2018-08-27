@@ -61,8 +61,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[1]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[1]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[1]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[1]->joint_limit_max_   = 1 * M_PI;
-    manipulator_link_data_[1]->joint_limit_min_   = -1 * M_PI;
+    manipulator_link_data_[1]->joint_limit_max_   = 1 * M_PI/180;
+    manipulator_link_data_[1]->joint_limit_min_   = -1 * M_PI/180;
     manipulator_link_data_[1]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[2]->name_    = "joint2";
@@ -73,8 +73,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[2]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.16);
     manipulator_link_data_[2]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, -1.0);
     manipulator_link_data_[2]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[2]->joint_limit_max_   = 1 * M_PI;
-    manipulator_link_data_[2]->joint_limit_min_   = -0.2 * M_PI;
+    manipulator_link_data_[2]->joint_limit_max_   = 1 * M_PI/180;
+    manipulator_link_data_[2]->joint_limit_min_   = -0.2 * M_PI/180;
     manipulator_link_data_[2]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[3]->name_    = "joint3";
@@ -85,8 +85,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[3]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[3]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[3]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[3]->joint_limit_max_   = 1 * M_PI;
-    manipulator_link_data_[3]->joint_limit_min_   = -1 * M_PI;
+    manipulator_link_data_[3]->joint_limit_max_   = 1 * M_PI/180;
+    manipulator_link_data_[3]->joint_limit_min_   = -1 * M_PI/180;
     manipulator_link_data_[3]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[4]->name_    = "joint4";
@@ -97,8 +97,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[4]->relative_position_ = robotis_framework::getTransitionXYZ(-0.03, 0, 0.29);
     manipulator_link_data_[4]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[4]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[4]->joint_limit_max_   = 1 * M_PI;
-    manipulator_link_data_[4]->joint_limit_min_   = -0.1 * M_PI;
+    manipulator_link_data_[4]->joint_limit_max_   = 1 * M_PI/180;
+    manipulator_link_data_[4]->joint_limit_min_   = -0.1 * M_PI/180;
     manipulator_link_data_[4]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[5]->name_    = "joint5";
@@ -109,8 +109,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[5]->relative_position_ = robotis_framework::getTransitionXYZ(-0.03, 0.0, 0.0);
     manipulator_link_data_[5]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[5]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[5]->joint_limit_max_   = 1 * M_PI;
-    manipulator_link_data_[5]->joint_limit_min_   = -1 * M_PI;
+    manipulator_link_data_[5]->joint_limit_max_   = 1 * M_PI/180;
+    manipulator_link_data_[5]->joint_limit_min_   = -1 * M_PI/180;
     manipulator_link_data_[5]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[6]->name_    = "joint6";
@@ -121,8 +121,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[6]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.263);
     manipulator_link_data_[6]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, -1.0);
     manipulator_link_data_[6]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[6]->joint_limit_max_   = 0.5 * M_PI;
-    manipulator_link_data_[6]->joint_limit_min_   = -0.5 * M_PI;
+    manipulator_link_data_[6]->joint_limit_max_   = 0.5 * M_PI/180;
+    manipulator_link_data_[6]->joint_limit_min_   = -0.5 * M_PI/180;
     manipulator_link_data_[6]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     manipulator_link_data_[7]->name_    = "joint7";
@@ -133,8 +133,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[7]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[7]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[7]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[7]->joint_limit_max_   = 1 * M_PI;
-    manipulator_link_data_[7]->joint_limit_min_   = -1 * M_PI;
+    manipulator_link_data_[7]->joint_limit_max_   = 1 * M_PI/180;
+    manipulator_link_data_[7]->joint_limit_min_   = -1 * M_PI/180;
     manipulator_link_data_[7]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     manipulator_link_data_[8]->name_    = "end";
@@ -313,6 +313,7 @@ void ManipulatorKinematicsDynamics::forwardKinematics(int joint_ID)
     manipulator_link_data_[i+1]->transformation_.block<3, 3>(0, 0) = manipulator_link_data_[i+1]->orientation_;
   }
   getPhiAngle();
+  manipulator_link_data_[END_LINK]->euler= rotation2rpy(manipulator_link_data_[8]->orientation_);
 }
 
 Eigen::MatrixXd ManipulatorKinematicsDynamics::calcJacobian(std::vector<int> idx)
@@ -544,7 +545,9 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
   Oc << goal_position(0)-d4*R07(0,2), goal_position(1)-d4*R07(1,2), goal_position(2)-d4*R07(2,2);
 
   
-  DHTABLE(0,2) = slide_position;                 
+  DHTABLE(0,2) = slide_position;       
+  std::cout<<"============slidepos_1=============== "<<std::endl<<DHTABLE(0,2)<<std::endl;
+          
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   Ps << 0, d1*cos(DHTABLE(0,3)), slide_position;   
@@ -736,6 +739,8 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
       manipulator_link_data_[id]->joint_angle_ = JointAngle.coeff(id);
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////
+  std::cout<<"============slidepos_1=============== "<<std::endl<<DHTABLE(0,2)<<std::endl;
+
   return ik_success;
 }
 bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_position, Eigen::Matrix3d rotation, 
@@ -752,7 +757,7 @@ bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_
   test_pos(1) = test_pos(1) - (d1*RL_prm);
   test_pos(2) = test_pos(2) - slide_pos;
   Lsw = test_pos.norm();
-  if(Lsw > (d2+d3-0.03))
+  if(Lsw > (d2+d3-0.03) || Lsw < 0.15)
   {
     if(Oc(2) < -0.8){                                         
         test_pos << test_pos(0), test_pos(1), test_pos(2)-(-0.8);
@@ -777,8 +782,9 @@ bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_
       }
     }
     slide_position = (slide_position < -0.8) ? -0.8 : slide_position;
+    slide_position = (slide_position >  0.0) ?  0.0 : slide_position;
     test_pos(2) = Oc(2) - slide_position;
-    if(test_pos.norm()<(d2+d3))
+    if(test_pos.norm() < (d2+d3) && test_pos.norm() > 0.1)
     {
       goal_slide_pos = slide_position;
       return true;
@@ -810,6 +816,7 @@ void ManipulatorKinematicsDynamics::getPhiAngle()
 
   Eigen::MatrixXd A(4,4);
   Eigen::MatrixXd T(4,4);
+  Eigen::MatrixXd test_T(4,4);
   Eigen::MatrixXd DH(5, 4);
   Eigen::VectorXd DH_row(4);
   Eigen::VectorXd elbow_origin(3);
@@ -843,6 +850,8 @@ void ManipulatorKinematicsDynamics::getPhiAngle()
     DH_row = DH.row(i);
     A = Trans( Angle(i), DH_row );
     T = T*A;
+    if(i==2)
+      test_T = T; 
   }
   elbow_goal = manipulator_link_data_[4]->position_;
   elbow_origin = T.block(0,3,3,1);
@@ -850,15 +859,52 @@ void ManipulatorKinematicsDynamics::getPhiAngle()
   double b = (elbow_goal - eRc).norm();
   double c = (elbow_origin - eRc).norm();
   double Phi = acos((b*b + c*c - a*a)/(2*b*c));
+
   if(manipulator_link_data_[4]->joint_angle_ < 0.2167)
   {
-    Phi = Phi - M_PI;
-    if(manipulator_link_data_[4]->joint_angle_ > 0.2166)
-      Phi = 0;
+    // Phi = Phi - M_PI;
+
+    // if(manipulator_link_data_[4]->joint_angle_ > 0.2166)
+    Phi = 0;
   }
-  if(manipulator_link_data_[3]->joint_angle_ >= 0)
-    manipulator_link_data_[END_LINK]->phi_ = Phi;
-  else
-    manipulator_link_data_[END_LINK]->phi_ = -Phi;
+  for(int k=1; k>=-1; k-=2)
+  {
+    Angle(3) = k * Phi;
+    T = test_T;
+    for ( int i=3; i<5; i++ )
+    {
+      DH_row = DH.row(i);
+      A = Trans( Angle(i), DH_row );
+      T = T*A;
+    }
+    Eigen::Vector3d elbow_test = T.block(0,3,3,1);
+    if((elbow_goal - elbow_test).norm() < 0.0001)
+      manipulator_link_data_[END_LINK]->phi_ = Phi;
+  }
+  
+}
+
+Eigen::MatrixXd ManipulatorKinematicsDynamics::rotation2rpy( Eigen::MatrixXd rotation )
+{
+  Eigen::MatrixXd _rpy = Eigen::MatrixXd::Zero( 3 , 1 );
+
+  _rpy.coeffRef(2,0) = asin(rotation.coeff(1,2));
+  // if (_rpy.coeffRef(2,0) == M_PI / 2)
+  // {
+  //     _rpy.coeffRef(1,0) = 0;
+  //     _rpy.coeffRef(0,0) = atan2(-rotation.coeff(1, 0), -rotation.coeff(1, 1));
+  // }
+  // else if (_rpy.coeffRef(2,0) == -M_PI / 2)
+  // {
+  //     _rpy.coeffRef(1,0) = 0;
+  //     _rpy.coeffRef(0,0) = atan2(-rotation.coeff(1, 0), -rotation.coeff(1, 1));
+  // }
+  // else
+  // {
+  _rpy.coeffRef(1,0) = atan2(rotation.coeff(0, 2), -rotation.coeff(2, 2));
+  _rpy.coeffRef(0,0) = atan2(-rotation.coeff(1, 0), -rotation.coeff(1, 1));
+  // }
+
+  return _rpy;
 }
 }

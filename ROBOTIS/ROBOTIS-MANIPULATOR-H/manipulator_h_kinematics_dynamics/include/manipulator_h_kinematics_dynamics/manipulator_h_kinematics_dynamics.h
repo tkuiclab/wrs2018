@@ -82,6 +82,7 @@ public:
   bool InverseKinematics_7( Eigen::VectorXd position, Eigen::Matrix3d rotation, double phi, double slide_position, Eigen::VectorXd Old_JointAngle );
   bool slideInverseKinematics(Eigen::Vector3d goal_position, Eigen::Matrix3d rotation, 
                                                             double slide_pos, double& goal_slide_pos);
+  Eigen::MatrixXd rotation2rpy( Eigen::MatrixXd rotation );
   void load_LinkParam();
   void getPhiAngle();
 };

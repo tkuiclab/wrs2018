@@ -84,7 +84,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
   QObject::connect(&qnode, SIGNAL(updateCurrentJointPose(manipulator_h_base_module_msgs::JointPose)), this, SLOT(updateCurrJointPoseSpinbox(manipulator_h_base_module_msgs::JointPose)));
 
   qRegisterMetaType<manipulator_h_base_module_msgs::KinematicsPose>("manipulator_h_base_module_msgs::KinematicsPose");
-  QObject::connect(&qnode, SIGNAL(updateCurrentKinematicsPose(manipulator_h_base_module_msgs::KinematicsPose)), this, SLOT(updateCurrKinematicsPoseSpinbox(manipulator_h_base_module_msgs::KinematicsPose)));
+  QObject::connect(&qnode, SIGNAL(updateCurrentKinematicsPose(manipulator_h_base_module_msgs::GetKinematicsPose)), this, SLOT(updateCurrKinematicsPoseSpinbox(manipulator_h_base_module_msgs::GetKinematicsPose)));
 
   
   /*********************
@@ -213,15 +213,19 @@ void MainWindow::updateCurrJointPoseSpinbox( manipulator_h_base_module_msgs::Joi
   ui.slide_spinbox->setValue( msg.slide_pos );
 }
 
-void MainWindow::updateCurrKinematicsPoseSpinbox( manipulator_h_base_module_msgs::KinematicsPose msg )
+void MainWindow::updateCurrKinematicsPoseSpinbox( manipulator_h_base_module_msgs::GetKinematicsPose srv )
 {
-  ui.pos_x_spinbox->setValue( msg.pose.position.x );
-  ui.pos_y_spinbox->setValue( msg.pose.position.y );
-  ui.pos_z_spinbox->setValue( msg.pose.position.z );
-  ui.ori_phi_spinbox->setValue( msg.phi * RADIAN2DEGREE );
-  Eigen::Quaterniond QR( msg.pose.orientation.w , msg.pose.orientation.x , msg.pose.orientation.y , msg.pose.orientation.z );
+  ui.pos_x_spinbox->setValue( srv.response.group_pose.position.x );
+  ui.pos_y_spinbox->setValue( srv.response.group_pose.position.y );
+  ui.pos_z_spinbox->setValue( srv.response.group_pose.position.z );
+  ui.ori_phi_spinbox->setValue( srv.response.phi * RADIAN2DEGREE );
+  // Eigen::Quaterniond QR( msg.pose.orientation.w , msg.pose.orientation.x , msg.pose.orientation.y , msg.pose.orientation.z );
 
-  Eigen::MatrixXd rpy = quaternion2rpy( QR );
+  // Eigen::MatrixXd rpy = quaternion2rpy( QR );
+
+  Eigen::Vector3d rpy;
+  // rpy << 0, 0, 0;
+  rpy << srv.response.euler[0], srv.response.euler[1], srv.response.euler[2];
 
   double roll  = rpy.coeff( 0, 0 ) * 180.0 / M_PI;
   double pitch = rpy.coeff( 1, 0 ) * 180.0 / M_PI;
@@ -248,8 +252,8 @@ Eigen::MatrixXd MainWindow::rotationY( double angle )
   Eigen::MatrixXd _rotation( 3 , 3 );
 
   _rotation << cos( angle ), 0.0, sin( angle ),
-      0.0, 1.0, 	     0.0,
-      -sin( angle ), 0.0, cos( angle );
+                    0.0,     1.0,     0.0,
+              -sin( angle ), 0.0, cos( angle );
 
   return _rotation;
 }

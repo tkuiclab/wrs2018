@@ -219,7 +219,8 @@ void QNode::getKinematicsPose ( std::string group_name )
     _kinematcis_pose.pose = _get_kinematics_pose.response.group_pose;
     _kinematcis_pose.phi  = _get_kinematics_pose.response.phi;
 
-    Q_EMIT updateCurrentKinematicsPose( _kinematcis_pose );
+
+    Q_EMIT updateCurrentKinematicsPose( _get_kinematics_pose );
   }
   else
     log(Error, "fail to get kinematcis pose.");
