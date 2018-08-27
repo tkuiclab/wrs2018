@@ -33,10 +33,10 @@ mobile_dual_arm:
     type: position_controllers/JointPositionController
     joint: r_joint_7
     pid: {p: 100.0, i: 0, d: 0}
-  r_joint8_position:
+  r_suction_joint_position:
     type: position_controllers/JointPositionController
-    joint: r_joint_8
-    pid: {p: 0, i: 0, d: 0}
+    joint: r_tool_joint
+    pid: {p: 50, i: 0, d: 0}
 
 
   l_joint1_position:
@@ -67,10 +67,10 @@ mobile_dual_arm:
     type: position_controllers/JointPositionController
     joint: l_joint_7
     pid: {p: 100.0, i: 0, d: 0}
-  l_joint8_position:
+  l_suction_joint_position:
     type: position_controllers/JointPositionController
-    joint: l_joint_8
-    pid: {p: 0, i: 0, d: 0}
+    joint: l_tool_joint
+    pid: {p: 50, i: 0, d: 0}
 
 
   r_slide_position:

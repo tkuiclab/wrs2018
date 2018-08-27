@@ -8,7 +8,7 @@
   <!-- Constants for robot dimensions -->
 
 
-  <xacro:macro name="single_arm" params="side parent *origin">
+  <xacro:macro name="single_arm" params="side parent child *origin">
   
 	  <link
 	    name="${side}_Base">
@@ -405,7 +405,7 @@
 	      effort="65"
 	      velocity="5" />
 	  </joint>
-	  <link
+	  <!-- <link
 	    name="${side}_Link_7">
 	    <inertial>
 	      <origin
@@ -444,17 +444,17 @@
 		  filename="package://single_arm_description/meshes/Link_7.STL" />
 	      </geometry>
 	    </collision>
-	  </link>
+	  </link> -->
 	  <joint
 	    name="${side}_joint_7"
 	    type="revolute">
 	    <origin
-	      xyz="0 0 0"
+	      xyz="0 -0.1345 0"
 	      rpy="1.5708 4.5659E-16 1.2025E-31" />
 	    <parent
 	      link="${side}_Link_6" />
 	    <child
-	      link="${side}_Link_7" />
+	      link="${child}" />
 	    <axis 
 	      xyz="0 0 1" />
 	    <limit
@@ -463,6 +463,7 @@
 	      effort="22"
 	      velocity="5" />
 	  </joint>
+		
           <!--
 	  <link
 	    name="${side}_Link_8">
