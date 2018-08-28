@@ -65,12 +65,6 @@ class ArmTask:
             # latch=True,
             queue_size=1
         )
-        # self.__set_vel_pub = rospy.Publisher(
-        #     str(self.name) + '/set_velocity',
-        #     Float64,
-        #     latch=True,
-        #     queue_size=1
-        # )
         self.__status_sub = rospy.Subscriber(
             str(self.name) + '/status',
             StatusMsg,
@@ -88,8 +82,8 @@ class ArmTask:
         elif 'End Trajectory' in msg.status_msg:
             self.__is_busy = False
 
-    def home(self):
-        self.pub_jointCmd([0, 0, 0, 0, 0, 0, 0])
+    def back_home(self):
+        self.jointMove(0,(0, 0, 0, 0, 0, 0, 0))
 
     @property
     def is_ikfail(self):
@@ -98,7 +92,7 @@ class ArmTask:
     def set_speed(self,i_speed):
         self.__speed = i_speed
 
-    def pub_jointCmd(self, slide_pos = 0,cmd=[0, 0, 0, 0, 0, 0, 0]):
+    def jointMove(self, slide_pos = 0,cmd=[0, 0, 0, 0, 0, 0, 0]):
         """Publish msg of joint cmd (rad) to manager node."""
         name  = list()
         value = list()
@@ -110,6 +104,17 @@ class ArmTask:
 
         self.__joint_pub.publish(JointPose(name, value, slide_pos, speed))
         self.__is_busy = True
+
+    def singleJointMove(self, index=-1, pos=0):
+        fb = self.get_joint()
+        slide_pos = fb.slide_pos
+        joint_pos = list(fb.joint_value)
+        if index == 0:
+            slide_pos = slide_pos + pos
+            self.jointMove(slide_pos ,joint_pos)
+        elif 0 < index <= 7:
+            joint_pos[index-1] = joint_pos[index-1] + pos
+            self.jointMove(slide_pos ,joint_pos)
 
     def euler2rotation(self, euler):
         roll, pitch, yaw = euler
@@ -136,7 +141,7 @@ class ArmTask:
         quaternion = tf.transformations.quaternion_from_euler(-pitch+pi, -yaw, roll-pi, 'ryxz')
         return (quaternion)
 
-    def pub_ikCmd(self, mode='line', pos=_POS, euler=_ORI, phi=0):
+    def ikMove(self, mode='line', pos=_POS, euler=_ORI, phi=0):
         print pos
         """Publish msg of ik cmd (deg) to manager node."""
         roll, pitch, yaw = euler
@@ -144,6 +149,7 @@ class ArmTask:
         pitch = pitch* pi/ 180
         yaw   = yaw  * pi/ 180
 
+        print 'b'
         self.__is_busy = True
 
         msg = KinematicsPose()
@@ -159,7 +165,7 @@ class ArmTask:
         msg.pose.orientation.w = quaternion[3]
 
         msg.speed = self.__speed
-
+        print 'c'
         #rospy.loginfo('Sent:{}'.format(cmd))
 
         if mode == 'line':
@@ -197,6 +203,22 @@ class ArmTask:
             return res
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
+    
+    def get_joint(self):
+        rospy.wait_for_service(self.name + '/get_joint_pose')
+        try:
+            joint = rospy.ServiceProxy(
+                self.name + '/get_joint_pose',
+                GetJointPose
+            )
+            name  = list()
+            for i in range(1, 8):
+                name.append('joint{}'.format(i))
+                
+            res = joint(name)
+            return res
+        except rospy.ServiceException, e:
+            print "Service call failed: %s" % e
 
     def relative_move_suction(self, mode='ptp', suction_angle=0, n=0, s=0, a=0):
         # a_suction = np.matrix([[cos(suction_angle),  0, -sin(suction_angle)],
@@ -208,15 +230,11 @@ class ArmTask:
                                [-sin(suction_angle), 0.0, cos(suction_angle)]])
         fb = self.get_fb()
         pos = fb.group_pose.position
-        ori = fb.group_pose.orientation
         phi = fb.phi
         euler = fb.euler
         # euler = self.quaternion2euler(ori)
-        print euler
-        print pos
+    
         rot = self.euler2rotation(euler) * suction_rot
-        print self.euler2rotation(euler)
-        print rot
         vec_n, vec_s, vec_a = self.rotation2vector(rot) #for suction
         move = [0, 0, 0]
 
@@ -226,13 +244,32 @@ class ArmTask:
             move += multiply(vec_s, s)
         if a != 0:
             move += multiply(vec_a, a)
-        print move
-        self.pub_ikCmd(
+        self.ikMove(
             mode,
             (pos.x + move[0], pos.y + move[1], pos.z + move[2]),
             (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
             phi
         )
+
+    def relative_move_pose(self, mode='ptp', xyz='', value=0):
+        fb = self.get_fb()
+        pos = fb.group_pose.position
+        phi = fb.phi
+        euler = fb.euler
+
+        if xyz == 'x':
+            pos.x += value
+        if xyz == 'y':
+            pos.y += value
+        if xyz == 'z':
+            pos.z += value
+        self.ikMove(
+            mode,
+            (pos.x , pos.y , pos.z),
+            (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
+            phi
+        )
+
     @property
     def busy(self):
         return self.__is_busy
@@ -242,10 +279,29 @@ if __name__ == '__main__':
     a = ArmTask('right_arm')
     rospy.sleep(0.3)
 
-    a.pub_jointCmd(0, (0, -1, 0, 1, 0, 0, 0))
+    a.set_speed(100)
+    a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
+    a.set_speed(20)
     while a.busy:
         rospy.sleep(0.3)
-    a.pub_ikCmd('p2p', (0, -0.3, -0.9), (0, 0, 0), 30) 
+    a.ikMove('p2p', (0, -0.3, -0.9), (0, 0, 0), 30) 
+    a.set_speed(100)
     while a.busy:
         rospy.sleep(0.3)
-    a.relative_move_suction('p2p', -45, n=0, s=0, a=0.1)
+    a.relative_move_suction('p2p', -45, n=0, s=0, a=-0.1)
+    while a.busy:
+        rospy.sleep(0.3)
+    a.singleJointMove(0,-0.2)
+    while a.busy:
+        rospy.sleep(0.3)
+    a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
+    while a.busy:
+        rospy.sleep(0.3)
+    a.singleJointMove(2,0.5)
+    while a.busy:
+        rospy.sleep(0.3)
+    a.relative_move_pose('p2p', 'y', -0.1)
+    while a.busy:
+        rospy.sleep(0.3)
+    a.back_home()
+ 
