@@ -18,6 +18,7 @@ from robotis_controller_msgs.msg import StatusMsg
 from manipulator_h_base_module_msgs.msg import P2PPose, JointPose, KinematicsPose
 from manipulator_h_base_module_msgs.srv import GetKinematicsPose, GetKinematicsPoseResponse
 from manipulator_h_base_module_msgs.srv import GetJointPose, GetJointPoseResponse
+from vacuum_cmd_msg.srv import VacuumCmd
 
 _POS = (0, 0, 0)
 _ORI = (0, 0, 0)
