@@ -46,8 +46,8 @@ rosservice call /right/suction_cmd "cmd: 'vacuumOn'"
 # 4. release gripper
 rosservice call /right/suction_cmd "cmd: 'vacuumOff'"
 
-# 5. control motor to turn specified angle
-rosservice call /right/suction_cmd "cmd: '45.0'"
+# 5. control motor to turn specified angle (0 ~ -90)
+rosservice call /right/suction_cmd "cmd: '-45.0'"
 ```
 * Use python api <br>
   reference to [strategy/suction.py](../strategy/scripts/suction.py)

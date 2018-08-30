@@ -5,7 +5,7 @@
 #include <DynamixelSerial1.h>
 
 
-#define ID 2
+#define ID 1
 #define UPSPEED 150
 #define DOWNSPEED 150
 #define ADJ_STEP 16
@@ -84,7 +84,6 @@ void callback(const VacuumCmd::Request& req , VacuumCmd::Response& res)
       return;
     }
 
-
     MaxPos_L = MaxPos;
     MaxPos_H = MaxPos >> 8;
     
@@ -142,7 +141,7 @@ void callback(const VacuumCmd::Request& req , VacuumCmd::Response& res)
     String cmd(req.cmd);
     double angle = cmd.toDouble();
 
-    int pos = map(angle, 90, 0, MaxPos, MinPos);
+    int pos = map(angle, -90.0, 0.0, MaxPos, MinPos);
     if (Dxl.moveSpeed(ID, pos, DOWNSPEED) != 0)
     {
       res.success = false;
