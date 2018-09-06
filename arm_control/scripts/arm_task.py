@@ -2,7 +2,6 @@
 
 """Use to generate arm task and run."""
 
-import sys
 import rospy
 import tf
 # import object_distribtion
@@ -221,7 +220,7 @@ class ArmTask:
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
 
-    def relative_move_suction(self, mode='ptp', suction_angle=0, n=0, s=0, a=0):
+    def noa_move_suction(self, mode='ptp', suction_angle=0, n=0, s=0, a=0):
         # a_suction = np.matrix([[cos(suction_angle),  0, -sin(suction_angle)],
         #                        [sin(suction_angle),  0,  cos(suction_angle)],
         #                        [                 0, -1,                   0]])
@@ -252,18 +251,22 @@ class ArmTask:
             phi
         )
 
-    def relative_move_pose(self, mode='ptp', xyz='', value=0):
+    def relative_move_pose(self, mode='ptp', pos = _POS):
         fb = self.get_fb()
-        pos = fb.group_pose.position
+        curr_pos = fb.group_pose.position
         phi = fb.phi
         euler = fb.euler
 
-        if xyz == 'x':
-            pos.x += value
-        if xyz == 'y':
-            pos.y += value
-        if xyz == 'z':
-            pos.z += value
+        curr_pos.x += pos[0]
+        curr_pos.y += pos[1]
+        curr_pos.z += pos[2]
+
+        # if xyz == 'x':
+        #     pos.x += value
+        # if xyz == 'y':
+        #     pos.y += value
+        # if xyz == 'z':
+        #     pos.z += value
         self.ikMove(
             mode,
             (pos.x , pos.y , pos.z),
@@ -289,7 +292,7 @@ if __name__ == '__main__':
     a.set_speed(100)
     while a.busy:
         rospy.sleep(0.3)
-    a.relative_move_suction('p2p', -45, n=0, s=0, a=-0.1)
+    a.noa_move_suction('p2p', -45, n=0, s=0, a=-0.1)
     while a.busy:
         rospy.sleep(0.3)
     a.singleJointMove(0,-0.2)
