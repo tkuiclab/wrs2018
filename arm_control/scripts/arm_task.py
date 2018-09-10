@@ -220,7 +220,7 @@ class ArmTask:
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
 
-    def noa_move_suction(self, mode='ptp', suction_angle=0, n=0, s=0, a=0):
+    def noa_move_suction(self, mode='ptp', suction_angle=0, n=0, o=0, a=0):
         # a_suction = np.matrix([[cos(suction_angle),  0, -sin(suction_angle)],
         #                        [sin(suction_angle),  0,  cos(suction_angle)],
         #                        [                 0, -1,                   0]])
@@ -235,13 +235,13 @@ class ArmTask:
         # euler = self.quaternion2euler(ori)
     
         rot = self.euler2rotation(euler) * suction_rot
-        vec_n, vec_s, vec_a = self.rotation2vector(rot) #for suction
+        vec_n, vec_o, vec_a = self.rotation2vector(rot) #for suction
         move = [0, 0, 0]
 
         if n > 1e-10:
             move += multiply(vec_n, n)
-        if s != 0:
-            move += multiply(vec_s, s)
+        if o != 0:
+            move += multiply(vec_o, o)
         if a != 0:
             move += multiply(vec_a, a)
         self.ikMove(
@@ -304,7 +304,7 @@ if __name__ == '__main__':
     a.singleJointMove(2,0.5)
     while a.busy:
         rospy.sleep(0.3)
-    a.relative_move_pose('p2p', 'y', -0.1)
+    a.relative_move_pose('p2p', (0, 0.1, 0) )
     while a.busy:
         rospy.sleep(0.3)
     a.back_home()

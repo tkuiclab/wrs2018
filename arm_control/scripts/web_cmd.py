@@ -23,6 +23,9 @@ def web_cmd_callback(msg):
             arm[msg.name].ikMove(msg.mode, msg.pose, msg.euler, msg.phi)
         elif 'relative' in msg.cmd:
             arm[msg.name].relative_move_pose(msg.mode, msg.pose)
+        elif 'noa_move' in msg.cmd:
+            arm[msg.name].noa_move_suction('p2p', n=msg.noa[0], o=msg.noa[1], a=msg.noa[2])
+            
         rospy.loginfo('send cmd')
     except KeyError:
         rospy.logerr('arm -> KeyError')
