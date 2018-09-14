@@ -94,6 +94,7 @@ class SuctionTask:
 
 if __name__ == '__main__':
     rospy.init_node('test_gripper')
+    print('test_gripper')
     right_gripper = SuctionTask(_name='right')
 
     right_gripper.gripper_vaccum_on()

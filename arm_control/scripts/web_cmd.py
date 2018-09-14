@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-import arm_task
+from arm_control import arm_task
 from std_msgs.msg import String, Float64
 from arm_control.msg import WebCmd
 
