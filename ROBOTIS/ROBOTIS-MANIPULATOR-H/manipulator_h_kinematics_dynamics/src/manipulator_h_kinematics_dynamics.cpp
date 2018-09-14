@@ -757,7 +757,7 @@ bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_
   test_pos(1) = test_pos(1) - (d1*RL_prm);
   test_pos(2) = test_pos(2) - slide_pos;
   Lsw = test_pos.norm();
-  if(Lsw > (d2+d3-0.03) || Lsw < 0.15)
+  if(Lsw > (d2+d3-0.03) || Lsw < 0.3)
   {
     if(Oc(2) < -0.8){                                         
         test_pos << test_pos(0), test_pos(1), test_pos(2)-(-0.8);
@@ -865,23 +865,25 @@ void ManipulatorKinematicsDynamics::getPhiAngle()
     // Phi = Phi - M_PI;
 
     // if(manipulator_link_data_[4]->joint_angle_ > 0.2166)
-    Phi = 0;
+    manipulator_link_data_[END_LINK]->phi_ = 0;
   }
-  for(int k=1; k>=-1; k-=2)
+  else if
   {
-    Angle(3) = k * Phi;
-    T = test_T;
-    for ( int i=3; i<5; i++ )
+    for(int k=1; k>=-1; k-=2)
     {
-      DH_row = DH.row(i);
-      A = Trans( Angle(i), DH_row );
-      T = T*A;
+      Angle(3) = k * Phi;
+      T = test_T;
+      for ( int i=3; i<5; i++ )
+      {
+        DH_row = DH.row(i);
+        A = Trans( Angle(i), DH_row );
+        T = T*A;
+      }
+      Eigen::Vector3d elbow_test = T.block(0,3,3,1);
+      if((elbow_goal - elbow_test).norm() < 0.0001)
+        manipulator_link_data_[END_LINK]->phi_ = Angle(3);
     }
-    Eigen::Vector3d elbow_test = T.block(0,3,3,1);
-    if((elbow_goal - elbow_test).norm() < 0.0001)
-      manipulator_link_data_[END_LINK]->phi_ = Phi;
   }
-  
 }
 
 Eigen::MatrixXd ManipulatorKinematicsDynamics::rotation2rpy( Eigen::MatrixXd rotation )

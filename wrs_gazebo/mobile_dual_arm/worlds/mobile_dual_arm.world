@@ -18,7 +18,7 @@
 	</include>
 -->
     <model name="shelf">
-      <pose>0 0 0  0 0 0</pose>
+      <pose>0.3 -0.4625 0  0 0 0</pose>
       <static>true</static>
       <link name="shelf">
         <visual name="visual">

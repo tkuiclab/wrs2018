@@ -21,6 +21,7 @@ from vacuum_cmd_msg.srv import VacuumCmd
 
 _POS = (0, 0, 0)
 _ORI = (0, 0, 0)
+_PHI = 45
 _suction_angle = 0
 class ArmTask:
     """Running arm task class."""
@@ -141,8 +142,7 @@ class ArmTask:
         quaternion = tf.transformations.quaternion_from_euler(-pitch+pi, -yaw, roll-pi, 'ryxz')
         return (quaternion)
 
-    def ikMove(self, mode='line', pos=_POS, euler=_ORI, phi=0):
-        print pos
+    def ikMove(self, mode='line', pos=_POS, euler=_ORI, phi=_PHI):
         """Publish msg of ik cmd (deg) to manager node."""
         roll, pitch, yaw = euler
         roll  = roll * pi/ 180
@@ -165,7 +165,8 @@ class ArmTask:
         msg.pose.orientation.w = quaternion[3]
 
         msg.speed = self.__speed
-        print 'c'
+        msg.phi = radians(phi)
+        # print 'c'
         #rospy.loginfo('Sent:{}'.format(cmd))
 
         if mode == 'line':
@@ -246,7 +247,7 @@ class ArmTask:
             mode,
             (pos.x + move[0], pos.y + move[1], pos.z + move[2]),
             (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
-            phi
+            degrees(phi)
         )
 
     def relative_move_pose(self, mode='ptp', pos = _POS):
@@ -259,6 +260,7 @@ class ArmTask:
         pos[1] += curr_pos.y
         pos[2] += curr_pos.z
 
+        print 'msg.phi = ',degrees(phi)
 
         # if xyz == 'x':
         #     pos.x += value
@@ -270,7 +272,7 @@ class ArmTask:
             mode,
             (pos[0], pos[1], pos[2]),
             (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
-            phi
+            degrees(phi)
         )
 
     @property
