@@ -17,6 +17,48 @@
 		<pose>0 0 0 0 0 0</pose>
 	</include>
 -->
+    <model name="shelf">
+      <pose>0 0 0  0 0 0</pose>
+      <static>true</static>
+      <link name="shelf">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+               <scale>0.001 0.001 0.001</scale>
+               <uri>model://mobile_dual_arm/scene/meshes/shelf.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+<!--
+    <model name="box">
+      <pose>0 0 0  0 0 0</pose>
+      <static>true</static>
+      <link name="box">
+        <inertial>
+          <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+          <mass
+            value="0.000438" />
+          <inertia
+            ixx="2.0813E-05"
+            ixy="1.7379E-08"
+            ixz="9.2823E-08"
+            iyy="1.8619E-05"
+            iyz="4.6462E-06"
+            izz="5.6779E-06" />
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box size="0.1 0.1 0.1"/>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+-->
+
     <!-- Focus camera on tall pendulum -->
     <gui fullscreen='0'>
       <camera name='user_camera'>

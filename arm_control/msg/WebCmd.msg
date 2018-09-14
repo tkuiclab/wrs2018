@@ -4,5 +4,5 @@ string    mode
 float64[] pose
 float64[] euler
 float64[] noa
-float64   phi
-float64   slide_pos
+float64   value
+int32       joint

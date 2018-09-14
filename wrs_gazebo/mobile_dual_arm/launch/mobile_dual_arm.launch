@@ -29,6 +29,4 @@
   <!-- ros_control rrbot launch file -->
   <include file="$(find dual_arm_control)/launch/dual_arm_control.launch" />
 
-  
-
 </launch>

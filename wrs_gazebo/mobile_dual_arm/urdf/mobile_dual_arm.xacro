@@ -6,26 +6,24 @@
 	<xacro:include filename="$(find suction_urdf)/urdf/suction_urdf.xacro" />
 	<!--xacro:include filename="$(find single_arm_description)/urdf/materials.xacro" /-->
   <xacro:include filename="$(find mobile_dual_arm)/urdf/mobile_dual_arm.gazebo" />
-  
-
-        <!--xacro:include filename="$(find mobile_table)/urdf/mobile_table.xacro" /-->
+  <xacro:include filename="$(find mobile_table)/urdf/mobile_table.xacro" />
 
 	<link name="world"/>
 
-	<joint name="fixed1" type="fixed">
+	<!-- <joint name="fixed1" type="fixed">
+		<origin
+	    xyz="0 0 0.562"
+      rpy="0 0 0" />
+		<parent link="world"/>
+    <child link="base_link"/>
+	</joint> -->
+	<joint name="fixed3" type="fixed">
 		<origin
 	    	xyz="0 0 0.562"
-        	rpy="0 0 0" />
+        rpy="0 0 0" />
 		<parent link="world"/>
-     		<child link="base_link"/>
+    <child link="mobile_base"/>
 	</joint>
-	<!--joint name="fixed3" type="fixed">
-		<origin
-	    	xyz="0 0 0.562"
-        	rpy="0 0 0" />
-		<parent link="world"/>
-     		<child link="mobile_base"/>
-	</joint-->
        
   <xacro:single_arm side="r"  parent="Arm_Base_R_Link" child="r_tool_link">
 	  <origin xyz="0 -0.016 0" rpy="1.57 1.57 0" />
@@ -53,13 +51,13 @@
      		<child link="Base"/>
 	</joint-->
 
-	<!--joint name="fixed1" type="fixed">
+	<joint name="fixed1" type="fixed">
 		<origin
-	    	xyz="0 0 0.1"
-        	rpy="0 0 0" />
+	    xyz="0 0 0"
+      rpy="0 0 0" />
 		<parent link="mobile_base"/>
-     		<child link="base_link"/>
-	</joint-->
+    <child link="base_link"/>
+	</joint>
 
 	<!--joint name="fixed2" type="fixed">
 		<origin

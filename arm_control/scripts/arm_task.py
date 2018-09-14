@@ -21,7 +21,7 @@ from vacuum_cmd_msg.srv import VacuumCmd
 
 _POS = (0, 0, 0)
 _ORI = (0, 0, 0)
-
+_suction_angle = 0
 class ArmTask:
     """Running arm task class."""
 
@@ -220,10 +220,8 @@ class ArmTask:
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
 
-    def noa_move_suction(self, mode='ptp', suction_angle=0, n=0, o=0, a=0):
-        # a_suction = np.matrix([[cos(suction_angle),  0, -sin(suction_angle)],
-        #                        [sin(suction_angle),  0,  cos(suction_angle)],
-        #                        [                 0, -1,                   0]])
+    def noa_move_suction(self, mode='ptp', suction_angle=_suction_angle, n=0, o=0, a=0):
+  
         suction_angle = suction_angle * pi/180
         suction_rot = np.matrix([[cos(suction_angle),  0.0, sin(suction_angle)],
                                [0.0,                 1.0,                0.0],
@@ -257,9 +255,10 @@ class ArmTask:
         phi = fb.phi
         euler = fb.euler
 
-        curr_pos.x += pos[0]
-        curr_pos.y += pos[1]
-        curr_pos.z += pos[2]
+        pos[0] += curr_pos.x
+        pos[1] += curr_pos.y
+        pos[2] += curr_pos.z
+
 
         # if xyz == 'x':
         #     pos.x += value
@@ -269,7 +268,7 @@ class ArmTask:
         #     pos.z += value
         self.ikMove(
             mode,
-            (pos.x , pos.y , pos.z),
+            (pos[0], pos[1], pos[2]),
             (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
             phi
         )

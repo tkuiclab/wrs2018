@@ -20,12 +20,19 @@ def web_cmd_callback(msg):
     try:
         rospy.loginfo('send cmd b')
         if 'absolute' in msg.cmd:
-            arm[msg.name].ikMove(msg.mode, msg.pose, msg.euler, msg.phi)
+            arm[msg.name].ikMove(msg.mode, msg.pose, msg.euler, msg.value)
         elif 'relative' in msg.cmd:
             arm[msg.name].relative_move_pose(msg.mode, msg.pose)
         elif 'noa_move' in msg.cmd:
-            arm[msg.name].noa_move_suction('p2p', n=msg.noa[0], o=msg.noa[1], a=msg.noa[2])
-            
+            arm[msg.name].noa_move_suction(msg.mode, n=msg.noa[0], o=msg.noa[1], a=msg.noa[2])
+        elif 'set_speed' in msg.cmd:
+            arm[msg.name].set_speed(msg.value)
+        elif 'single_joint' in msg.cmd:
+            arm[msg.name].singleJointMove(msg.joint, msg.value)
+        elif 'joint_move' in msg.cmd:
+            arm[msg.name].jointMove(msg.value, msg.pose)
+        elif 'back_home' in msg.cmd:
+            arm[msg.name].back_home()
         rospy.loginfo('send cmd')
     except KeyError:
         rospy.logerr('arm -> KeyError')
