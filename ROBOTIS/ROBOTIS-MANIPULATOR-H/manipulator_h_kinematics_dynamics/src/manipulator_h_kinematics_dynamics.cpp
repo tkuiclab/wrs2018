@@ -867,7 +867,7 @@ void ManipulatorKinematicsDynamics::getPhiAngle()
     // if(manipulator_link_data_[4]->joint_angle_ > 0.2166)
     manipulator_link_data_[END_LINK]->phi_ = 0;
   }
-  else if
+  else
   {
     for(int k=1; k>=-1; k-=2)
     {
