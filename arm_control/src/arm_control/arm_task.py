@@ -149,7 +149,6 @@ class ArmTask:
         pitch = pitch* pi/ 180
         yaw   = yaw  * pi/ 180
 
-        print 'b'
         self.__is_busy = True
 
         msg = KinematicsPose()
@@ -166,7 +165,7 @@ class ArmTask:
 
         msg.speed = self.__speed
         msg.phi = radians(phi)
-        # print 'c'
+       
         #rospy.loginfo('Sent:{}'.format(cmd))
 
         if mode == 'line':
@@ -259,8 +258,6 @@ class ArmTask:
         pos[0] += curr_pos.x
         pos[1] += curr_pos.y
         pos[2] += curr_pos.z
-
-        print 'msg.phi = ',degrees(phi)
 
         # if xyz == 'x':
         #     pos.x += value

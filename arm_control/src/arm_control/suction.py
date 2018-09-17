@@ -4,6 +4,7 @@ import rospy
 from math import radians, degrees, pi
 from vacuum_cmd_msg.srv import VacuumCmd
 from std_msgs.msg import Bool, Float64
+from std_srvs.srv import Empty
 
 # 2017/07/19 Gripper Parameter Backup
 # cam2tool_y = -0.025
@@ -23,37 +24,71 @@ class SuctionTask:
         """Inital object."""
         self.name    = _name
         self.gripped = False
-        self.is_grip_sub = rospy.Subscriber(
-            self.name + '/is_grip',
-            Bool,
-            self.is_grip_callback,
-            queue_size=1
-        )
-        if self.name == 'right':
-            self.suction_pub = rospy.Publisher(
-                '/mobile_dual_arm/r_suction_joint_position/command',
-                Float64,
-                queue_size=1
-            )
-        elif self.name == 'left':
-            self.suction_pub = rospy.Publisher(
-                '/mobile_dual_arm/l_suction_joint_position/command',
-                Float64,
+        print 'name = ', self.name
+        if 'gazebo' in self.name:
+            if 'right' in self.name:
+                self.suction_pub = rospy.Publisher(
+                    '/mobile_dual_arm/r_suction_joint_position/command',
+                    Float64,
+                    queue_size=1
+                )
+                self.is_grip_sub = rospy.Subscriber(
+                    self.name + '/robot/right_vacuum_gripper/grasping',
+                    Bool,
+                    self.is_grip_callback,
+                    queue_size=1
+                )
+                print 'nameeeee = ', self.name
+            elif 'left' in self.name :
+                self.suction_pub = rospy.Publisher(
+                    '/mobile_dual_arm/l_suction_joint_position/command',
+                    Float64,
+                    queue_size=1
+                )
+                self.is_grip_sub = rospy.Subscriber(
+                    self.name + '/robot/left_vacuum_gripper/grasping',
+                    Bool,
+                    self.is_grip_callback,
+                    queue_size=1
+                )
+        else:
+            self.is_grip_sub = rospy.Subscriber(
+                self.name + '/is_grip',
+                Bool,
+                self.is_grip_callback,
                 queue_size=1
             )
         
     def robot_cmd_client(self, cmd):
-        suction_service = self.name + '/suction_cmd'
-        rospy.wait_for_service(suction_service)
-        try:
-            client = rospy.ServiceProxy(
-                suction_service,
-                VacuumCmd
-            )
-            client(cmd)
-        
-        except rospy.ServiceException, e:
-            print "Service call (Vacuum) failed: %s" % e
+        if 'gazebo' in self.name:
+            if 'On' in cmd:
+                suction_service = '/robot/' + self.name + '/vacuum_gripper/on'
+                print 'ononon'
+            elif 'Off' in cmd:
+                suction_service = '/robot/' + self.name + '/vacuum_gripper/off'
+                print 'offoffoff'
+            rospy.wait_for_service(suction_service)
+            try:
+                client = rospy.ServiceProxy(
+                    suction_service,
+                    Empty
+                )
+                client()
+                print 'trytrytry'
+            except rospy.ServiceException, e:
+                print "Service call (Vacuum) failed: %s" % e
+        else:
+            suction_service = self.name + '/suction_cmd'
+            rospy.wait_for_service(suction_service)
+            try:
+                client = rospy.ServiceProxy(
+                    suction_service,
+                    VacuumCmd
+                )
+                client(cmd)
+            
+            except rospy.ServiceException, e:
+                print "Service call (Vacuum) failed: %s" % e
 
     def gripper_vaccum_on(self):
         self.robot_cmd_client('vacuumOn')
@@ -95,7 +130,7 @@ class SuctionTask:
 if __name__ == '__main__':
     rospy.init_node('test_gripper')
     print('test_gripper')
-    right_gripper = SuctionTask(_name='right')
+    right_gripper = SuctionTask(_name='right_gazebo')
 
     right_gripper.gripper_vaccum_on()
     print('is grip: {}'.format(right_gripper.gripped))

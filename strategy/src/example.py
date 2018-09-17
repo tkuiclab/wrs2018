@@ -10,6 +10,7 @@ rospack = rospkg.RosPack()
 sys.path.append(os.path.join(rospack.get_path('arm_control'), 'src/arm_control'))
 
 from arm_task import ArmTask
+from suction  import SuctionTask
 
 idle            = 0
 busy            = 1
@@ -18,53 +19,67 @@ frontSafetyPos  = 3
 rearSafetyPos   = 4
 move2Bin        = 5
 move2Shelf      = 6
-leaveBin        = 7
-leaveShelf      = 8
-move2Object     = 9
-move2PlacePos  = 10
-pickObject     = 11
-placeObject    = 12
+moveIn2Shelf    = 7
+leaveBin        = 8
+leaveShelf      = 9
+move2Object     = 10
+move2PlacedPos  = 11
+pickObject      = 12
+placeObject     = 13
 
 
 class exampleTask:
     def __init__(self, _name = '/robotis'):
-        """Inital object."""
+        """Initial object."""
+        en_sim = False
+        if len(sys.argv) >= 2:
+            rospy.set_param('en_sim', sys.argv[1])
+            en_sim = rospy.get_param('en_sim')
+        # if en_sim:
+        #     print en_sim
+        #     return
         self.name = _name
         self.state = initPose
         self.nextState = idle
-        self.arm = ArmTask(self.name)
+        self.arm = ArmTask(self.name + '_arm')
         self.pick_list = 2
         self.pos   = (0, 0, 0)
         self.euler = (0, 0, 0)
         self.phi   = 0
+        if en_sim:
+            self.suction = SuctionTask(self.name + '_gazebo')
+            print "aa"
+        else:
+            self.suction = SuctionTask(self.name)
+            print "bb"
 
     @property
     def finish(self):
         return self.pick_list == 0
 
     def getRearSafetyPos(self):
-        if self.name == 'right_arm':
+        if self.name == 'right':
             self.pos, self.euler, self.phi = (-0.1, -0.45, -0.5), (90, 0, 0), -30
-        elif self.name == 'left_arm':
+        elif self.name == 'left':
             self.pos, self.euler, self.phi = (-0.1, 0.45, -0.5), (-90, 0, 0),  30
 
     def getFrontSafetyPos(self):
-        if self.name == 'right_arm':
+        if self.name == 'right':
             self.pos, self.euler, self.phi = (0.1, -0.45, -0.5), (0, 30, 0), 45
-        elif self.name == 'left_arm':
+        elif self.name == 'left':
             self.pos, self.euler, self.phi = (0.1, 0.45, -0.5), (0, 30, 0), -45
 
     def getObjectPos(self):
-        if self.name == 'right_arm':
-            self.pos, self.euler, self.phi = (-0.5, -0.15, -0.5), (90, 0, 0), -30
-        elif self.name == 'left_arm':
-            self.pos, self.euler, self.phi = (-0.5, 0.15, -0.5), (-90, 0, 0), 30
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = [-0.5, -0.15, -0.7], (90, 0, 0), -30
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = [-0.5, 0.15, -0.7], (-90, 0, 0), 30
 
     def getPlacePos(self):
-        if self.name == 'right_arm':
-            self.pos, self.euler, self.phi = (0.15, -0.35, -0.4), (0, 90, 0), 45
-        elif self.name == 'left_arm':
-            self.pos, self.euler, self.phi = (0.15, 0.35, -0.4), (0, 90, 0), -45
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = [0.45, -0.35, -0.5], (0, 90, 0), 45
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = [0.45, 0.35, -0.5], (0, 90, 0), -45
 
 
     def proces(self):
@@ -101,13 +116,23 @@ class exampleTask:
             self.state = busy
             self.nextState = move2Object
             self.getObjectPos()
+            self.pos[2] += 0.2
             self.arm.ikMove('line', self.pos, self.euler, self.phi) 
 
         elif self.state == move2Shelf:
             self.state = busy
-            self.nextState = move2PlacePos
+            self.nextState = moveIn2Shelf
             self.getPlacePos()
-            self.arm.ikMove('p2p', self.pos, self.euler, self.phi)
+            self.pos[0] += -0.3
+            self.pos[2] += 0.1
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
+        
+        elif self.state == moveIn2Shelf:
+            self.state = busy
+            self.nextState = move2PlacedPos
+            self.getPlacePos()
+            self.pos[2] += 0.1
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == leaveBin:
             self.state = busy
@@ -125,18 +150,20 @@ class exampleTask:
             self.nextState = pickObject
             self.arm.relative_move_pose('line', [0, 0, -0.2])
 
-        elif self.state == move2PlacePos:
+        elif self.state == move2PlacedPos:
             self.state = busy
             self.nextState = placeObject
-            self.arm.relative_move_pose('line', [0.3, 0, -0.1])
+            self.arm.relative_move_pose('line', [0, 0, -0.1])
 
         elif self.state == pickObject:
             self.state = busy
             self.nextState = leaveBin
+            self.suction.gripper_vaccum_on()
             
         elif self.state == placeObject:
             self.state = busy
             self.nextState = leaveShelf
+            self.suction.gripper_vaccum_off()
 
         elif self.state == busy:
             if self.arm.busy:
@@ -146,9 +173,9 @@ class exampleTask:
             
 if __name__ == '__main__':
     rospy.init_node('example')
-    # right_arm = ArmTask('right_arm')
-    right = exampleTask('right_arm')
-    left  = exampleTask('left_arm')
+    # right = ArmTask('right')
+    right = exampleTask('right')
+    left  = exampleTask('left')
     rospy.sleep(0.3)
 
     rate = rospy.Rate(30)  # 30hz
@@ -156,89 +183,4 @@ if __name__ == '__main__':
         left.proces()
         right.proces()
         rate.sleep()
-    # right_arm.set_speed(100)
-    # right_arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
-    # right_arm.set_speed(80)
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('line', (-0.1, -0.15, -0.75), (90, 0, 0), -30)
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('line', (-0.5, -0.15, -0.8), (90, 0, 0), -30) 
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, -0.08])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, 0.08])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('line', (0.1, -0.35, -0.7), (0, 30, 0), 45)
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('p2p', (0.55, -0.35, -0.35), (0, 90, 0), 45)
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0.2, 0, -0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, -0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, 0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [-0.3, 0, 0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('line', (-0.1, -0.15, -0.75), (90, 0, 0), -30)
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('line', (-0.5, -0.15, -0.75), (90, 0, 0), -30) 
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, -0.08])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, 0.08])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('line', (0.1, -0.35, -0.7), (0, 30, 0), 45)
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.ikMove('p2p', (0.55, -0.35, -0.35), (0, 90, 0), 45)
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0.15, 0, -0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, -0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [0, 0, 0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.relative_move_pose('line', [-0.3, 0, 0.1])
-    # while right_arm.busy:
-    #     rospy.sleep(0.3)
-    # right_arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
-
-    # a.set_speed(100)
-    # while a.busy:
-    #     rospy.sleep(0.3)
-    # a.noa_move_suction('p2p', -45, n=0, o=0, a=-0.1)
-    # while a.busy:
-    #     rospy.sleep(0.3)
-    # a.singleJointMove(0,-0.2)
-    # while a.busy:
-    #     rospy.sleep(0.3)
-    # a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
-    # while a.busy:
-    #     rospy.sleep(0.3)
-    # a.singleJointMove(1,0.5)
-    # while a.busy:
-    #     rospy.sleep(0.3)
-    # a.relative_move_pose('p2p', [0, -0.1, 0])
-    # while a.busy:
-    #     rospy.sleep(0.3)
-    # a.back_home()
+   
