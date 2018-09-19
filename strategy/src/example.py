@@ -70,16 +70,24 @@ class exampleTask:
             self.pos, self.euler, self.phi = (0.1, 0.45, -0.5), (0, 30, 0), -45
 
     def getObjectPos(self):
+        lunchboxPos = [[-0.519, -0.15, -0.6],
+                       [-0.519, -0.15, -0.65]]
+        drinkPos = [[-0.4, 0.15, -0.6],
+                    [-0.519, 0.15, -0.6]]
         if self.name == 'right':
-            self.pos, self.euler, self.phi = [-0.519, -0.15, -0.6], (90, 0, 0), -30
+            self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
         elif self.name == 'left':
-            self.pos, self.euler, self.phi = [-0.519, 0.15, -0.6], (-90, 0, 0), 30
+            self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
 
     def getPlacePos(self):
+        lunchboxPos = [[0.5, -0.25, -0.54],
+                       [0.5, -0.25, -0.49]]
+        drinkPos = [[0.5, 0.25, -0.5],
+                    [0.42, 0.25, -0.5]]
         if self.name == 'right':
-            self.pos, self.euler, self.phi = [0.5, -0.25, -0.54], (0, 90, 0), 45
+            self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (0, 90, 0), 45
         elif self.name == 'left':
-            self.pos, self.euler, self.phi = [0.5, 0.25, -0.54], (0, 90, 0), -45
+            self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (0, 90, 0), -45
 
 
     def proces(self):
