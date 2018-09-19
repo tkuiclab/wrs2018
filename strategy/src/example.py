@@ -106,7 +106,7 @@ class exampleTask:
             self.nextState = move2Shelf
             self.getFrontSafetyPos()
             self.arm.set_speed(70)
-            self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)           
             self.suction.gripper_suction_deg(-30)
 
         elif self.state == rearSafetyPos:
@@ -178,10 +178,9 @@ class exampleTask:
                 self.state = self.nextState
             
 if __name__ == '__main__':
-    rospy.init_node('example')
-    # right = ArmTask('right')
-    right = exampleTask('right')
-    left  = exampleTask('left')
+    rospy.init_node('example')        #enable this node
+    right = exampleTask('right')      #Set up right arm controller
+    left  = exampleTask('left')       #Set up left arm controller
     rospy.sleep(0.3)
 
     rate = rospy.Rate(30)  # 30hz
