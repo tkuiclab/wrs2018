@@ -71,15 +71,15 @@ class exampleTask:
 
     def getObjectPos(self):
         if self.name == 'right':
-            self.pos, self.euler, self.phi = [-0.5, -0.15, -0.7], (90, 0, 0), -30
+            self.pos, self.euler, self.phi = [-0.519, -0.15, -0.6], (90, 0, 0), -30
         elif self.name == 'left':
-            self.pos, self.euler, self.phi = [-0.5, 0.15, -0.7], (-90, 0, 0), 30
+            self.pos, self.euler, self.phi = [-0.519, 0.15, -0.6], (-90, 0, 0), 30
 
     def getPlacePos(self):
         if self.name == 'right':
-            self.pos, self.euler, self.phi = [0.45, -0.35, -0.5], (0, 90, 0), 45
+            self.pos, self.euler, self.phi = [0.5, -0.25, -0.54], (0, 90, 0), 45
         elif self.name == 'left':
-            self.pos, self.euler, self.phi = [0.45, 0.35, -0.5], (0, 90, 0), -45
+            self.pos, self.euler, self.phi = [0.5, 0.25, -0.54], (0, 90, 0), -45
 
 
     def proces(self):
@@ -99,12 +99,15 @@ class exampleTask:
             self.nextState = idle
             self.arm.set_speed(70)
             self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
+            self.suction.gripper_suction_deg(0)
 
         elif self.state == frontSafetyPos:
             self.state = busy
             self.nextState = move2Shelf
             self.getFrontSafetyPos()
+            self.arm.set_speed(70)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            self.suction.gripper_suction_deg(-30)
 
         elif self.state == rearSafetyPos:
             self.state = busy
@@ -126,6 +129,7 @@ class exampleTask:
             self.pos[0] += -0.3
             self.pos[2] += 0.1
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            self.suction.gripper_suction_deg(-90)
         
         elif self.state == moveIn2Shelf:
             self.state = busy
@@ -137,6 +141,7 @@ class exampleTask:
         elif self.state == leaveBin:
             self.state = busy
             self.nextState = frontSafetyPos
+            self.arm.set_speed(30)
             self.arm.relative_move_pose('line', [0, 0, 0.2])
 
         elif self.state == leaveShelf:
@@ -144,6 +149,7 @@ class exampleTask:
             self.nextState = idle
             self.arm.relative_move_pose('line', [-0.3, 0, 0.1])
             self.pick_list -= 1
+            self.suction.gripper_suction_deg(0)
 
         elif self.state == move2Object:
             self.state = busy

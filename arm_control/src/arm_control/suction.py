@@ -61,22 +61,23 @@ class SuctionTask:
         
     def robot_cmd_client(self, cmd):
         if 'gazebo' in self.name:
-            if 'On' in cmd:
-                suction_service = '/robot/' + self.name + '/vacuum_gripper/on'
-                print 'ononon'
-            elif 'Off' in cmd:
-                suction_service = '/robot/' + self.name + '/vacuum_gripper/off'
-                print 'offoffoff'
-            rospy.wait_for_service(suction_service)
-            try:
-                client = rospy.ServiceProxy(
-                    suction_service,
-                    Empty
-                )
-                client()
-                print 'trytrytry'
-            except rospy.ServiceException, e:
-                print "Service call (Vacuum) failed: %s" % e
+            for i in range(1, 5):
+                if 'On' in cmd:
+                    suction_service = '/robot/' + self.name + '/vacuum_gripper' + str(i) + '/on'
+                    print 'ononon'
+                elif 'Off' in cmd:
+                    suction_service = '/robot/' + self.name + '/vacuum_gripper' + str(i) + '/off'
+                    print 'offoffoff'
+                rospy.wait_for_service(suction_service)
+                try:
+                    client = rospy.ServiceProxy(
+                        suction_service,
+                        Empty
+                    )
+                    client()
+                    print 'trytrytry'
+                except rospy.ServiceException, e:
+                    print "Service call (Vacuum) failed: %s" % e
         else:
             suction_service = self.name + '/suction_cmd'
             rospy.wait_for_service(suction_service)
@@ -101,26 +102,30 @@ class SuctionTask:
         rospy.sleep(0.3)
 
     def gripper_suction_up(self):
-        self.robot_cmd_client('suctionUp')
-        msg = 0.0
-        self.suction_pub.publish(msg)
+        if 'gazebo' in self.name:
+            msg = 0.0
+            self.suction_pub.publish(msg)
+        else:
+            self.robot_cmd_client('suctionUp')
         print('Suction Up')
 
     def gripper_suction_down(self):
-        self.robot_cmd_client('suctionDown')
-        # msg = std_msg/Float64()
-        msg = -pi/2
-        self.suction_pub.publish(msg)
+        if 'gazebo' in self.name:
+            msg = -pi/2
+            self.suction_pub.publish(msg)
+        else:
+            self.robot_cmd_client('suctionDown')
         print('Suction Down')
 
     def gripper_suction_deg(self, deg):
         str_deg = '{}'.format(deg)
-        self.robot_cmd_client(str_deg)
+        if 'gazebo' in self.name:
+            msg = radians(deg)
+            self.suction_pub.publish(msg)
+        else:
+            self.robot_cmd_client(str_deg)
 
-        # msg = std_msg/Float64()
-        msg = radians(deg)
-        self.suction_pub.publish(msg)
-
+        
         print('Suction Move : ' + str_deg)
 
     def is_grip_callback(self, msg):

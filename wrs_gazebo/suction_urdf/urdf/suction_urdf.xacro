@@ -100,19 +100,20 @@
         xyz="0 1 0" />
       <limit
         lower="-3.14"
-	      upper="3.14"
+	upper="3.14"
         effort="5"
-        velocity="5" />
+        velocity="0.5" />
     </joint>
 
     <link
-      name="${side}_end_Link">
+      name="${side}_end_Link1">
+      <gravity>0</gravity>
       <inertial>
         <origin
           xyz="0 0 0"
           rpy="0 0 0" />
         <mass
-          value="0.000438" />
+          value="0.0001" />
         <inertia
           ixx="2.0813E-05"
           ixy="1.7379E-08"
@@ -129,25 +130,214 @@
            <box size="0.01 0.01 0.01"/>
         </geometry>
         <material
-          name="">
+          name="transparent">
           <color
-            rgba="0.79216 0.81961 0.93333 1" />
+            rgba="0 0 0 0" />
         </material>
       </visual>
     </link>
-    <joint name="${side}_end_joint" type="revolute">
+    <joint name="${side}_end_joint1" type="revolute">
 	<origin
-        xyz="0 0 0.09"
-        rpy="-1.7985E-15 -2.9973E-16 1.1669E-16" />
+        xyz="0 -0.001 0.06"
+        rpy="0 1.5708 0" />
 	<parent link="${side}_tool_end_Link"/>
-	<child link="${side}_end_Link"/>
+	<child link="${side}_end_Link1"/>
         <axis
-            xyz="0 1 0" />
+            xyz="1 0 0" />
         <limit
-            lower="-3.14"
-	    upper="3.14"
+            lower="0"
+	    upper="0"
             effort="5"
             velocity="5" />
+        <dynamics damping="0.0" friction="10"/>
+    </joint>
+
+    <link
+      name="${side}_end_Link2">
+      <gravity>0</gravity>
+      <inertial>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <mass
+          value="0.0001" />
+        <inertia
+          ixx="2.0813E-05"
+          ixy="1.7379E-08"
+          ixz="9.2823E-08"
+          iyy="1.8619E-05"
+          iyz="4.6462E-06"
+          izz="5.6779E-06" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+	<geometry>
+           <box size="0.01 0.01 0.01"/>
+        </geometry>
+        <material
+          name="transparent">
+          <color
+            rgba="0 0 0 0" />
+        </material>
+      </visual>
+    </link>
+    <joint name="${side}_end_joint2" type="revolute">
+	<origin
+        xyz="-0.0125 -0.001 0.06"
+        rpy="0 1.5708 0" />
+	<parent link="${side}_tool_end_Link"/>
+	<child link="${side}_end_Link2"/>
+        <axis
+            xyz="1 0 0" />
+        <limit
+            lower="0"
+	    upper="0"
+            effort="5"
+            velocity="5" />
+        <dynamics damping="0.0" friction="10"/>
+    </joint>
+
+    <link
+      name="${side}_end_Link3">
+      <gravity>0</gravity>
+      <inertial>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <mass
+          value="0.0001" />
+        <inertia
+          ixx="2.0813E-05"
+          ixy="1.7379E-08"
+          ixz="9.2823E-08"
+          iyy="1.8619E-05"
+          iyz="4.6462E-06"
+          izz="5.6779E-06" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+	<geometry>
+           <box size="0.01 0.01 0.01"/>
+        </geometry>
+        <material
+          name="transparent">
+          <color
+            rgba="0 0 0 0" />
+        </material>
+      </visual>
+    </link>
+    <joint name="${side}_end_joint3" type="revolute">
+	<origin
+        xyz="0.0125 -0.001 0.06"
+        rpy="0 1.5708 0" />
+	<parent link="${side}_tool_end_Link"/>
+	<child link="${side}_end_Link3"/>
+        <axis
+            xyz="1 0 0" />
+        <limit
+            lower="0"
+	    upper="0"
+            effort="5"
+            velocity="5" />
+        <dynamics damping="0.0" friction="10"/>
+    </joint>
+
+    <link
+      name="${side}_end_Link4">
+      <gravity>0</gravity>
+      <inertial>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <mass
+          value="0.0001" />
+        <inertia
+          ixx="2.0813E-05"
+          ixy="1.7379E-08"
+          ixz="9.2823E-08"
+          iyy="1.8619E-05"
+          iyz="4.6462E-06"
+          izz="5.6779E-06" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+	<geometry>
+           <box size="0.01 0.01 0.01"/>
+        </geometry>
+        <material
+          name="transparent">
+          <color
+            rgba="0 0 0 0" />
+        </material>
+      </visual>
+    </link>
+    <joint name="${side}_end_joint4" type="revolute">
+	<origin
+        xyz="0 -0.001 0.0475"
+        rpy="0 1.5708 0" />
+	<parent link="${side}_tool_end_Link"/>
+	<child link="${side}_end_Link4"/>
+        <axis
+            xyz="1 0 0" />
+        <limit
+            lower="0"
+	    upper="0"
+            effort="5"
+            velocity="5" />
+        <dynamics damping="0.0" friction="10"/>
+    </joint>
+
+    <link
+      name="${side}_end_Link5">
+      <gravity>0</gravity>
+      <inertial>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <mass
+          value="0.0001" />
+        <inertia
+          ixx="2.0813E-05"
+          ixy="1.7379E-08"
+          ixz="9.2823E-08"
+          iyy="1.8619E-05"
+          iyz="4.6462E-06"
+          izz="5.6779E-06" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+	<geometry>
+           <box size="0.01 0.01 0.01"/>
+        </geometry>
+        <material
+          name="transparent">
+          <color
+            rgba="0 0 0 0" />
+        </material>
+      </visual>
+    </link>
+    <joint name="${side}_end_joint5" type="revolute">
+	<origin
+        xyz="0 -0.001 0.0725"
+        rpy="0 1.5708 0" />
+	<parent link="${side}_tool_end_Link"/>
+	<child link="${side}_end_Link5"/>
+        <axis
+            xyz="1 0 0" />
+        <limit
+            lower="0"
+	    upper="0"
+            effort="5"
+            velocity="5" />
+        <dynamics damping="0.0" friction="10"/>
     </joint>
 
     <xacro:suction_transmission side="${side}" />
