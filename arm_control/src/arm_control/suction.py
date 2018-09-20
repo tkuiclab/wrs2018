@@ -64,10 +64,8 @@ class SuctionTask:
             for i in range(1, 5):
                 if 'On' in cmd:
                     suction_service = '/robot/' + self.name + '/vacuum_gripper' + str(i) + '/on'
-                    print 'ononon'
                 elif 'Off' in cmd:
                     suction_service = '/robot/' + self.name + '/vacuum_gripper' + str(i) + '/off'
-                    print 'offoffoff'
                 rospy.wait_for_service(suction_service)
                 try:
                     client = rospy.ServiceProxy(
@@ -75,7 +73,6 @@ class SuctionTask:
                         Empty
                     )
                     client()
-                    print 'trytrytry'
                 except rospy.ServiceException, e:
                     print "Service call (Vacuum) failed: %s" % e
         else:
@@ -86,8 +83,8 @@ class SuctionTask:
                     suction_service,
                     VacuumCmd
                 )
-                client(cmd)
-            
+                res = client(cmd)
+                print res
             except rospy.ServiceException, e:
                 print "Service call (Vacuum) failed: %s" % e
 
