@@ -23,11 +23,11 @@ sudo apt-get install ros-kinetic-gazebo-ros-control
 #### A step by step series of examples that tell you how to get a development env running
 ##### Start manager of manipulator
 
-If you want to run on real robot:
+* If you want to run on real robot:
 ```
 roslaunch manipulator_h_manager dual_arm.launch
 ```
-If you want to run in gazebo:
+* If you want to run in gazebo:
 ```
 roslaunch manipulator_h_manager dual_arm.launch en_sim:=true
 ```
@@ -40,50 +40,15 @@ Explain how to run the automated tests for this system
 
 ##### 1. Reset the position of the object (only in simulation)
 ```
-rosrun strategy objectPos.py
+rosrun strategy object_pos.py
 ```
 ##### 2. Run task example
 
-If you want to run on real robot:
+* If you want to run on real robot:
 ```
 rosrun strategy example.py 
 ```
-If you want to run in gazebo:
+* If you want to run in gazebo:
 ```
-rosrun strategy example.py 
+rosrun strategy example.py True
 ```
-
-
-## Deployment
-
-none
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
