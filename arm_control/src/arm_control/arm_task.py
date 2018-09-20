@@ -19,10 +19,13 @@ from manipulator_h_base_module_msgs.srv import GetKinematicsPose, GetKinematicsP
 from manipulator_h_base_module_msgs.srv import GetJointPose, GetJointPoseResponse
 from vacuum_cmd_msg.srv import VacuumCmd
 
+
 _POS = (0, 0, 0)
 _ORI = (0, 0, 0)
 _PHI = 45
 _suction_angle = 0
+
+
 class ArmTask:
     """Running arm task class."""
 

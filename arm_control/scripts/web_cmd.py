@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from arm_control import arm_task
+from arm_control import ArmTask
 from std_msgs.msg import String, Float64
 from arm_control.msg import WebCmd
 
@@ -41,8 +41,8 @@ def web_cmd_callback(msg):
 if __name__ == '__main__':
     rospy.init_node('web_cmd')
 
-    arm_right = arm_task.ArmTask('right_arm')
-    arm_left  = arm_task.ArmTask('left_arm')
+    arm_right = ArmTask('right_arm')
+    arm_left  = ArmTask('left_arm')
     arm = {"right": arm_right, "left": arm_left}
     set_sub()
 
