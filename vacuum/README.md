@@ -50,7 +50,7 @@ rosservice call /right/suction_cmd "cmd: 'vacuumOff'"
 rosservice call /right/suction_cmd "cmd: '-45.0'"
 ```
 * Use python api <br>
-  reference to [strategy/suction.py](../strategy/scripts/suction.py)
+  reference to [arm_control/suction.py](../arm_control/src/arm_control/suction.py)
 
 ### Get Gripper Feedback
 * Use rostopic
@@ -59,7 +59,7 @@ rosservice call /right/suction_cmd "cmd: '-45.0'"
 rostopic echo /right/is_grip
 ```
 * Use python api <br>
-  reference to [strategy/suction.py](../strategy/scripts/suction.py)
+  reference to [arm_control/suction.py](../arm_control/src/arm_control/suction.py)
 
 
 ## Request Package of ROS

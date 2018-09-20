@@ -5,12 +5,8 @@
 import os
 import sys
 import rospy
-import rospkg
-rospack = rospkg.RosPack()
-sys.path.append(os.path.join(rospack.get_path('arm_control'), 'src/arm_control'))
+from arm_control import ArmTask, SuctionTask
 
-from arm_task import ArmTask
-from suction  import SuctionTask
 
 idle            = 0
 busy            = 1

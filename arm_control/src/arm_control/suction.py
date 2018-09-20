@@ -6,6 +6,7 @@ from vacuum_cmd_msg.srv import VacuumCmd
 from std_msgs.msg import Bool, Float64
 from std_srvs.srv import Empty
 
+
 # 2017/07/19 Gripper Parameter Backup
 # cam2tool_y = -0.025
 # cam2tool_z = 0.14
@@ -18,6 +19,7 @@ cam2tool_z = 0.18 #0.27 #0.26
 gripper_length = 0.04
 cam2center_y = 0.035
 cam2center_y_4_tote = 0.035#0.06 #0.05
+
 
 class SuctionTask:
     def __init__(self, _name='/robotis'):

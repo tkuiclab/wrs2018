@@ -19,10 +19,13 @@ from manipulator_h_base_module_msgs.srv import GetKinematicsPose, GetKinematicsP
 from manipulator_h_base_module_msgs.srv import GetJointPose, GetJointPoseResponse
 from vacuum_cmd_msg.srv import VacuumCmd
 
+
 _POS = (0, 0, 0)
 _ORI = (0, 0, 0)
 _PHI = 45
 _suction_angle = 0
+
+
 class ArmTask:
     """Running arm task class."""
 
@@ -275,35 +278,43 @@ class ArmTask:
     @property
     def busy(self):
         return self.__is_busy
+    
+    def wait_busy(self):
+        """This is blocking method."""
+        while self.busy:
+            rospy.sleep(0.1)
 
 if __name__ == '__main__':
-    rospy.init_node('strategy')
+    rospy.init_node('test_arm_task')
+    print("Test arm task script")
+    
     a = ArmTask('right_arm')
     rospy.sleep(0.3)
 
     a.set_speed(100)
     a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
     a.set_speed(20)
-    while a.busy:
-        rospy.sleep(0.3)
+    a.wait_busy()
+    
     a.ikMove('p2p', (0, -0.3, -0.9), (0, 0, 0), 30) 
     a.set_speed(100)
-    while a.busy:
-        rospy.sleep(0.3)
+    a.wait_busy()
+    
     a.noa_move_suction('p2p', -45, n=0, s=0, a=-0.1)
-    while a.busy:
-        rospy.sleep(0.3)
+    a.wait_busy()
+        
     a.singleJointMove(0,-0.2)
-    while a.busy:
-        rospy.sleep(0.3)
+    a.wait_busy()
+        
     a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
-    while a.busy:
-        rospy.sleep(0.3)
+    a.wait_busy()
+        
     a.singleJointMove(2,0.5)
-    while a.busy:
-        rospy.sleep(0.3)
+    a.wait_busy()
+        
     a.relative_move_pose('p2p', (0, 0.1, 0) )
-    while a.busy:
-        rospy.sleep(0.3)
+    a.wait_busy()
+    
     a.back_home()
+    a.wait_busy()
  
