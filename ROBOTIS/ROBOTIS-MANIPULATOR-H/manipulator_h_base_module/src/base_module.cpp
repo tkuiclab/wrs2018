@@ -173,11 +173,15 @@ void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
 
 void BaseModule::setModeMsgCallback(const std_msgs::String::ConstPtr& msg)
 {
-  std_msgs::String str_msg;
-  str_msg.data = "base_module";
+  if(msg->data == "stop")
+    stop();
+  else
+  {
+    std_msgs::String str_msg;
+    str_msg.data = "base_module";
 
-  set_ctrl_module_pub_.publish(str_msg);
-
+    set_ctrl_module_pub_.publish(str_msg);
+  }
   return;
 }
 
@@ -269,7 +273,6 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
 
   Eigen::Vector3d p2p_positoin;
   Eigen::Matrix3d p2p_rotation;
-  Eigen::VectorXd p2p_joint(8);
 
   int     max_iter    = 30;
   double  ik_tol      = 1e-3;
@@ -306,9 +309,8 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
 
     for ( int id = 1; id <= MAX_JOINT_ID; id++ )
     {
-      p2p_joint(id) = manipulator_->manipulator_link_data_[id]->joint_angle_;
-      p2p_msg.name.push_back( manipulator_->manipulator_link_data_[id]->name_ );
-      p2p_msg.value.push_back( p2p_joint(id) );
+      p2p_msg.name.push_back(manipulator_->manipulator_link_data_[id]->name_);
+      p2p_msg.value.push_back(manipulator_->manipulator_link_data_[id]->joint_angle_);
     }
     p2p_msg.slide_pos = slide_->goal_slide_pos;
     p2p_msg.speed     = robotis_->p2p_pose_msg_.speed;
@@ -667,6 +669,28 @@ void BaseModule::stop()
   robotis_->is_moving_ = false;
   robotis_->ik_solve_ = false;
   robotis_->cnt_ = 0;
+
+  manipulator_h_base_module_msgs::JointPose stop_msg;
+
+  for ( int id = 1; id <= MAX_JOINT_ID; id++ )
+  {
+    stop_msg.name.push_back(manipulator_->manipulator_link_data_[id]->name_);
+    stop_msg.value.push_back(joint_state_->goal_joint_state_[id].position_);
+  }
+  stop_msg.slide_pos = slide_->goal_slide_pos;
+  stop_msg.speed     = 10;
+  robotis_->joint_pose_msg_ = stop_msg;
+
+  if (robotis_->is_moving_ == false)
+  {
+    tra_gene_thread_ = new boost::thread(boost::bind(&BaseModule::generateJointTrajProcess, this));
+    delete tra_gene_thread_;
+    ROS_INFO("!!!!Stop robot arm!!!!");
+  }
+  else
+  {
+    ROS_INFO("!!!!Stop failed!!!!");
+  }
 
   return;
 }

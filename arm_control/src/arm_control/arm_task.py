@@ -11,7 +11,7 @@ from numpy import multiply
 
 import numpy as np
 
-from std_msgs.msg import String, Float64
+from std_msgs.msg import String, Float64, Bool
 from robotis_controller_msgs.msg import StatusMsg
 # from manipulator_h_base_module_msgs.msg import IK_Cmd, JointPose
 from manipulator_h_base_module_msgs.msg import P2PPose, JointPose, KinematicsPose
@@ -39,8 +39,8 @@ class ArmTask:
         #rospy.on_shutdown(self.stop_task)
         self.__set_mode_pub.publish('set')
         self.__is_busy = False
-        # self.__set_vel_pub.publish(10)
-        self.__ik_fail =False
+        self.__ik_fail = False
+        self.__is_stop = False
         self.__speed = 50
 
     def __set_pubSub(self):
@@ -75,6 +75,12 @@ class ArmTask:
             self.__status_callback,
             queue_size=1
         )
+        self.__stop_sub = rospy.Subscriber(
+            'robot/is_stop',
+            Bool,
+            self.__stop_callback,
+            queue_size=5
+        )
         # Waiting for topic enable
         rospy.sleep(0.3)
 
@@ -86,12 +92,22 @@ class ArmTask:
         elif 'End Trajectory' in msg.status_msg:
             self.__is_busy = False
 
+    def __stop_callback(self, msg):
+        if msg.data:
+            self.__set_mode_pub.publish('stop')
+            self.__is_stop = True
+        
     def back_home(self):
         self.jointMove(0,(0, 0, 0, 0, 0, 0, 0))
-
+    @property
+    def is_busy(self):
+        return self.__is_busy
     @property
     def is_ikfail(self):
         return self.__ik_fail
+    @property
+    def is_stop(self):
+        return self.__is_stop
 
     def set_speed(self,i_speed):
         self.__speed = i_speed
@@ -262,59 +278,49 @@ class ArmTask:
         pos[1] += curr_pos.y
         pos[2] += curr_pos.z
 
-        # if xyz == 'x':
-        #     pos.x += value
-        # if xyz == 'y':
-        #     pos.y += value
-        # if xyz == 'z':
-        #     pos.z += value
         self.ikMove(
             mode,
             (pos[0], pos[1], pos[2]),
             (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
             degrees(phi)
         )
-
-    @property
-    def busy(self):
-        return self.__is_busy
     
     def wait_busy(self):
         """This is blocking method."""
-        while self.busy:
+        while self.is_busy:
             rospy.sleep(0.1)
 
-if __name__ == '__main__':
-    rospy.init_node('test_arm_task')
-    print("Test arm task script")
+# if __name__ == '__main__':
+#     rospy.init_node('test_arm_task')
+#     print("Test arm task script")
     
-    a = ArmTask('right_arm')
-    rospy.sleep(0.3)
+#     a = ArmTask('right_arm')
+#     rospy.sleep(0.3)
 
-    a.set_speed(100)
-    a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
-    a.set_speed(20)
-    a.wait_busy()
+#     a.set_speed(100)
+#     a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
+#     a.set_speed(20)
+#     a.wait_busy()
     
-    a.ikMove('p2p', (0, -0.3, -0.9), (0, 0, 0), 30) 
-    a.set_speed(100)
-    a.wait_busy()
+#     a.ikMove('p2p', (0, -0.3, -0.9), (0, 0, 0), 30) 
+#     a.set_speed(100)
+#     a.wait_busy()
     
-    a.noa_move_suction('p2p', -45, n=0, s=0, a=-0.1)
-    a.wait_busy()
+#     a.noa_move_suction('p2p', -45, n=0, s=0, a=-0.1)
+#     a.wait_busy()
         
-    a.singleJointMove(0,-0.2)
-    a.wait_busy()
+#     a.singleJointMove(0,-0.2)
+#     a.wait_busy()
         
-    a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
-    a.wait_busy()
+#     a.jointMove(0, (0, -1, 0, 1, 0, 0, 0))
+#     a.wait_busy()
         
-    a.singleJointMove(2,0.5)
-    a.wait_busy()
+#     a.singleJointMove(2,0.5)
+#     a.wait_busy()
         
-    a.relative_move_pose('p2p', (0, 0.1, 0) )
-    a.wait_busy()
+#     a.relative_move_pose('p2p', (0, 0.1, 0) )
+#     a.wait_busy()
     
-    a.back_home()
-    a.wait_busy()
+#     a.back_home()
+#     a.wait_busy()
  

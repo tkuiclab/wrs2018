@@ -49,8 +49,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[0]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[0]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[0]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[0]->joint_limit_max_   = 100.0;
-    manipulator_link_data_[0]->joint_limit_min_   = -100.0;
+    manipulator_link_data_[0]->joint_limit_max_   = 0;
+    manipulator_link_data_[0]->joint_limit_min_   = -0.8;
     manipulator_link_data_[0]->inertia_           = robotis_framework::getInertiaXYZ(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
     manipulator_link_data_[1]->name_    = "joint1";
@@ -61,8 +61,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[1]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[1]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[1]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[1]->joint_limit_max_   = 1 * M_PI/180;
-    manipulator_link_data_[1]->joint_limit_min_   = -1 * M_PI/180;
+    manipulator_link_data_[1]->joint_limit_max_   = 180 * M_PI/180;
+    manipulator_link_data_[1]->joint_limit_min_   = -180 * M_PI/180;
     manipulator_link_data_[1]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[2]->name_    = "joint2";
@@ -73,8 +73,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[2]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.16);
     manipulator_link_data_[2]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, -1.0);
     manipulator_link_data_[2]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[2]->joint_limit_max_   = 1 * M_PI/180;
-    manipulator_link_data_[2]->joint_limit_min_   = -0.2 * M_PI/180;
+    manipulator_link_data_[2]->joint_limit_max_   = 16 * M_PI/180;
+    manipulator_link_data_[2]->joint_limit_min_   = -180 * M_PI/180;
     manipulator_link_data_[2]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[3]->name_    = "joint3";
@@ -85,8 +85,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[3]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[3]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[3]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[3]->joint_limit_max_   = 1 * M_PI/180;
-    manipulator_link_data_[3]->joint_limit_min_   = -1 * M_PI/180;
+    manipulator_link_data_[3]->joint_limit_max_   = 180 * M_PI/180;
+    manipulator_link_data_[3]->joint_limit_min_   = -180 * M_PI/180;
     manipulator_link_data_[3]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[4]->name_    = "joint4";
@@ -97,8 +97,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[4]->relative_position_ = robotis_framework::getTransitionXYZ(-0.03, 0, 0.29);
     manipulator_link_data_[4]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[4]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[4]->joint_limit_max_   = 1 * M_PI/180;
-    manipulator_link_data_[4]->joint_limit_min_   = -0.1 * M_PI/180;
+    manipulator_link_data_[4]->joint_limit_max_   = 175 * M_PI/180;
+    manipulator_link_data_[4]->joint_limit_min_   = -40 * M_PI/180;
     manipulator_link_data_[4]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[5]->name_    = "joint5";
@@ -109,8 +109,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[5]->relative_position_ = robotis_framework::getTransitionXYZ(-0.03, 0.0, 0.0);
     manipulator_link_data_[5]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[5]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[5]->joint_limit_max_   = 1 * M_PI/180;
-    manipulator_link_data_[5]->joint_limit_min_   = -1 * M_PI/180;
+    manipulator_link_data_[5]->joint_limit_max_   = 180 * M_PI/180;
+    manipulator_link_data_[5]->joint_limit_min_   = -180 * M_PI/180;
     manipulator_link_data_[5]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 
     manipulator_link_data_[6]->name_    = "joint6";
@@ -121,8 +121,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[6]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.263);
     manipulator_link_data_[6]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, -1.0);
     manipulator_link_data_[6]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[6]->joint_limit_max_   = 0.5 * M_PI/180;
-    manipulator_link_data_[6]->joint_limit_min_   = -0.5 * M_PI/180;
+    manipulator_link_data_[6]->joint_limit_max_   = 106 * M_PI/180;
+    manipulator_link_data_[6]->joint_limit_min_   = -106 * M_PI/180;
     manipulator_link_data_[6]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     manipulator_link_data_[7]->name_    = "joint7";
@@ -133,8 +133,8 @@ ManipulatorKinematicsDynamics::ManipulatorKinematicsDynamics(TreeSelect tree)
     manipulator_link_data_[7]->relative_position_ = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
     manipulator_link_data_[7]->joint_axis_        = robotis_framework::getTransitionXYZ(0.0, 0.0, 1.0);
     manipulator_link_data_[7]->center_of_mass_    = robotis_framework::getTransitionXYZ(0.0, 0.0, 0.0);
-    manipulator_link_data_[7]->joint_limit_max_   = 1 * M_PI/180;
-    manipulator_link_data_[7]->joint_limit_min_   = -1 * M_PI/180;
+    manipulator_link_data_[7]->joint_limit_max_   = 180 * M_PI/180;
+    manipulator_link_data_[7]->joint_limit_min_   = -180 * M_PI/180;
     manipulator_link_data_[7]->inertia_           = robotis_framework::getInertiaXYZ(1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     manipulator_link_data_[8]->name_    = "end";
@@ -389,25 +389,25 @@ bool ManipulatorKinematicsDynamics::inverseKinematics(int to, Eigen::MatrixXd ta
 
   for (int id = 0; id < idx.size(); id++)
   {
-    int joint_num = idx[id];
-    Old_JointAngle[joint_num] = manipulator_link_data_[joint_num]->joint_angle_;
+    Old_JointAngle[idx[id]] = manipulator_link_data_[idx[id]]->joint_angle_;
   }
 
   ik_success = InverseKinematics_7(tar_position, tar_orientation, tar_phi, tar_slide_pos, Old_JointAngle);
 
   forwardKinematics(7);
   
+  int joint_num;
 
   for (int id = 0; id < idx.size(); id++)
   {
-    int joint_num = idx[id];
+     joint_num = idx[id];
 
-    if (manipulator_link_data_[joint_num]->joint_angle_ >= manipulator_link_data_[joint_num]->joint_limit_max_)
+    if (manipulator_link_data_[joint_num]->joint_angle_ > manipulator_link_data_[joint_num]->joint_limit_max_)
     {
       limit_success = false;   
       break;
     }
-    else if (manipulator_link_data_[joint_num]->joint_angle_ <= manipulator_link_data_[joint_num]->joint_limit_min_)
+    else if (manipulator_link_data_[joint_num]->joint_angle_ < manipulator_link_data_[joint_num]->joint_limit_min_)
     {
       limit_success = false;   
       break;
@@ -415,9 +415,14 @@ bool ManipulatorKinematicsDynamics::inverseKinematics(int to, Eigen::MatrixXd ta
     else
       limit_success = true;
   }
-  limit_success = true;
+  
   if (ik_success == true && limit_success == true)
     return true;
+  else if(!limit_success)
+  {
+    std::cout<<"Out of Joint \""<<joint_num<<"\" limit!!!"<<std::endl;
+    return false;
+  }
   else
     return false;
 }
@@ -544,9 +549,7 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
  
   Oc << goal_position(0)-d4*R07(0,2), goal_position(1)-d4*R07(1,2), goal_position(2)-d4*R07(2,2);
 
-  
   DHTABLE(0,2) = slide_position;       
-  std::cout<<"============slidepos_1=============== "<<std::endl<<DHTABLE(0,2)<<std::endl;
           
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -645,12 +648,15 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
             D_Joint_2 = (JointAngle.block(0, 0, 1, 5) - Old_JointAngle.block(0, 0, 1, 5)).cwiseAbs().maxCoeff();
         }
     }
-    std::cout<<"||||||||||||||||||||||||||||||||||||||||||| "<<std::endl;
-    std::cout<<"============D_Joint_1=============== "<<std::endl<<D_Joint_1<<std::endl;
-    std::cout<<"============D_Joint_2=============== "<<std::endl<<D_Joint_2<<std::endl;
+  
     if( isMatch == 0 && i == -1)
     {
         JointAngle = Old_JointAngle;
+        std::cout<<"====D_Joint_1==== "<<std::endl<<D_Joint_1<<std::endl;
+        std::cout<<"====D_Joint_2==== "<<std::endl<<D_Joint_2<<std::endl;
+        std::cout<<"====JointAngle====="<<std::endl<<JointAngle<<std::endl;
+        std::cout<<"No solution 1 !!!"<<std::endl;
+        ik_success = false;
     }
     else if( isMatch == 1 && D_Joint_2 == 0)
     {
@@ -709,12 +715,14 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
             D_Joint_2 = (JointAngle - Old_JointAngle).cwiseAbs().maxCoeff();
         }
     }
-    std::cout<<"============D_Joint_1=============== "<<std::endl<<D_Joint_1<<std::endl;
-    std::cout<<"============D_Joint_2=============== "<<std::endl<<D_Joint_2<<std::endl;
-    std::cout<<"============JointAngle==============="<<std::endl<<JointAngle<<std::endl;
+    
     if( isMatch == 0 && i == -1)
     {
         JointAngle = Old_JointAngle;
+        std::cout<<"====D_Joint_1===== "<<std::endl<<D_Joint_1<<std::endl;
+        std::cout<<"====D_Joint_2===== "<<std::endl<<D_Joint_2<<std::endl;
+        std::cout<<"====JointAngle====="<<std::endl<<JointAngle<<std::endl;
+        std::cout<<"No solution 2 !!!"<<std::endl;
         ik_success = false;
     }
     else if( isMatch == 1 && D_Joint_2 == 0)
@@ -739,8 +747,6 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
       manipulator_link_data_[id]->joint_angle_ = JointAngle.coeff(id);
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////
-  std::cout<<"============slidepos_1=============== "<<std::endl<<DHTABLE(0,2)<<std::endl;
-
   return ik_success;
 }
 bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_position, Eigen::Matrix3d rotation, 
@@ -757,15 +763,18 @@ bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_
   test_pos(1) = test_pos(1) - (d1*RL_prm);
   test_pos(2) = test_pos(2) - slide_pos;
   Lsw = test_pos.norm();
-  if(Lsw > (d2+d3-0.03) || Lsw < 0.3)
+  if(Lsw > (d2+d3-0.03) || Lsw < 0.3 || (slide_pos - Oc(2)) < 0.1) 
   {
     if(Oc(2) < -0.8){                                         
         test_pos << test_pos(0), test_pos(1), test_pos(2)-(-0.8);
     }else{
         test_pos << test_pos(0), test_pos(1), 0;
     }
-    if(Oc(2)>0 || test_pos.norm() > (d2+d3-0.01))
+    if(Oc(2)>0 || test_pos.norm() > (d2+d3-0.005))
     {
+      std::cout<<"Out of range 1 !!!"<<std::endl;
+      std::cout<<"Oc(2) = "<<Oc(2)<<std::endl;
+      std::cout<<"test_pos.norm() = "<<test_pos.norm()<<std::endl;
       return false;
     }
 
@@ -778,11 +787,12 @@ bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_
       }
       if(i==5)
       {
+        std::cout<<"Out of range 2 !!!"<<std::endl;
         return false;
       }
     }
     slide_position = (slide_position < -0.8) ? -0.8 : slide_position;
-    slide_position = (slide_position >  0.0) ?  0.0 : slide_position;
+    slide_position = (slide_position >  0) ?  0 : slide_position;
     test_pos(2) = Oc(2) - slide_position;
     if(test_pos.norm() < (d2+d3) && test_pos.norm() > 0.1)
     {
@@ -791,6 +801,7 @@ bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_
     }
     else
     {
+      std::cout<<"Out of range 3 !!!"<<std::endl;
       return false;
     }
   }

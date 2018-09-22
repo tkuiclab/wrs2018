@@ -55,21 +55,21 @@ class exampleTask:
 
     def getRearSafetyPos(self):
         if self.name == 'right':
-            self.pos, self.euler, self.phi = (-0.1, -0.45, -0.5), (90, 0, 0), -30
+            self.pos, self.euler, self.phi = (-0.1, -0.45, -0.45), (90, 0, 0), -30
         elif self.name == 'left':
-            self.pos, self.euler, self.phi = (-0.1, 0.45, -0.5), (-90, 0, 0),  30
+            self.pos, self.euler, self.phi = (-0.1, 0.45, -0.45), (-90, 0, 0),  30
 
     def getFrontSafetyPos(self):
         if self.name == 'right':
-            self.pos, self.euler, self.phi = (0.1, -0.45, -0.5), (0, 30, 0), 45
+            self.pos, self.euler, self.phi = (0.1, -0.45, -0.45), (0, 20, 0), 45
         elif self.name == 'left':
-            self.pos, self.euler, self.phi = (0.1, 0.45, -0.5), (0, 30, 0), -45
+            self.pos, self.euler, self.phi = (0.1, 0.45, -0.45), (0, 20, 0), -45
 
     def getObjectPos(self):
-        lunchboxPos = [[-0.519, -0.15, -0.6],
-                       [-0.519, -0.15, -0.65]]
+        lunchboxPos = [[-0.5, -0.15, -0.6],
+                       [-0.5, -0.15, -0.65]]
         drinkPos = [[-0.4, 0.15, -0.6],
-                    [-0.519, 0.15, -0.6]]
+                    [-0.5, 0.15, -0.6]]
         if self.name == 'right':
             self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
         elif self.name == 'left':
@@ -87,6 +87,11 @@ class exampleTask:
 
 
     def proces(self):
+        if self.arm.is_stop:                                       # must be include in your strategy
+            self.finish = True                                     # must be include in your strategy
+            print "!!! Robot is stop !!!"                          # must be include in your strategy
+            return                                                 # must be include in your strategy
+
         if self.state == idle:
             if self.finish:
                 return
@@ -94,10 +99,6 @@ class exampleTask:
                 self.state = rearSafetyPos
                 print "self.pick_list = " + str(self.pick_list)
 
-        # elif self.state == WaitVision:
-        #     return
-
-        # Move to bin and initial pose
         elif self.state == initPose:
             self.state = busy
             self.nextState = idle
@@ -111,7 +112,7 @@ class exampleTask:
             self.getFrontSafetyPos()
             self.arm.set_speed(70)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)           
-            self.suction.gripper_suction_deg(-30)
+            self.suction.gripper_suction_deg(-20)
 
         elif self.state == rearSafetyPos:
             self.state = busy
@@ -176,7 +177,7 @@ class exampleTask:
             self.suction.gripper_vaccum_off()
 
         elif self.state == busy:
-            if self.arm.busy:
+            if self.arm.is_busy:
                 return
             else:
                 self.state = self.nextState
