@@ -262,7 +262,7 @@ void loop()
   is_grip_msg.data = digitalRead(is_grip_left);
   isGripL.publish(&is_grip_msg);
 
-  is_stop_msg.data = digitalRead(is_stop);
+  is_stop_msg.data = !digitalRead(is_stop);
   isStop.publish(&is_stop_msg);
 
   nh.spinOnce();
