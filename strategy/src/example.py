@@ -193,4 +193,4 @@ if __name__ == '__main__':
         left.proces()
         right.proces()
         rate.sleep()
-   
+

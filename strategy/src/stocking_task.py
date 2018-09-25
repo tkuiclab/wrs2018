@@ -23,7 +23,20 @@ move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
 
+is_right = 0
 
+lunchboxPos = [[-0.5, -0.15, -0.6],
+               [-0.5, -0.15, -0.65],
+               [-0.5, 0.15, -0.6],
+               [-0.5, 0.15, -0.65]]
+
+drinkPos = [[-0.3, 0.15, -0.6],
+            [-0.3, 0.25, -0.6],                              [-0.4, 0.15, -0.6],                              [-0.4, 0.25, -0.6]]
+
+riceballPos = [[-0.3, -0.15, -0.6],
+              [-0.3, -0.25, -0.6],
+              [-0.4, -0.15, -0.6],                             [-0.4, -0.25, -0.6]]
+objectPos = [lunchboxPos drinkPos riceballPos]
 class exampleTask:
     def __init__(self, _name = '/robotis'):
         """Initial object."""
@@ -38,16 +51,19 @@ class exampleTask:
         self.state = initPose
         self.nextState = idle
         self.arm = ArmTask(self.name + '_arm')
-        self.pick_list = 2
+        self.pickListAll = len(lunchboxPos) + len(riceballPos) + len(drinkPos)
+        self.pickList = 0
         self.pos   = (0, 0, 0)
         self.euler = (0, 0, 0)
         self.phi   = 0
+        if self.name == 'right':
+            is_right = 1
+        if self.name == 'left':
+            is_right = -1
         if en_sim:
             self.suction = SuctionTask(self.name + '_gazebo')
-            print "aa"
         else:
             self.suction = SuctionTask(self.name)
-            print "bb"
 
     @property
     def finish(self):
@@ -66,24 +82,14 @@ class exampleTask:
             self.pos, self.euler, self.phi = (0.1, 0.45, -0.45), (0, 20, 0), -45
 
     def getObjectPos(self):
-        lunchboxPos = [[-0.5, -0.15, -0.6],
-                       [-0.5, -0.15, -0.65],
-                       [-0.5, 0.15, -0.6],
-                       [-0.5, 0.15, -0.65]]
-
-        drinkPos = [[-0.3, 0.15, -0.6],
-                    [-0.3, 0.25, -0.6],
-                    [-0.4, 0.15, -0.6],
-                    [-0.4, 0.25, -0.6]]
-
-        riceballPos = [[-0.3, -0.15, -0.6],
-                       [-0.3, -0.25, -0.6],
-                       [-0.4, -0.15, -0.6],
-                       [-0.4, -0.25, -0.6]]
-        if self.name == 'right':
-            self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
-        elif self.name == 'left':
-            self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
+        if objectPos[[self.pick_list/4][self.pick_list%4][1]]*is_right > 0:
+            self.pos, self.euler, self.phi = objectPos[[self.pick_list/4][self.pick_list%4]], (90, 0, 0), -30
+        else
+            self.pickList ++
+        #if self.name == 'right':
+       #     self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
+       # elif self.name == 'left':
+        #    self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
 
     def getPlacePos(self):
         lunchboxPos = [[0.5, -0.25, -0.54],
