@@ -14,6 +14,7 @@
     <node name="manipulator_h_manager_$(arg side)" pkg="manipulator_h_manager" type="manipulator_h_manager"
             output="screen" >
         <param name="side"            value="$(arg side)" />
+        <param name="gazebo"          value="$(arg en_sim)" />
         <param name="link_file_path"  value="$(find manipulator_h_kinematics_dynamics)/config/link_param_$(arg side).yaml" />
         <param name="robot_file_path" value="$(find manipulator_h_manager)/config/ROBOTIS_$(arg side).robot" />
 

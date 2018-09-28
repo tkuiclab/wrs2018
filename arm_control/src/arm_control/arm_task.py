@@ -94,7 +94,6 @@ class ArmTask:
 
     def __stop_callback(self, msg):
         if msg.data:
-            self.__set_mode_pub.publish('stop')
             self.__is_stop = True
         
     def back_home(self):
