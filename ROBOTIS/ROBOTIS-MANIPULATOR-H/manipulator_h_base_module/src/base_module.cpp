@@ -30,6 +30,7 @@ using namespace robotis_manipulator_h;
 BaseModule::BaseModule()
   : control_cycle_msec_(0)
 {
+  stop_flag     = false;
   enable_       = false;
   module_name_  = "base_module";
   control_mode_ = robotis_framework::PositionControl;
@@ -121,6 +122,9 @@ void BaseModule::queueThread()
   set_ctrl_module_pub_ = ros_node.advertise<std_msgs::String>("/robotis/enable_ctrl_module", 1);
 
   /* subscribe topics */
+  ros::Subscriber stop_sub = ros_node.subscribe("/robot/is_stop", 5,
+                                                &BaseModule::stopMsgCallback, this);
+
   ros::Subscriber ini_pose_msg_sub = ros_node.subscribe("/robotis/base/ini_pose_msg", 5,
                                                         &BaseModule::initPoseMsgCallback, this);
   ros::Subscriber set_mode_msg_sub = ros_node.subscribe("/robotis/base/set_mode_msg", 5,
@@ -145,7 +149,16 @@ void BaseModule::queueThread()
     usleep(1000);
   }
 }
-
+void BaseModule::stopMsgCallback(const std_msgs::Bool::ConstPtr& msg)
+{
+  if (msg->data && !stop_flag)
+  {
+    stop_flag = true;
+    stop();
+  }
+  else if (!msg->data)
+    stop_flag = false;
+}
 void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
 {
   if (enable_ == false)
