@@ -1,9 +1,22 @@
 #include <ros.h>
 #include <vacuum_cmd_msg/VacuumCmd.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/String.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Empty.h>
 #include <EEPROM.h>
 #include <DynamixelSerial1.h>
+#include <SPI.h>
+#include <MFRC522.h>     // 引用程式庫
 
+#define RST_PIN      5        // 讀卡機的重置腳位
+#define SS_PIN       53        // 晶片選擇腳位
+
+MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
+
+std_msgs::String str_msg;
+std_msgs::Int32 int32;
+ros::Publisher chatter("rfid", &str_msg);
 
 #define ID_right  1
 #define ID_left   2
@@ -74,9 +87,6 @@ void setup()
   
   nh.advertiseService(vac_srv_right);
   nh.advertiseService(vac_srv_left);
-//  nn.initNode();
-//  nn.advertiseService(vac_srv_right);
-//  nn.advertiseService(vac_srv_left);
   
   pinMode(led_pin, OUTPUT);
   pinMode(vac_pin_right, OUTPUT);
@@ -110,6 +120,10 @@ void setup()
   MinPos_L_left = EEPROM.read(addressMin_L_left);
   MinPos_H_left = EEPROM.read(addressMin_H_left);
   MinPos_left = MinPos_H_left << 8 | MinPos_L_left;
+
+  SPI.begin(); // Init SPI bus
+  mfrc522.PCD_Init(); // Init MFRC522 
+  nh.advertise(chatter);
 }
 DynamixelClass wDxl(bool isRight)
 {
@@ -254,6 +268,46 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
   res.success = true;
 }
 
+void RFID()
+{
+  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+    byte *id = mfrc522.uid.uidByte;   // 取得卡片的UID
+    byte idSize = mfrc522.uid.size;   // 取得UID的長度
+    if(id[0] == 16 
+        && id[1] == 200
+        && id[2] == 16
+        && id[3] == 168){ 
+      char hello[2] = "0";
+      str_msg.data = hello;
+      chatter.publish( &str_msg );
+    }
+    else if(id[0] == 192 
+        && id[1] == 110
+        && id[2] == 209
+        && id[3] == 87){  
+          char hello[2] = "1";
+          str_msg.data = hello;
+          chatter.publish( &str_msg );
+        }
+    else if(id[0] == 96 
+        && id[1] == 191
+        && id[2] == 31
+        && id[3] == 168){  
+          char hello[2] = "2";
+          str_msg.data = hello;
+          chatter.publish( &str_msg );
+        }
+    else if(id[0] == 176 
+        && id[1] == 53
+        && id[2] == 41
+        && id[3] == 164){  
+          char hello[2] = "3";
+          str_msg.data = hello;
+          chatter.publish( &str_msg );
+        }
+  }
+}
+
 void loop()
 { 
   is_grip_msg.data = digitalRead(is_grip_right);
@@ -264,6 +318,8 @@ void loop()
 
   is_stop_msg.data = !digitalRead(is_stop);
   isStop.publish(&is_stop_msg);
+
+  RFID();
 
   nh.spinOnce();
   delay(10);
