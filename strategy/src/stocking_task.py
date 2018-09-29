@@ -4,6 +4,7 @@
 
 import os
 import sys
+import copy
 import rospy
 from arm_control import ArmTask, SuctionTask
 
@@ -23,20 +24,20 @@ move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
 
-lunchboxPos = [[-0.5, -0.15, -0.6],
-               [-0.5, -0.15, -0.65],
-               [-0.5, 0.15, -0.6],
-               [-0.5, 0.15, -0.65]]
+lunchboxPos = [[-0.425, -0.16, -0.64],
+               [-0.425, -0.16, -0.69],
+               [-0.425,  0.16, -0.64],
+               [-0.425,  0.16, -0.69]]
 
-drinkPos = [[-0.3, 0.15, -0.6],
-            [-0.3, 0.25, -0.6],                   
-            [-0.4, 0.15, -0.6],                              
-            [-0.4, 0.25, -0.6]]
+drinkPos = [[-0.165, -0.11, -0.645],
+            [-0.27,  -0.11, -0.645],                   
+            [-0.165, -0.21, -0.645],                              
+            [-0.27,  -0.21, -0.645]]
 
-riceballPos = [[-0.3, -0.15, -0.6],
-              [-0.3, -0.25, -0.6],
-              [-0.4, -0.15, -0.6],                             
-              [-0.4, -0.25, -0.6]]
+riceballPos = [[-0.155, 0.2, -0.715],
+              [-0.25,   0.2, -0.715],
+              [-0.155,  0.1, -0.715],                             
+              [-0.25,   0.1, -0.715]]
 objectPos = [lunchboxPos, drinkPos, riceballPos]
 class exampleTask:
     def __init__(self, _name = '/robotis'):
@@ -72,7 +73,7 @@ class exampleTask:
 
     def getRearSafetyPos(self):
         # if self.name == 'right':
-        self.pos, self.euler, self.phi = (-0.05, -0.5*self.is_right, -0.45), (90*self.is_right, 0, 0), -60*self.is_right
+        self.pos, self.euler, self.phi = (0, -0.55*self.is_right, -0.45), (90*self.is_right, -20, 0), -60*self.is_right
         # elif self.name == 'left':
         #     self.pos, self.euler, self.phi = (-0.1, 0.45, -0.45), (-90, 0, 0),  30
 
@@ -84,13 +85,11 @@ class exampleTask:
 
     def getObjectPos(self):
         while objectPos[self.pickList/4][self.pickList%4][1]*self.is_right > 0:
-            print self.pickList/4
-            print self.pickList%4
             self.pickList += 1
             if self.finish:
                 return
 
-        self.pos, self.euler, self.phi = objectPos[self.pickList/4][self.pickList%4], (90*self.is_right, -45, 0), -30*self.is_right
+        self.pos, self.euler, self.phi = copy.deepcopy(objectPos[self.pickList/4][self.pickList%4]), [90*self.is_right, 0, 0], -30*self.is_right
 
         #if self.name == 'right':
        #     self.pos, self.euler, self.phi = lunchboxPos[2-self.pickList], (90, 0, 0), -30
@@ -141,14 +140,16 @@ class exampleTask:
             self.state = busy
             self.nextState = move2Bin
             self.getRearSafetyPos()
-            self.arm.set_speed(10)
+            self.arm.set_speed(30)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2Bin:
             self.state = busy
             self.nextState = move2Object
             self.getObjectPos()
-            self.pos[2] += 0.2
+            self.pos[2] += 0.15
+            self.euler[1] = -20
+            print self.pos
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
             self.arm.set_speed(100)
  
@@ -173,7 +174,10 @@ class exampleTask:
             self.state = busy
             self.nextState = frontSafetyPos
             self.arm.set_speed(100)
-            self.arm.relative_move_pose('line', [0, 0, 0.2])
+            self.getObjectPos()
+            self.pos[2] += 0.15
+            self.euler[1] = -20
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == leaveShelf:
             self.state = busy
@@ -185,7 +189,9 @@ class exampleTask:
         elif self.state == move2Object:
             self.state = busy
             self.nextState = pickObject
-            self.arm.relative_move_pose('line', [0, 0, -0.2])
+            self.getObjectPos()
+            print self.pos
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2PlacedPos:
             self.state = busy

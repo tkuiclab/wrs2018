@@ -763,7 +763,7 @@ bool ManipulatorKinematicsDynamics::slideInverseKinematics(Eigen::Vector3d goal_
   test_pos(1) = test_pos(1) - (d1*RL_prm);
   test_pos(2) = test_pos(2) - slide_pos;
   Lsw = test_pos.norm();
-  if(Lsw > (d2+d3-0.03) || Lsw < 0.3 || (slide_pos - Oc(2)) < 0.1) 
+  if(Lsw > (d2+d3-0.03) || Lsw < 0.3 || (slide_pos - Oc(2)) < 0.3) 
   {
     if(Oc(2) < -0.8){                                         
         test_pos << test_pos(0), test_pos(1), test_pos(2)-(-0.8);
