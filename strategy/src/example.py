@@ -102,7 +102,7 @@ class exampleTask:
         elif self.state == initPose:
             self.state = busy
             self.nextState = idle
-            self.arm.set_speed(70)
+            self.arm.set_speed(30)
             self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
             self.suction.gripper_suction_deg(0)
 
@@ -110,7 +110,7 @@ class exampleTask:
             self.state = busy
             self.nextState = move2Shelf
             self.getFrontSafetyPos()
-            self.arm.set_speed(70)
+            self.arm.set_speed(30)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)           
             self.suction.gripper_suction_deg(-20)
 
@@ -146,7 +146,7 @@ class exampleTask:
         elif self.state == leaveBin:
             self.state = busy
             self.nextState = frontSafetyPos
-            self.arm.set_speed(30)
+            self.arm.set_speed(20)
             self.arm.relative_move_pose('line', [0, 0, 0.2])
 
         elif self.state == leaveShelf:

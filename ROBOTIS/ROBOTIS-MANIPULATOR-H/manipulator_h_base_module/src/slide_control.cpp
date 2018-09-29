@@ -7,7 +7,6 @@ slide_control::slide_control()
 {
     ros::NodeHandle nh_private("~");
     gazebo_mode = nh_private.param<bool>("gazebo", false);
-    std::cout<<"gazebo_mode = "<<gazebo_mode<<std::endl;
     if(gazebo_mode)
     {
         std::string side_str  = nh_private.param<std::string>("side", "");
@@ -26,7 +25,6 @@ slide_control::~slide_control(){}
 
 void slide_control::slide_pub()
 {
-    std::cout<<"gazebo_mode = "<<gazebo_mode<<std::endl;
     if(gazebo_mode)
     {
         std_msgs::Float64 msg;

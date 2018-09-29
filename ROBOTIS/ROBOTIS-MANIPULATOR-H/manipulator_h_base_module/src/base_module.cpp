@@ -151,12 +151,9 @@ void BaseModule::queueThread()
 }
 void BaseModule::stopMsgCallback(const std_msgs::Bool::ConstPtr& msg)
 {
-  if (msg->data && !stop_flag)
-  {
-    stop_flag = true;
+  if (msg->data)
     stop();
-  }
-  else if (!msg->data)
+  else
     stop_flag = false;
 }
 void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
@@ -694,17 +691,16 @@ void BaseModule::stop()
   stop_msg.speed     = 10;
   robotis_->joint_pose_msg_ = stop_msg;
 
-  if (robotis_->is_moving_ == false)
+  if (!stop_flag)
   {
+    robotis_->is_moving_ = false;
+    robotis_->ik_solve_  = false;
+    robotis_->cnt_ = 0;
     tra_gene_thread_ = new boost::thread(boost::bind(&BaseModule::generateJointTrajProcess, this));
     delete tra_gene_thread_;
+    stop_flag = true;
     ROS_INFO("!!!!Stop robot arm!!!!");
   }
-  else
-  {
-    ROS_INFO("!!!!Stop failed!!!!");
-  }
-
   return;
 }
 
