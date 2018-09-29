@@ -24,21 +24,34 @@ move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
 
+objectName = ('lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
+              'drink',    'drink',    'drink',    'drink',
+              'riceball', 'riceball', 'riceball', 'riceball')
+
 lunchboxPos = [[-0.425, -0.16, -0.64],
                [-0.425, -0.16, -0.69],
                [-0.425,  0.16, -0.64],
                [-0.425,  0.16, -0.69]]
 
-drinkPos = [[-0.165, -0.11, -0.645],
-            [-0.27,  -0.11, -0.645],                   
-            [-0.165, -0.21, -0.645],                              
-            [-0.27,  -0.21, -0.645]]
+drinkPos =    [[-0.165, -0.11, -0.645],
+               [-0.27,  -0.11, -0.645],                   
+               [-0.165, -0.21, -0.645],                              
+               [-0.27,  -0.21, -0.645]]
 
-riceballPos = [[-0.155, 0.2, -0.715],
-              [-0.25,   0.2, -0.715],
-              [-0.155,  0.1, -0.715],                             
-              [-0.25,   0.1, -0.715]]
+riceballPos = [[-0.155,  0.2, -0.715],
+               [-0.25,   0.2, -0.715],
+               [-0.155,  0.1, -0.715],                             
+               [-0.25,   0.1, -0.715]]
+
 objectPos = [lunchboxPos, drinkPos, riceballPos]
+
+topRight    = [0.4, -0.1, -0.15]
+topLeft     = [0.4,  0.1, -0.15]
+middleRight = [0.4, -0.1, -0.52]
+middleLeft  = [0.4,  0.1, -0.52]
+bottomRight = [0.5, -0.2, -1]
+bottomLeft  = [0.5,  0.2, -1]
+
 class exampleTask:
     def __init__(self, _name = '/robotis'):
         """Initial object."""
@@ -46,9 +59,6 @@ class exampleTask:
         if len(sys.argv) >= 2:
             rospy.set_param('en_sim', sys.argv[1])
             en_sim = rospy.get_param('en_sim')
-        # if en_sim:
-        #     print en_sim
-        #     return
         self.name = _name
         self.state = initPose
         self.nextState = idle
@@ -72,29 +82,17 @@ class exampleTask:
         return self.pickList == self.pickListAll
 
     def getRearSafetyPos(self):
-        # if self.name == 'right':
         self.pos, self.euler, self.phi = (0, -0.55*self.is_right, -0.45), (90*self.is_right, -20, 0), -60*self.is_right
-        # elif self.name == 'left':
-        #     self.pos, self.euler, self.phi = (-0.1, 0.45, -0.45), (-90, 0, 0),  30
 
     def getFrontSafetyPos(self):
-        # if self.name == 'right':
         self.pos, self.euler, self.phi = (0.1, -0.45*self.is_right, -0.45), (0, 20, 0), 45*self.is_right
-        # elif self.name == 'left':
-        #     self.pos, self.euler, self.phi = (0.1, 0.45, -0.45), (0, 20, 0), -45
 
     def getObjectPos(self):
         while objectPos[self.pickList/4][self.pickList%4][1]*self.is_right > 0:
             self.pickList += 1
             if self.finish:
                 return
-
         self.pos, self.euler, self.phi = copy.deepcopy(objectPos[self.pickList/4][self.pickList%4]), [90*self.is_right, 0, 0], -30*self.is_right
-
-        #if self.name == 'right':
-       #     self.pos, self.euler, self.phi = lunchboxPos[2-self.pickList], (90, 0, 0), -30
-       # elif self.name == 'left':
-        #    self.pos, self.euler, self.phi = drinkPos[2-self.pickList], (-90, 0, 0), 30
 
     def getPlacePos(self):
         lunchboxPos = [[0.5, -0.25, -0.54],
@@ -149,7 +147,6 @@ class exampleTask:
             self.getObjectPos()
             self.pos[2] += 0.15
             self.euler[1] = -20
-            print self.pos
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
             self.arm.set_speed(100)
  
@@ -190,7 +187,6 @@ class exampleTask:
             self.state = busy
             self.nextState = pickObject
             self.getObjectPos()
-            print self.pos
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2PlacedPos:
@@ -219,10 +215,7 @@ if __name__ == '__main__':
     right = exampleTask('right')      #Set up right arm controller
     left  = exampleTask('left')       #Set up left arm controller
     rospy.sleep(0.3)
-    # print objectPos
-    # print objectPos[0]
-    # print objectPos[0][0]
-    # print objectPos[0][0][0]
+
     rate = rospy.Rate(30)  # 30hz
     while not rospy.is_shutdown() and (not right.finish or not left.finish):
         left.proces()
