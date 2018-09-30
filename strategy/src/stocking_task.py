@@ -24,9 +24,13 @@ move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
 
-objectName = ('lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
+lunchQuan = 2
+drinkQuan = 2
+riceQuan  = 2
+
+objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
-              'riceball', 'riceball', 'riceball', 'riceball')
+              'riceball', 'riceball', 'riceball', 'riceball']
 
 lunchboxPos = [[-0.425, -0.16, -0.64],
                [-0.425, -0.16, -0.69],
@@ -51,6 +55,13 @@ middleRight = [0.4, -0.1, -0.52]
 middleLeft  = [0.4,  0.1, -0.52]
 bottomRight = [0.5, -0.2, -1]
 bottomLeft  = [0.5,  0.2, -1]
+
+topRightEu    = [0, 90, 0]
+topLeftEu     = [0, 90, 0]
+middleRightEu = [0, 90, 0]
+middleLeftEu  = [0, 90, 0]
+bottomRightEu = [0, 90, 0]
+bottomLeftEu  = [0, 90, 0]
 
 class exampleTask:
     def __init__(self, _name = '/robotis'):
@@ -81,29 +92,53 @@ class exampleTask:
     def finish(self):
         return self.pickList == self.pickListAll
 
+    def setQuantity(self):
+        for index in range(lunchQuan):
+            objectName[index] = 'lunchboxXX'
+        for index in range(drinkQuan):
+            objectName[index] = 'drinkXX'
+        for index in range(riceQuan):
+            objectName[index] = 'riceballXX'
+
     def getRearSafetyPos(self):
-        self.pos, self.euler, self.phi = (0, -0.55*self.is_right, -0.45), (90*self.is_right, -20, 0), -60*self.is_right
+        self.pos   = (0, -0.55*self.is_right, -0.45)
+        self.euler = (90*self.is_right, -20, 0)
+        self.phi   = -60*self.is_right
 
     def getFrontSafetyPos(self):
-        self.pos, self.euler, self.phi = (0.1, -0.45*self.is_right, -0.45), (0, 20, 0), 45*self.is_right
+        self.pos   = (0.1, -0.45*self.is_right, -0.45)
+        self.euler = (0, 20, 0)
+        self.phi   = 45*self.is_right
 
     def getObjectPos(self):
         while objectPos[self.pickList/4][self.pickList%4][1]*self.is_right > 0:
             self.pickList += 1
             if self.finish:
                 return
-        self.pos, self.euler, self.phi = copy.deepcopy(objectPos[self.pickList/4][self.pickList%4]), [90*self.is_right, 0, 0], -30*self.is_right
+        self.pos   = copy.deepcopy(objectPos[self.pickList/4][self.pickList%4])
+        self.euler = [90*self.is_right, 0, 0]
+        self.phi   = -30*self.is_right
 
     def getPlacePos(self):
-        lunchboxPos = [[0.5, -0.25, -0.54],
-                       [0.5, -0.25, -0.49]]
-        drinkPos = [[0.5, 0.25, -0.5],
-                    [0.42, 0.25, -0.5]]
-        if self.name == 'right':
-            self.pos, self.euler, self.phi = lunchboxPos[0], (0, 90, 0), 45
-        elif self.name == 'left':
-            self.pos, self.euler, self.phi = drinkPos[0], (0, 90, 0), -45
-
+        if objectName[self.pickList] == 'lunchboxXX':
+            self.pos   = bottomRight
+            self.euler = bottomRightEu
+        if objectName[self.pickList] == 'lunchbox':
+            self.pos   = bottomLeft
+            self.euler = bottomLeftEu
+        if objectName[self.pickList] == 'drinkXX':
+            self.pos   = middleRight
+            self.euler = middleRightEu
+        if objectName[self.pickList] == 'drink':
+            self.pos   = middleLeft
+            self.euler = middleLeftEu
+        if objectName[self.pickList] == 'riceballXX':
+            self.pos   = topRight
+            self.euler = topRightEu
+        if objectName[self.pickList] == 'riceball':
+            self.pos   = topLeft
+            self.euler = topLeftEu
+        self.phi   = 45*self.is_right
 
     def proces(self):
         if self.arm.is_stop:                                       # must be include in your strategy
@@ -192,7 +227,8 @@ class exampleTask:
         elif self.state == move2PlacedPos:
             self.state = busy
             self.nextState = placeObject
-            self.arm.relative_move_pose('line', [0, 0, -0.1])
+            self.getPlacePos()
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == pickObject:
             self.state = busy
