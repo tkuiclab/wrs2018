@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#-*- coding: utf-8 -*-
 
 """Use to generate arm task and run."""
 
@@ -238,8 +239,7 @@ class ArmTask:
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
 
-    def noa_move_suction(self, mode='ptp', suction_angle=_suction_angle, n=0, o=0, a=0):
-  
+    def noa_move_suction(self, mode='p2p', suction_angle=_suction_angle, n=0, o=0, a=0):
         suction_angle = suction_angle * pi/180
         suction_rot = np.matrix([[cos(suction_angle),  0.0, sin(suction_angle)],
                                [0.0,                 1.0,                0.0],
@@ -267,7 +267,32 @@ class ArmTask:
             degrees(phi)
         )
 
-    def relative_move_pose(self, mode='ptp', pos = _POS):
+    def noa_relative_pos(self, mode='p2p', pos=_POS, euler=_ORI, phi=_PHI, suction_angle=_suction_angle, n=0, o=0, a=0):
+        #由a點移動至基於b點延noa向量移動後的c點
+        suction_angle = suction_angle * pi/180
+        suction_rot = np.matrix([[cos(suction_angle),  0.0, sin(suction_angle)],
+                               [0.0,                 1.0,                0.0],
+                               [-sin(suction_angle), 0.0, cos(suction_angle)]])
+        euler[0], euler[1], euler[2] = radians(euler[0]), radians(euler[1]), radians(euler[2])
+        rot = self.euler2rotation(euler) * suction_rot
+        vec_n, vec_o, vec_a = self.rotation2vector(rot) #for suction
+        move = [0, 0, 0]
+
+        if n > 1e-10:
+            move += multiply(vec_n, n)
+        if o != 0:
+            move += multiply(vec_o, o)
+        if a != 0:
+            move += multiply(vec_a, a)
+
+        self.ikMove(
+            mode,
+            (pos[0] + move[0], pos[1] + move[1], pos[2] + move[2]),
+            (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
+            phi
+        )
+
+    def relative_move_pose(self, mode='p2p', pos = _POS):
         fb = self.get_fb()
         curr_pos = fb.group_pose.position
         phi = fb.phi
@@ -281,6 +306,17 @@ class ArmTask:
             mode,
             (pos[0], pos[1], pos[2]),
             (degrees(euler[0]), degrees(euler[1]), degrees(euler[2])),
+            degrees(phi)
+        )
+
+    def move_euler(self, mode='p2p', euler=_ORI):
+        fb = self.get_fb()
+        pos = fb.group_pose.position
+        phi = fb.phi
+        self.ikMove(
+            mode,
+            (pos.x, pos.y, pos.z),
+            euler,
             degrees(phi)
         )
     
