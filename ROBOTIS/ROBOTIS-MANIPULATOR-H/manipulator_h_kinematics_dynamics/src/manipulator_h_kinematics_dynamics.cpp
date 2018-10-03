@@ -711,7 +711,7 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
       // JointAngle(7) = (JointAngle(7)>Old_JointAngle(7))?(JointAngle(7)-2*pi):(JointAngle(7)+2*pi);
       JointAngle(7) = (JointAngle(7)>Old_JointAngle(7))?-pi:pi;
     }
-    std::cout<<"====JointAngle567===== "<<JointAngle(5)<<" "<<JointAngle(6)<<" "<<JointAngle(7)<<std::endl;
+    // std::cout<<"====JointAngle567===== "<<JointAngle(5)<<" "<<JointAngle(6)<<" "<<JointAngle(7)<<std::endl;
     Eigen::VectorXd Joint_dev(8);
     Deviation = testPos.norm();
     if ( Deviation < 0.0001 )
@@ -758,13 +758,17 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
 
   if(!is_p2p)
   {
+    if(fabs(JointAngle(2)-(pi/2)) < 0.001)
+      JointAngle(1) = Old_JointAngle(1);
+    if(fabs(JointAngle(6)) < 0.001)
+      JointAngle(5) = Old_JointAngle(5);
     for (int id = 0; id <= MAX_JOINT_ID; id++)
     {
       Deviation = JointAngle(id)-Old_JointAngle(id);
       if(fabs(Deviation) > 0.17)
       {
-        std::cout<<"====Deviation===== "<<JointAngle(id)<<" "<<Old_JointAngle(id)<<std::endl;
-        JointAngle(id) = Old_JointAngle(id) + Deviation/fabs(Deviation)/100.0;
+        // std::cout<<"====Deviation===== "<<JointAngle(id)<<" "<<Old_JointAngle(id)<<std::endl;
+        JointAngle(id) = Old_JointAngle(id) + Deviation/fabs(Deviation)/5000.0;
         // JointAngle(id) = Old_JointAngle(id);
       }
     }
