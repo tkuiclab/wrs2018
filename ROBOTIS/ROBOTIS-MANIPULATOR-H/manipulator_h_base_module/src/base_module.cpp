@@ -311,7 +311,7 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
 
   // std::cout<<"<<<<<<<<<<<<<<<<<<<slide_->goal_slide_pos<<<<<<<<<<<<<<<<<"<<std::endl<<slide_->goal_slide_pos<<std::endl;
   bool    ik_success = manipulator_->inverseKinematics(robotis_->ik_id_end_,
-                                                            p2p_positoin, p2p_rotation, p2p_phi, slide_->goal_slide_pos, max_iter, ik_tol);
+                                                            p2p_positoin, p2p_rotation, p2p_phi, slide_->goal_slide_pos, true);
 
   if (ik_success == true && slide_success == true)
   {
@@ -617,7 +617,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
       robotis_->is_ik = true;
       
       bool    ik_success  = manipulator_->inverseKinematics(robotis_->ik_id_end_,robotis_->ik_target_position_, 
-                                                              robotis_->ik_target_rotation_, robotis_->ik_target_phi_, tar_slide_pos, max_iter, ik_tol);
+                                                              robotis_->ik_target_rotation_, robotis_->ik_target_phi_, tar_slide_pos, false);
     
       if (ik_success == true)
       {
