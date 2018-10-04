@@ -8,46 +8,56 @@
 #include <iostream>
 
 #include "pcl_tutorial.h"
+#include "disposing_vision/coordinate_normal.h"
 
 ros::Publisher pub;
 Pcl_tutorial Pcl_function;
 float x_coordinate_min,y_coordinate_min,z_coordinate_min;
 float x_coordinate_Max,y_coordinate_Max,z_coordinate_Max;
-struct coordinate_normal
-{
-  int x,y,z;
-  float normal_x,normal_y,normal_z;
-}object_normal;
+disposing_vision::coordinate_normal object_normal;
 
-coordinate_normal average_normal(pcl::PointCloud<pcl::PointNormal>::Ptr input_cloud){
-  coordinate_normal average_normal;
+disposing_vision::coordinate_normal average_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud
+                                                  ,pcl::PointCloud<pcl::PointNormal>::Ptr input_normal){
+
+  disposing_vision::coordinate_normal average_normal;
+  average_normal.x=0;
+  average_normal.y=0;
+  average_normal.z=0;
   average_normal.normal_x = 0.0;
   average_normal.normal_y = 0.0;
   average_normal.normal_z = 0.0;
   int count = 0;
-  for (size_t currentPoint = 0; currentPoint < input_cloud->points.size(); currentPoint++)
+
+  for (size_t currentPoint = 0; currentPoint < input_normal->points.size(); currentPoint++)
 	{
-    if(!(isnan(input_cloud->points[currentPoint].normal[0])||
-         isnan(input_cloud->points[currentPoint].normal[1])||
-         isnan(input_cloud->points[currentPoint].normal[2])))
+    if(!(isnan(input_normal->points[currentPoint].normal[0])||
+         isnan(input_normal->points[currentPoint].normal[1])||
+         isnan(input_normal->points[currentPoint].normal[2])))
     {
-      average_normal.normal_x = average_normal.normal_x + input_cloud->points[currentPoint].normal[0];
-      average_normal.normal_y = average_normal.normal_y + input_cloud->points[currentPoint].normal[1];
-      average_normal.normal_z = average_normal.normal_z + input_cloud->points[currentPoint].normal[2];
-		  count++;
+      average_normal.x = average_normal.x + input_cloud->points[currentPoint].x;
+      average_normal.y = average_normal.y + input_cloud->points[currentPoint].y;
+      average_normal.z = average_normal.z + input_cloud->points[currentPoint].z;
+      average_normal.normal_x = average_normal.normal_x + input_normal->points[currentPoint].normal[0];
+      average_normal.normal_y = average_normal.normal_y + input_normal->points[currentPoint].normal[1];
+      average_normal.normal_z = average_normal.normal_z + input_normal->points[currentPoint].normal[2];
+		  
+      count++;
       // std::cout << "Point:" << std::endl;
       // cout << currentPoint << std::endl;
 		  // std::cout << "\town:" << average_normal.normal_x << " "
-		  // 		                  << average_normal.normal_y << " "
-		  // 		                  << average_normal.normal_z << std::endl;
+		  		                  // << average_normal.normal_y << " "
+		  		                  // << average_normal.normal_z << std::endl;
 
-		  // std::cout << "\tNormal:" << input_cloud->points[currentPoint].normal[0] << " "
-		  // 		  << input_cloud->points[currentPoint].normal[1] << " "
-		  // 		  << input_cloud->points[currentPoint].normal[2] << std::endl;
+		  // std::cout << "\tNormal:" << input_cloud->points[currentPoint].x << " "
+		  // 		                      << input_cloud->points[currentPoint].y << " "
+		  // 		                      << input_cloud->points[currentPoint].z << std::endl;
     }
   }
-  printf("================\ncloud_size = %d \n",count);
+  // printf("================\ncloud_size = %d \n",count);
 
+  average_normal.x = average_normal.x/count;
+  average_normal.y = average_normal.y/count;
+  average_normal.z = average_normal.z/count;
   average_normal.normal_x = average_normal.normal_x/count;
   average_normal.normal_y = average_normal.normal_y/count;
   average_normal.normal_z = average_normal.normal_z/count;
@@ -76,23 +86,21 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
   pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normal (new pcl::PointCloud<pcl::PointNormal>);
   Pcl_function.calculate_normal(object_cloud,cloud_normal);
 
-  object_normal = average_normal(cloud_normal);
+  object_normal = average_normal(object_cloud,cloud_normal);
+
+	std::cout << "\tTotal Point:" << object_normal.x << " "
+			                          << object_normal.y << " "
+			                          << object_normal.z << std::endl;
 	std::cout << "\tTotal Normal:" << object_normal.normal_x << " "
 			                           << object_normal.normal_y << " "
 			                           << object_normal.normal_z << std::endl;
   
   //<<<Save file for debug>>>
-  pcl::PCDWriter writer;
-  writer.write ("object.pcd", *object_cloud, false);
+  // pcl::PCDWriter writer;
+  // writer.write ("object.pcd", *object_cloud, false);
   // writer.write ("plane.pcd", *plane_cloud, false);
 
-
-  pcl::ModelCoefficients coefficients;
-//------------------------------------------------------------------------------
-  // 把提取出来的内点形成的平面模型的参数发布出去
-  pcl_msgs::ModelCoefficients ros_coefficients;
-  pcl_conversions::fromPCL(coefficients, ros_coefficients);
-  pub.publish (ros_coefficients);
+  pub.publish (object_normal);
 }
 
 void set_coordinate_limit_min(const geometry_msgs::Point& input)
@@ -127,7 +135,7 @@ int main (int argc, char** argv)
   ros::Subscriber sub_coordinate_Max = nh.subscribe ("/coordinate_limit_Max", 1, set_coordinate_limit_Max);
 
   // Create a ROS publisher for the output point cloud
-  pub = nh.advertise<pcl_msgs::ModelCoefficients> ("output", 1);
+  pub = nh.advertise<disposing_vision::coordinate_normal> ("output", 1);
 
   // Spin
   ros::spin ();
