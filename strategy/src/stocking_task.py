@@ -63,14 +63,14 @@ bottomRight = [0.5, -0.2, -1]
 bottomLeft  = [0.5,  0.2, -1]
 
 topRightEu    = [145, 45, -45]
-topLeftEu     = [127, 60, -45]
+topLeftEu     = [127, 60, -60]
 middleRightEu = [0, 90,  30]
 middleLeftEu  = [0, 90,  45]
 bottomRightEu = [0, 90,  30]
 bottomLeftEu  = [0, 90, -30]
 
 topRightPhi    = -35 
-topLeftPhi     = -35
+topLeftPhi     = -20
 middleRightPhi = 40
 middleLeftPhi  = 40
 bottomRightPhi = 25
@@ -121,7 +121,7 @@ class exampleTask:
 
     def getRearSafetyPos(self):
         self.pos   = (0, -0.5*self.is_right, -0.5)
-        self.euler = [90*self.is_right, -20, 30*self.is_right]
+        self.euler = [-90*self.is_right, -20, 30*self.is_right]
         self.phi   = -60*self.is_right
 
     def getFrontSafetyPos(self):
@@ -137,7 +137,7 @@ class exampleTask:
             if self.finish:
                 return
         self.pos   = objectPos[self.pickList/4][self.pickList%4][:]
-        self.euler = [180*self.is_right, 0, 0]
+        self.euler = [-150*self.is_right, 0, 0]
         self.phi   = -30*self.is_right
 
     def getPlacePos(self):
@@ -169,8 +169,6 @@ class exampleTask:
             self.sucAngle = topLeftSuc
 
     def proces(self):
-        if self.name == 'left':
-            print degrees(self.arm.get_joint().joint_value[4])
         if self.arm.is_stop:                                       # must be include in your strategy
             self.finish = True                                     # must be include in your strategy
             print "!!! Robot is stop !!!"                          # must be include in your strategy
@@ -182,7 +180,7 @@ class exampleTask:
                 return
             else:
                 if 'riceball' in objectName[self.pickList] and self.pickList!=8:
-                    self.state = savePose1
+                    self.state = savePose3
                 else:
                     self.state = rearSafetyPos
                 print "self.pickList = " + str(self.pickList)
@@ -194,40 +192,40 @@ class exampleTask:
             pos = fb.group_pose.position
             self.pos = (pos.x-0.1, pos.y, pos.z)
             self.euler = (0, 0, -85)
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.ikMove('p2p', self.pos, self.euler, self.phi)
 
         elif self.state == savePose2:
             self.state = busy
             self.nextState = savePose3
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.relative_move_pose('p2p', [0, 0.1, -0.1])
 
         elif self.state == savePose3:
             self.state = busy
             self.nextState = rearSafetyPos
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.jointMove(0, (0, -1, 0, 2, 0, -1, 0))
 
         elif self.state == initPose:
             self.state = busy
             self.nextState = idle
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.jointMove(0, (0, -1, 0, 1.57, 0, -0.57, 0))
 
         elif self.state == frontSafetyPos:
             self.state = busy
             self.nextState = move2Shelf
-            self.getFrontSafetyPos()
-            self.arm.set_speed(30)
-            self.arm.ikMove('line', self.pos, self.euler, self.phi)           
-            self.suction.gripper_suction_deg(-20)
+            self.getRearSafetyPos()
+            self.euler[0] = -180
+            self.arm.set_speed(90)
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == rearSafetyPos:
             self.state = busy
             self.nextState = move2Bin
             self.getRearSafetyPos()
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == rearSafetyPos2:
@@ -235,7 +233,7 @@ class exampleTask:
             self.nextState = move2Shelf
             self.getRearSafetyPos()
             self.euler[0] = -180
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2Bin:
@@ -244,19 +242,21 @@ class exampleTask:
             self.getObjectPos()
             self.pos[2] = -0.5
             self.euler[1] = -20
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
  
         elif self.state == move2Shelf:
             self.state = busy
+            self.getPlacePos()
             if 'riceball' in objectName[self.pickList]:
                 self.nextState = riceballEuler
+                # self.euler = [0, -10, 0]
+                # self.pos[2] -= 0.2
             else:
                 self.nextState = moveIn2Shelf
-            self.getPlacePos()
             self.pos[2] += 0.1
             self.euler[0] = 0
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
             self.suction.gripper_suction_deg(-90)
 
@@ -264,8 +264,10 @@ class exampleTask:
             self.state = busy
             self.nextState = moveIn2Shelf
             self.getPlacePos()
-            self.arm.set_speed(30)
-            self.arm.move_euler('line', self.euler)
+            self.pos[2] += 0.1
+            self.arm.set_speed(90)
+            print 'euler = ', self.euler
+            self.arm.move_euler('p2p', self.euler)
             self.suction.gripper_suction_deg(self.sucAngle)
         
         elif self.state == moveIn2Shelf:
@@ -273,13 +275,13 @@ class exampleTask:
             self.nextState = move2PlacedPos
             self.getPlacePos()
             self.pos[2] += 0.1
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == leaveBin:
             self.state = busy
-            self.nextState = rearSafetyPos2
-            self.arm.set_speed(30)
+            self.nextState = frontSafetyPos
+            self.arm.set_speed(90)
             self.getObjectPos()
             self.pos[2] = -0.5
             # self.pos[0] += 0.02 
@@ -290,7 +292,7 @@ class exampleTask:
         elif self.state == leaveShelf:
             self.state = busy
             self.nextState = idle
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             if objectName[self.pickList] == 'riceballXX':
                 self.arm.noa_move_suction('line', suction_angle=0, n=0.1, o=0, a=-0.2)
             else:
@@ -303,14 +305,14 @@ class exampleTask:
             self.state = busy
             self.nextState = pickObject
             self.getObjectPos()
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2PlacedPos:
             self.state = busy
             self.nextState = placeObject
             self.getPlacePos()
-            self.arm.set_speed(30)
+            self.arm.set_speed(90)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == pickObject:
@@ -334,7 +336,7 @@ if __name__ == '__main__':
     right = exampleTask('right')      #Set up right arm controller
     left  = exampleTask('left')       #Set up left arm controller
     rospy.sleep(0.3)
-
+    
     rate = rospy.Rate(30)  # 30hz
     while not rospy.is_shutdown() and (not right.finish or not left.finish):
         left.proces()
