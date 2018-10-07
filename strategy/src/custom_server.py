@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from assistant_pkg.srv import *
+from std_msgs.msg import Int32
+from std_msgs.msg import Bool
 import rospy
 
 IDEL          = 0
@@ -20,10 +22,10 @@ SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, RotToDeg0, MoveToP2, Giv
 #SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, MoveToP2, GiveObj_Type2, STOP]
 
 # SerialKey Num for function GetMissionSerialKey
-RobotIdel  = 0
-LeadCustom = 1
-TakeObjToCustom_Type1 = 2
-TakeObjToCustom_Type2 = 3
+RobotIdel  = '0'
+LeadCustom = '1'
+TakeObjToCustom_Type1 = '2'
+TakeObjToCustom_Type2 = '3'
 
 class exampleTask:
     def __init__(self, _name = '/robotis'):
@@ -35,33 +37,37 @@ class exampleTask:
         # if en_sim:
         #     print en_sim
         #     return
-        self.name  = _name
-        self.state = initPose
-        self.nextState = idle
-        self.arm   = ArmTask(self.name + '_arm')
-        self.pick_list = 2
-        self.pos   = (0, 0, 0)
-        self.euler = (0, 0, 0)
-        self.phi   = 0
-        if en_sim:
-            self.suction = SuctionTask(self.name + '_gazebo')
-            print "aa"
-        else:
-            self.suction = SuctionTask(self.name)
-            print "bb"
+        
+        # self.name  = _name
+        # self.state = initPose
+        # self.nextState = idle
+        # self.arm   = ArmTask(self.name + '_arm')
+        # self.pick_list = 2
+        # self.pos   = (0, 0, 0)
+        # self.euler = (0, 0, 0)
+        # self.phi   = 0
+        # if en_sim:
+        #     self.suction = SuctionTask(self.name + '_gazebo')
+        #     print "aa"
+        # else:
+        #     self.suction = SuctionTask(self.name)
+        #     print "bb"
     
 class CDualArmCommand:
     def __init__(self):
-            self.right = exampleTask('right')      #Set up right arm controller
-            self.left  = exampleTask('left')       #Set up left arm controller
+        self.right = exampleTask('right')      #Set up right arm controller
+        self.left  = exampleTask('left')       #Set up left arm controller
 
-            self.DualArmIsBusyFlag = False
+        self.DualArmIsBusyFlag = False
 
     def TakeObj(self):
+        pass
 
     def GiveObj_Type1(self):
+        pass
 
     def GiveObj_Type2(self):
+        pass
 
     def IDEL(self):
         self.DualArmIsBusyFlag = False
@@ -75,7 +81,7 @@ class CMobileCommand:
     def __init__(self):
         self.pub_behavior= rospy.Publisher('scan_black/strategy_behavior', Int32, queue_size = 1)
         self.pub_start   = rospy.Publisher('scan_black/strategy_start', Bool, queue_size = 1)
-        rospy.Subscriber("scan_black/dualarm_start", Bool, self.DualArm_Start)
+        rospy.Subscriber("scan_black/dualarm_start", Bool, self.Sub_DualArm_Start)
 
         self.MobileIsBusyFlag = False
 
@@ -104,7 +110,7 @@ class CMobileCommand:
 
     def Sub_DualArm_Start(self, msg):
         # Subcriber of DualArmStart Callback funciton
-        self.__DualArmFlag = msg
+        self.__DualArmFlag = msg.data
         if(self.__DualArmFlag == True):
             self.MobileIsBusyFlag = False
 
@@ -145,13 +151,14 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
         DualArmCommandSet.GiveObj_Type2
     elif(Key == STOP):
         # Key in DualArm & Mobile Robot STOP function here.
+        pass
 
 def handle_state(req):
-    Get_Req = req
+    Get_Req = req.state
     print("Returning [%s]"%(req.state)) # Show the state from Assistant
 
     MobileCommandSet = CMobileCommand()
-    DualArmCommandSet= CDualCommand()
+    DualArmCommandSet= CDualArmCommand()
 
     SerialKeyIndex   = 0
     MissionExecuteFlag = True
