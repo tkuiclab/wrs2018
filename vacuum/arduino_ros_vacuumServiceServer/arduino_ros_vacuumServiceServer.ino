@@ -7,16 +7,21 @@
 #include <EEPROM.h>
 #include <DynamixelSerial1.h>
 #include <SPI.h>
-#include <MFRC522.h>     // 引用程式庫
+#include <MFRC522.h>     
 
-#define RST_PIN      5        // 讀卡機的重置腳位
-#define SS_PIN       53        // 晶片選擇腳位
+constexpr uint8_t RST_PIN = 49;     // Configurable, see typical pin layout above
+constexpr uint8_t SS_1_PIN = 47;   // Configurable, take a unused pin, only HIGH/LOW required, must be diffrent to SS 2
+constexpr uint8_t SS_2_PIN = 48;    // Configurable, take a unused pin, only HIGH/LOW required, must be diffrent to SS 1
+constexpr uint8_t NR_OF_READERS = 2;
 
-MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
+byte ssPins[] = {SS_1_PIN, SS_2_PIN};
+
+MFRC522 mfrc522[NR_OF_READERS];   // Create MFRC522 instan/ce./
 
 std_msgs::String str_msg;
 std_msgs::Int32 int32;
 ros::Publisher chatter("rfid", &str_msg);
+ros::Publisher costII("consume", &str_msg);
 
 #define ID_right  1
 #define ID_left   2
@@ -41,8 +46,8 @@ void callback_left(const VacuumCmd::Request& , VacuumCmd::Response& );
 ros::ServiceServer<VacuumCmd::Request, VacuumCmd::Response> vac_srv_right("right/suction_cmd", &callback_right);
 ros::ServiceServer<VacuumCmd::Request, VacuumCmd::Response> vac_srv_left("left/suction_cmd", &callback_left);
 
-DynamixelClass Dxl_right(Serial3);
-DynamixelClass Dxl_left(Serial1);
+DynamixelClass Dxl_right(Serial1);
+DynamixelClass Dxl_left(Serial3);
 
 int MaxPos;
 int MinPos;
@@ -67,13 +72,13 @@ int addressMin_H_left = 15;
 int addressMax_L_left = 17;
 int addressMax_H_left = 19;
 
-const int is_grip_left  = 52;
-const int is_grip_right = 50;
-const int is_stop       = 48;
+const int is_grip_left  = 37;
+const int is_grip_right = 39;
+const int is_stop       = 35;
 
 const int led_pin = 13;
-const int vac_pin_right = 51;
-const int vac_pin_left  = 45;
+const int vac_pin_right = 33;
+const int vac_pin_left  = 31;
 int ID = 0;
 int vac_pin = 0;
 
@@ -121,9 +126,20 @@ void setup()
   MinPos_H_left = EEPROM.read(addressMin_H_left);
   MinPos_left = MinPos_H_left << 8 | MinPos_L_left;
 
+  Serial.begin(57600);
+  while (!Serial);    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+ 
   SPI.begin(); // Init SPI bus
-  mfrc522.PCD_Init(); // Init MFRC522 
+  //mfrc522.PCD_Init(); // Init MFRC522 
   nh.advertise(chatter);
+  nh.advertise(costII);
+  for(uint8_t reader = 0; reader < NR_OF_READERS; reader++){
+    mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN); // Init each MFRC522 card/
+    Serial.print(F("Reader "));
+    Serial.print(reader);
+    Serial.print(F(": "));
+  }
+
 }
 DynamixelClass wDxl(bool isRight)
 {
@@ -270,42 +286,68 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
 
 void RFID()
 {
-  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
-    byte *id = mfrc522.uid.uidByte;   // 取得卡片的UID
-    byte idSize = mfrc522.uid.size;   // 取得UID的長度
-    if(id[0] == 16 
-        && id[1] == 200
-        && id[2] == 16
-        && id[3] == 168){ 
-      char hello[2] = "0";
-      str_msg.data = hello;
-      chatter.publish( &str_msg );
-    }
-    else if(id[0] == 192 
-        && id[1] == 110
-        && id[2] == 209
-        && id[3] == 87){  
-          char hello[2] = "1";
-          str_msg.data = hello;
-          chatter.publish( &str_msg );
-        }
-    else if(id[0] == 96 
-        && id[1] == 191
-        && id[2] == 31
-        && id[3] == 168){  
-          char hello[2] = "2";
-          str_msg.data = hello;
-          chatter.publish( &str_msg );
-        }
-    else if(id[0] == 176 
-        && id[1] == 53
-        && id[2] == 41
-        && id[3] == 164){  
-          char hello[2] = "3";
-          str_msg.data = hello;
-          chatter.publish( &str_msg );
-        }
+  for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) 
+  {
+    if (mfrc522[reader].PICC_IsNewCardPresent() && mfrc522[reader].PICC_ReadCardSerial()) 
+    {
+      byte* id = mfrc522[reader].uid.uidByte;
+      dump_byte_array(id, mfrc522[reader].uid.size);
+      pub_topic(id, "90", 101, 183, 231, 43);
+      pub_topic(id, "91", 167, 227, 232, 43);
+      pub_topic(id, "90", 176, 53, 41, 164);
+      pub_topic(id, "91", 80, 16, 112, 163);
+      pub_topic(id, "0", 16, 200, 16, 168);
+      pub_topic(id, "1", 192, 110, 209, 87);
+      pub_topic(id, "2", 96, 191, 31, 168);
+      
+      pub_topic(id, "90", 98, 181, 38, 65);
+      pub_topic(id, "91", 162, 200, 147, 65);
+      pub_topic(id, "90", 226, 254, 152, 65);
+      pub_topic(id, "91", 146, 199, 139, 65);
+      pub_topic(id, "0", 50, 232, 139, 65);
+      pub_topic(id, "1", 18, 247, 135, 65);
+      pub_topic(id, "2", 128, 198, 44, 164);
+      
+      pub_topic2(id, "consumeA", 242, 90, 144, 65);
+      pub_topic2(id, "consumeB", 226, 233, 127, 65);
+      pub_topic2(id, "consumeA", 98, 80, 27, 65);
+      pub_topic2(id, "consumeB", 89, 10, 232, 43);
+      
+      pub_topic2(id, "spare", 98, 80, 27, 65);
+      Serial.print(F("Reader "));
+      Serial.print(reader);
+      Serial.print(F(": Card UID:"));
+      Serial.println();
+      }
   }
+}
+
+void dump_byte_array(byte *buffer, byte bufferSize) {
+  for (byte i = 0; i < bufferSize; i++) {
+    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
+    Serial.print(buffer[i] , DEC);
+  }
+  Serial.println();
+}
+
+void pub_topic(byte *buffer, const char out_str[], byte arg0, byte arg1, byte arg2, byte arg3){
+  if(buffer[0] == arg0
+    && buffer[1] == arg1
+    && buffer[2] == arg2
+    && buffer[3] == arg3){
+      str_msg.data = out_str;
+      chatter.publish(&str_msg);
+    }
+}
+
+void pub_topic2(byte *buffer, const char out_str[], byte arg0, byte arg1, byte arg2, byte arg3){
+  if(buffer[0] == arg0
+    && buffer[1] == arg1
+    && buffer[2] == arg2
+    && buffer[3] == arg3){
+      str_msg.data = out_str;
+      costII.publish(&str_msg);
+    }
 }
 
 void loop()
@@ -322,5 +364,4 @@ void loop()
   RFID();
 
   nh.spinOnce();
-  delay(10);
 }
