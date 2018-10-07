@@ -96,20 +96,23 @@ class CMobileCommand(object):
     def Mobile_AID(self):
         # Turn to abs 0 deg
         self.MobileIsBusyFlag = True
-        behavior_type = 11
-        self.put_behavior.publish(behavior_type)
+        behavior_type = Int32()
+        behavior_type.data = 11
+        self.pub_behavior.publish(behavior_type)
 
     def Mobile_ORDER(self):
         # Turn to abs +90 deg
         self.MobileIsBusyFlag = True
-        behavior_type = 12
-        self.put_behavior.publish(behavior_type)
+        behavior_type = Int32()
+        behavior_type.data = 12
+        self.pub_behavior.publish(behavior_type)
 
     def Mobile_NEXT(self):
         # Move to point 2 (0 deg)
         self.MobileIsBusyFlag = True
-        behavior_type = 3
-        self.put_behavior.publish(behavior_type)
+        behavior_type = Int32()
+        behavior_type.data =  3
+        self.pub_behavior.publish(behavior_type)
 
     def Sub_DualArm_Start(self, msg):
         # Subcriber of DualArmStart Callback funciton
