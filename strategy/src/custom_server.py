@@ -22,10 +22,10 @@ SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, RotToDeg0, MoveToP2, Giv
 #SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, MoveToP2, GiveObj_Type2, STOP]
 
 # SerialKey Num for function GetMissionSerialKey
-RobotIdel  = '0'
-LeadCustom = '1'
-TakeObjToCustom_Type1 = '2'
-TakeObjToCustom_Type2 = '3'
+RobotIdel  = 0
+LeadCustom = 1
+TakeObjToCustom_Type1 = 2
+TakeObjToCustom_Type2 = 3
 
 class exampleTask:
     def __init__(self, _name = '/robotis'):
@@ -53,7 +53,7 @@ class exampleTask:
         #     self.suction = SuctionTask(self.name)
         #     print "bb"
     
-class CDualArmCommand:
+class CDualArmCommand(object):
     def __init__(self):
         self.right = exampleTask('right')      #Set up right arm controller
         self.left  = exampleTask('left')       #Set up left arm controller
@@ -74,10 +74,11 @@ class CDualArmCommand:
         # Do nothing
     
     def DualArmIsBusy(self):
-        self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)
-        return DualArmIsBusyFlag
+        #self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)
+        self.DualArmIsBusyFlag = False
+        return self.DualArmIsBusyFlag
 
-class CMobileCommand:
+class CMobileCommand(object):
     def __init__(self):
         self.pub_behavior= rospy.Publisher('scan_black/strategy_behavior', Int32, queue_size = 1)
         self.pub_start   = rospy.Publisher('scan_black/strategy_start', Bool, queue_size = 1)
@@ -87,24 +88,26 @@ class CMobileCommand:
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
-        self.MobileIsBusy = True
-        self.pub_start.publish(True)
+        self.MobileIsBusyFlag = True
+        start = Bool()
+        start.data = True
+        self.pub_start.publish(start)
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
-        self.MobileIsBusy = True
+        self.MobileIsBusyFlag = True
         behavior_type = 11
         self.put_behavior.publish(behavior_type)
 
     def Mobile_ORDER(self):
         # Turn to abs +90 deg
-        self.MobileIsBusy = True
+        self.MobileIsBusyFlag = True
         behavior_type = 12
         self.put_behavior.publish(behavior_type)
 
     def Mobile_NEXT(self):
         # Move to point 2 (0 deg)
-        self.MobileIsBusy = True
+        self.MobileIsBusyFlag = True
         behavior_type = 3
         self.put_behavior.publish(behavior_type)
 
@@ -115,7 +118,7 @@ class CMobileCommand:
             self.MobileIsBusyFlag = False
 
     def IDLE(self):
-        self.MobileIsBusy = False
+        self.MobileIsBusyFlag = False
         # Do nothing
         
     def MobileIsBusy(self):
@@ -157,6 +160,8 @@ def handle_state(req):
     Get_Req = req.state
     print("Returning [%s]"%(req.state)) # Show the state from Assistant
 
+    print(type(Get_Req))
+    print(Get_Req)
     MobileCommandSet = CMobileCommand()
     DualArmCommandSet= CDualArmCommand()
 
@@ -166,12 +171,13 @@ def handle_state(req):
     MotionSerialKey = GetMissionSerialKey(Get_Req)
     
     while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
-        if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
+        if not(MobileCommandSet.MobileIsBusy()): #or DualArmCommandSet.DualArmIsBusy()):
             MotionKey = MotionSerialKey[SerialKeyIndex]
             MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
-                
+            print(MotionKey,SerialKeyIndex)
             if(MotionKey != STOP):
                 SerialKeyIndex += 1
+                print(SerialKeyIndex)
             else:
                 SerialKeyIndex = 0
                 MissionExecuteFlag = False
