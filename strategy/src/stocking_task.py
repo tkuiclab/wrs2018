@@ -63,14 +63,14 @@ bottomRight = [0.5, -0.2, -1]
 bottomLeft  = [0.5,  0.2, -1]
 
 topRightEu    = [145, 45, -45]
-topLeftEu     = [127, 60, -60]
+topLeftEu     = [127, 55, -45]
 middleRightEu = [0, 90,  30]
 middleLeftEu  = [0, 90,  45]
 bottomRightEu = [0, 90,  30]
 bottomLeftEu  = [0, 90, -30]
 
 topRightPhi    = -35 
-topLeftPhi     = -20
+topLeftPhi     = -35
 middleRightPhi = 40
 middleLeftPhi  = 40
 bottomRightPhi = 25
@@ -336,7 +336,7 @@ if __name__ == '__main__':
     right = exampleTask('right')      #Set up right arm controller
     left  = exampleTask('left')       #Set up left arm controller
     rospy.sleep(0.3)
-    
+
     rate = rospy.Rate(30)  # 30hz
     while not rospy.is_shutdown() and (not right.finish or not left.finish):
         left.proces()

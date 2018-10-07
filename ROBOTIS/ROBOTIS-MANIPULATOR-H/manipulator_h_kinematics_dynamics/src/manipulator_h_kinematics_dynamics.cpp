@@ -530,7 +530,7 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
   bool ik_success = false;
 
   int isMatch;
-  double theta_e;
+  double theta_e, modify_euler_theta;
   double theta_1, theta_2, theta_3, theta_4, theta_5, theta_6, theta_7;
   double Deviation, D_Joint_1, D_Joint_2, D_Joint_1_2, D_Joint_2_2;
   double Lsw, Lec, Lsc;
@@ -547,9 +547,15 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
   Eigen::MatrixXd T(4,4);
   Eigen::MatrixXd DH(5, 4);
   Eigen::VectorXd DH_row(4);
+  Eigen::Matrix3d Modify_euler;
+
+  modify_euler_theta = (-pi/2)*RL_prm;
+  Modify_euler << cos(modify_euler_theta), -sin(modify_euler_theta), 0,
+                  sin(modify_euler_theta),  cos(modify_euler_theta), 0,
+                  0,                        0,                       1;
 
   R07 = Eigen::MatrixXd::Identity(4,4);
-  R07.block(0,0,3,3) = rotation;
+  R07.block(0,0,3,3) = rotation*Modify_euler;
  
   Oc << goal_position(0)-d4*R07(0,2), goal_position(1)-d4*R07(1,2), goal_position(2)-d4*R07(2,2);
 
