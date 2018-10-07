@@ -67,7 +67,7 @@ geometry_msgs::PoseStamped average_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr
   
   return average_normal;
 }
-
+//==========================call back function============================
 void 
 cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
 {
@@ -82,9 +82,11 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
   // Pcl_function.cylinder_segmentation(cloud,object_cloud,plane_cloud);
 
   //passthrough
-  // Pcl_function.passthrough(cloud,object_cloud,"x",x_coordinate_min,x_coordinate_Max);
-  // Pcl_function.passthrough(cloud,object_cloud,"y",y_coordinate_min,y_coordinate_Max);
+  Pcl_function.passthrough(cloud,object_cloud,"x",x_coordinate_min,x_coordinate_Max);
+  Pcl_function.passthrough(cloud,object_cloud,"y",y_coordinate_min,y_coordinate_Max);
   Pcl_function.passthrough(cloud,object_cloud,"z",z_coordinate_min,z_coordinate_Max);
+
+  Pcl_function.downsampling(object_cloud,object_cloud,0.01);
 
   pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normal (new pcl::PointCloud<pcl::PointNormal>);
   Pcl_function.calculate_normal(object_cloud,cloud_normal);
@@ -103,16 +105,30 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
   pub_procced.publish(ros_object_cloud);
 
   // object_normal.header.frame_id = "base_link";
-  object_normal.header.frame_id = "camera_link";
+  object_normal.header.frame_id = "camera_depth_optical_frame";
   object_normal.header.stamp = ros::Time::now();;
   object_normal.header.seq = 1;
   
+  geometry_msgs::Quaternion msg;
+
+  // extracting surface normals
+  tf::Vector3 axis_vector(object_normal.pose.orientation.x, object_normal.pose.orientation.y, object_normal.pose.orientation.z);
+  tf::Vector3 up_vector(1.0, 0.0, 0.0);
+
+  tf::Vector3 right_vector = axis_vector.cross(up_vector);
+  right_vector.normalized();
+  tf::Quaternion q(right_vector, -1.0*acos(axis_vector.dot(up_vector)));
+  q.normalize();
+  tf::quaternionTFToMsg(q, msg);
+  object_normal.pose.orientation = msg;
+    
   std::cout << "\tTotal Point:" << object_normal.pose.position.x << " "
 			                          << object_normal.pose.position.y << " "
 			                          << object_normal.pose.position.z << std::endl;
 	std::cout << "\tTotal Normal:" << object_normal.pose.orientation.x << " "
 			                           << object_normal.pose.orientation.y << " "
-			                           << object_normal.pose.orientation.z << std::endl;
+			                           << object_normal.pose.orientation.z << " "
+			                           << object_normal.pose.orientation.w << std::endl;
   
   pub_pose.publish (object_normal);
 }
@@ -137,6 +153,7 @@ void set_coordinate_limit_Max(const geometry_msgs::Point& input)
   printf("z_coordinate_Max = %f\n",z_coordinate_Max);  
 }
 
+//==============================Main============================================
 int main (int argc, char** argv)
 {
   // Initialize ROS

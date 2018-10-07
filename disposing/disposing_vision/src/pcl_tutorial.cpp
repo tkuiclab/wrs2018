@@ -134,5 +134,8 @@ void Pcl_tutorial::downsampling(pcl::PointCloud<PointTRGB>::Ptr cloud
                               , pcl::PointCloud<PointTRGB>::Ptr cloud_filtered
                               , float range)
 {
-  
+  pcl::VoxelGrid<PointTRGB> sor;
+  sor.setInputCloud (cloud);
+  sor.setLeafSize (range,range,range);
+  sor.filter (*cloud_filtered);
 }

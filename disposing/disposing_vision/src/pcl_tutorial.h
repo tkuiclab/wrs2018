@@ -29,7 +29,6 @@
 //Downsampling
 #include <pcl/filters/voxel_grid.h>
 
-
 typedef pcl::PointXYZ PointT;
 typedef pcl::PointXYZRGB PointTRGB;
 
