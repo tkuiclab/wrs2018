@@ -65,9 +65,10 @@ void RobotisState::setInverseKinematics(int cnt, Eigen::MatrixXd start_rotation,
 {
   for (int dim = 0; dim < 3; dim++)
     ik_target_position_.coeffRef(dim, 0) = calc_task_tra_.coeff(cnt, dim);
-
-  // start_rotation<<1,0,0,0,-1,0,0,0,-1;
-  // std::cout<<"start_rotationstart_rotation"<<std::endl<<start_rotation<<std::endl;
+  
+  // Eigen::Vector3d start_euler = ManipulatorKinematicsDynamics::rotation2rpy(start_rotation);
+  // start_euler(0) = (start_euler(0)+M_PI)/2;
+  // start_rotation = robotis_framework::convertRPYToRotation(start_euler(0), start_euler(1),start_euler(2));
 
   Eigen::Quaterniond start_quaternion = robotis_framework::convertRotationToQuaternion(start_rotation);
 
@@ -76,6 +77,13 @@ void RobotisState::setInverseKinematics(int cnt, Eigen::MatrixXd start_rotation,
                                        kinematics_pose_msg_.pose.orientation.y,
                                        kinematics_pose_msg_.pose.orientation.z);
 
+  // Eigen::Matrix3d target_rotation = robotis_framework::convertQuaternionToRotation(target_quaternion);                                    
+  // Eigen::Vector3d target_euler = ManipulatorKinematicsDynamics::rotation2rpy(target_rotation);
+  // Eigen::Vector3d m_pi(M_PI, M_PI, M_PI);
+  // target_euler = (target_euler+m_pi)/2;
+  // target_rotation = robotis_framework::convertRPYToRotation(target_euler(0), target_euler(1),target_euler(2));
+  // target_quaternion = target_rotation;
+
   double count = (double) cnt / (double) all_time_steps_;
 
   Eigen::Quaterniond quaternion = start_quaternion.slerp(count, target_quaternion);
@@ -83,6 +91,10 @@ void RobotisState::setInverseKinematics(int cnt, Eigen::MatrixXd start_rotation,
   ik_target_phi_ = start_phi + count * (kinematics_pose_msg_.phi - start_phi);
 
   ik_target_rotation_ = robotis_framework::convertQuaternionToRotation(quaternion);
+  // target_euler = ManipulatorKinematicsDynamics::rotation2rpy(ik_target_rotation_);
+  // target_euler = target_euler*2 - m_pi;
+  // ik_target_rotation_ = robotis_framework::convertRPYToRotation(target_euler(0), target_euler(1),target_euler(2));
+
   // std::cout<<"ik_target_rotation_ik_target_rotation_"<<std::endl<<ik_target_rotation_<<std::endl;
 }
 
