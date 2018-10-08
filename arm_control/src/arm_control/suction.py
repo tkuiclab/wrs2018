@@ -100,6 +100,27 @@ class SuctionTask:
         print('Vaccum Off')
         rospy.sleep(0.3)
 
+    def gripper_calibration(self):
+        if 'gazebo' in self.name:
+            pass
+        else:
+            self.robot_cmd_client('calibration')
+        print('calibration')
+
+    def gripper_set_max(self):
+        if 'gazebo' in self.name:
+            pass
+        else:
+            self.robot_cmd_client('setMaxPos')
+        print('setMaxPos')
+    
+    def gripper_set_min(self):
+        if 'gazebo' in self.name:
+            pass
+        else:
+            self.robot_cmd_client('setMinPos')
+        print('setMinPos')
+
     def gripper_suction_up(self):
         if 'gazebo' in self.name:
             msg = 0.0
@@ -134,17 +155,28 @@ class SuctionTask:
 if __name__ == '__main__':
     rospy.init_node('test_gripper')
     print('test_gripper')
-    right_gripper = SuctionTask(_name='right_gazebo')
+    right_gripper = SuctionTask(_name='right')
 
-    right_gripper.gripper_vaccum_on()
-    print('is grip: {}'.format(right_gripper.gripped))
-    rospy.sleep(2)
+    # right_gripper.gripper_vaccum_on()
+    # print('is grip: {}'.format(right_gripper.gripped))
+    # rospy.sleep(2)
 
-    right_gripper.gripper_vaccum_off()
-    print('is grip: {}'.format(right_gripper.gripped))
-    rospy.sleep(2)
-    right_gripper.gripper_suction_up()
-    rospy.sleep(2)
-    right_gripper.gripper_suction_down()
-    rospy.sleep(2)
-    right_gripper.gripper_suction_deg(-40)
+    # right_gripper.gripper_vaccum_off()
+    # print('is grip: {}'.format(right_gripper.gripped))
+    # rospy.sleep(2)
+    # right_gripper.gripper_suction_up()
+    # rospy.sleep(2)
+    # right_gripper.gripper_suction_down()
+    # rospy.sleep(2)
+    # right_gripper.gripper_suction_deg(-40)
+
+    # right_gripper.gripper_vaccum_on()
+    # right_gripper.gripper_vaccum_off()
+
+    # right_gripper.gripper_calibration()
+    # right_gripper.gripper_set_max()
+    # right_gripper.gripper_set_min()
+
+    # right_gripper.gripper_suction_up()
+    # right_gripper.gripper_suction_down()
+    right_gripper.gripper_suction_deg(0)

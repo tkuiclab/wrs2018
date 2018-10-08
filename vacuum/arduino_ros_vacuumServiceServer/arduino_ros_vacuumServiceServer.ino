@@ -25,8 +25,8 @@ ros::Publisher costII("consume", &str_msg);
 
 #define ID_right  1
 #define ID_left   2
-#define UPSPEED   150
-#define DOWNSPEED 150
+#define UPSPEED   100
+#define DOWNSPEED 100
 #define ADJ_STEP  4
 #define POS_LMT   1024
 
