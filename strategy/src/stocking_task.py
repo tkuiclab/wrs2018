@@ -24,7 +24,7 @@ move2Object     = 10
 move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
-savePose1        = 14
+savePose1       = 14
 savePose2       = 15
 savePose3       = 16 
 riceballEuler   = 17
@@ -38,41 +38,48 @@ objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
               'riceball', 'riceball', 'riceball', 'riceball']
 
-lunchboxPos = [[-0.425, -0.16, -0.64],
-               [-0.425, -0.16, -0.69],
-               [-0.425,  0.16, -0.64],
-               [-0.425,  0.16, -0.69]]
+lunchboxPos = [[-0.424, -0.16, -0.65],
+               [-0.424, -0.16, -0.7],
+               [-0.424,  0.16, -0.65],
+               [-0.424,  0.16, -0.67]]
 
-drinkPos =    [[-0.185, -0.11, -0.645],
-               [-0.29,  -0.11, -0.645],                   
-               [-0.185, -0.21, -0.645],                              
-               [-0.29,  -0.21, -0.645]]
+drinkPos =    [[-0.183, 0.11, -0.6445],
+               [-0.288, 0.11, -0.6445],                   
+               [-0.183, 0.21, -0.6445],                              
+               [-0.288, 0.21, -0.6445]]
 
-riceballPos = [[-0.175,  0.2, -0.715],
-               [-0.27,   0.2, -0.715],
-               [-0.175,  0.1, -0.715],                             
-               [-0.27,   0.1, -0.715]]
+riceballPos = [[-0.172, -0.2, -0.715],
+               [-0.267, -0.2, -0.715],
+               [-0.172, -0.1, -0.715],                             
+               [-0.267, -0.1, -0.715]]
 
+lunchboxEu = [150, 0, 0]
+
+drinkEu =    [-180, 0, 0]
+            
+riceballEu = [-80, 0, 0]
+               
 objectPos = [lunchboxPos, drinkPos, riceballPos]
+objectEu  = [lunchboxEu,  drinkEu,  riceballEu]
 
-topRight    = [0.4, -0.1, -0.2]
-topLeft     = [0.4,  0.1, -0.2]
-middleRight = [0.4, -0.1, -0.6]
-middleLeft  = [0.4,  0.1, -0.6]
+topRight    = [0.43, -0.1, -0.2]
+topLeft     = [0.43,  0.1, -0.2]
+middleRight = [0.46, -0.1, -0.52]
+middleLeft  = [0.46,  0.1, -0.52]
 bottomRight = [0.5, -0.2, -1]
 bottomLeft  = [0.5,  0.2, -1]
 
-topRightEu    = [145, 45, -45]
-topLeftEu     = [127, 55, -45]
-middleRightEu = [0, 90,  30]
-middleLeftEu  = [0, 90,  45]
+topRightEu    = [-145, 35, 25]
+topLeftEu     = [-127, 55, 45]
+middleRightEu = [0, 90,  -30]
+middleLeftEu  = [0, 90,  -45]
 bottomRightEu = [0, 90,  30]
 bottomLeftEu  = [0, 90, -30]
 
-topRightPhi    = -35 
-topLeftPhi     = -35
+topRightPhi    = -45 
+topLeftPhi     = -45
 middleRightPhi = 40
-middleLeftPhi  = 40
+middleLeftPhi  = 45
 bottomRightPhi = 25
 bottomLeftPhi  = 25
 
@@ -92,7 +99,7 @@ class exampleTask:
         self.arm = ArmTask(self.name + '_arm')
         self.pickListAll = len(lunchboxPos) + len(riceballPos) + len(drinkPos)
         self.setQuantity()
-        self.pickList = 0
+        self.pickList =10
         self.pos   = [0, 0, 0]
         self.euler = [0, 0, 0]
         self.phi   = 0
@@ -133,11 +140,13 @@ class exampleTask:
         if self.finish:
             return
         while objectPos[self.pickList/4][self.pickList%4][1]*self.is_right > 0:
-            self.pickList += 1
+            self.pickList += 1 
             if self.finish:
                 return
         self.pos   = objectPos[self.pickList/4][self.pickList%4][:]
-        self.euler = [-150*self.is_right, 0, 0]
+        self.euler = objectEu[self.pickList/4][:]
+        self.euler[0] *= self.is_right
+        self.euler[2] *= self.is_right
         self.phi   = -30*self.is_right
 
     def getPlacePos(self):
@@ -158,15 +167,16 @@ class exampleTask:
             self.euler = middleLeftEu[:]
             self.phi   = middleLeftPhi*self.is_right
         if objectName[self.pickList] == 'riceballXX':
-            self.pos   = topRight[:]
-            self.euler = topRightEu[:]
-            self.phi   = topRightPhi*self.is_right
-            self.sucAngle = topRightSuc
-        if objectName[self.pickList] == 'riceball':
             self.pos   = topLeft[:]
             self.euler = topLeftEu[:]
             self.phi   = topLeftPhi*self.is_right
             self.sucAngle = topLeftSuc
+        if objectName[self.pickList] == 'riceball':
+            self.pos   = topRight[:]
+            self.euler = topRightEu[:]
+            self.phi   = topRightPhi*self.is_right
+            self.sucAngle = topRightSuc
+            
 
     def proces(self):
         if self.arm.is_stop:                                       # must be include in your strategy
@@ -205,7 +215,7 @@ class exampleTask:
             self.state = busy
             self.nextState = rearSafetyPos
             self.arm.set_speed(90)
-            self.arm.jointMove(0, (0, -1, 0, 2, 0, -1, 0))
+            self.arm.jointMove(0, (0, -1, 0, 2, 0, -0.7, 0))
 
         elif self.state == initPose:
             self.state = busy
@@ -217,7 +227,7 @@ class exampleTask:
             self.state = busy
             self.nextState = move2Shelf
             self.getRearSafetyPos()
-            self.euler[0] = -180
+            self.euler[0] = -90*self.is_right
             self.arm.set_speed(90)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
@@ -250,15 +260,18 @@ class exampleTask:
             self.getPlacePos()
             if 'riceball' in objectName[self.pickList]:
                 self.nextState = riceballEuler
+                self.euler[0] = -45
                 # self.euler = [0, -10, 0]
                 # self.pos[2] -= 0.2
             else:
                 self.nextState = moveIn2Shelf
+                self.euler[0] = 0
             self.pos[2] += 0.1
-            self.euler[0] = 0
+            
             self.arm.set_speed(90)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
-            self.suction.gripper_suction_deg(-90)
+            if 'riceball' not in objectName[self.pickList]:
+                self.suction.gripper_suction_deg(-90)
 
         elif self.state == riceballEuler:
             self.state = busy
@@ -267,7 +280,7 @@ class exampleTask:
             self.pos[2] += 0.1
             self.arm.set_speed(90)
             print 'euler = ', self.euler
-            self.arm.move_euler('p2p', self.euler)
+            self.arm.move_euler('line', self.euler)
             self.suction.gripper_suction_deg(self.sucAngle)
         
         elif self.state == moveIn2Shelf:
@@ -283,10 +296,11 @@ class exampleTask:
             self.nextState = frontSafetyPos
             self.arm.set_speed(90)
             self.getObjectPos()
-            self.pos[2] = -0.5
-            # self.pos[0] += 0.02 
-            # self.euler[1] = -30
-            # self.euler[2] = 10*self.is_right
+            self.pos[2] = -0.47
+            if 'drink' in objectName[self.pickList]:
+                self.pos[0] -= 0.02 
+                self.euler[1] = -40
+                self.euler[2] = 10*self.is_right
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == leaveShelf:
@@ -294,9 +308,9 @@ class exampleTask:
             self.nextState = idle
             self.arm.set_speed(90)
             if objectName[self.pickList] == 'riceballXX':
-                self.arm.noa_move_suction('line', suction_angle=0, n=0.1, o=0, a=-0.2)
+                self.arm.noa_move_suction('line', suction_angle=0, n=0.08, o=0, a=-0.22)
             else:
-                self.arm.noa_move_suction('line', suction_angle=0, n=0.1, o=0, a=-0.1)
+                self.arm.noa_move_suction('line', suction_angle=0, n=0.08, o=0, a=-0.12)
             # self.arm.relative_move_pose('line', [-0.3, 0, 0.1])
             self.pickList += 1
             self.suction.gripper_suction_deg(0)

@@ -734,11 +734,11 @@ bool ManipulatorKinematicsDynamics::InverseKinematics_7( Eigen::VectorXd goal_po
     {
       JointAngle(1) = (JointAngle(1)>Old_JointAngle(1))?-pi:pi;
     }
-    if(JointAngle(7)*Old_JointAngle(7)<0 && fabs(Old_JointAngle(7))>3 && fabs(JointAngle(7))>2.95)
-    {
-      // JointAngle(7) = (JointAngle(7)>Old_JointAngle(7))?(JointAngle(7)-2*pi):(JointAngle(7)+2*pi);
-      JointAngle(7) = (JointAngle(7)>Old_JointAngle(7))?-pi:pi;
-    }
+    // if(JointAngle(7)*Old_JointAngle(7)<0 && fabs(JointAngle(7) - Old_JointAngle(7)) > pi)
+    // {
+    //   // JointAngle(7) = (JointAngle(7)>Old_JointAngle(7))?(JointAngle(7)-2*pi):(JointAngle(7)+2*pi);
+    //   JointAngle(7) = (JointAngle(7)>Old_JointAngle(7))?-pi:pi;
+    // }
     // std::cout<<"====JointAngle567===== "<<JointAngle(5)<<" "<<JointAngle(6)<<" "<<JointAngle(7)<<std::endl;
     Eigen::VectorXd Joint_dev(8);
     Deviation = testPos.norm();
