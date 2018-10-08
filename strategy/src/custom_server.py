@@ -4,6 +4,7 @@ from assistant_pkg.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
 import rospy
+import time
 
 IDEL          = 0
 MoveToP1      = 1
@@ -88,28 +89,28 @@ class CMobileCommand(object):
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         start = Bool()
         start.data = True
         self.pub_start.publish(start)
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 11
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_ORDER(self):
         # Turn to abs +90 deg
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 12
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_NEXT(self):
         # Move to point 2 (0 deg)
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data =  3
         self.pub_behavior.publish(behavior_type)
@@ -139,15 +140,20 @@ def GetMissionSerialKey(MissionReq):
 
 def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
     if(Key == IDEL):
+        print("IDEL")
         MobileCommandSet.IDLE()
         DualArmCommandSet.IDEL()       
     elif(Key == MoveToP1):
+        print("MoveToP1")
         MobileCommandSet.Mobile_START()
     elif(Key == MoveToP2):
+        print("MoveToP2")
         MobileCommandSet.Mobile_NEXT()
     elif(Key == RotToDeg90):
+        print("RotToDeg90")
         MobileCommandSet.Mobile_ORDER()
     elif(Key == RotToDeg0):
+        print("RotToDeg0")
         MobileCommandSet.Mobile_AID()
     elif(Key == TakeObj):
         DualArmCommandSet.TakeObj()
@@ -156,15 +162,16 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
     elif(Key == GiveObj_Type2):
         DualArmCommandSet.GiveObj_Type2
     elif(Key == STOP):
+        print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
         pass
+
+index = 0
 
 def handle_state(req):
     Get_Req = req.state
     print("Returning [%s]"%(req.state)) # Show the state from Assistant
 
-    print(type(Get_Req))
-    print(Get_Req)
     MobileCommandSet = CMobileCommand()
     DualArmCommandSet= CDualArmCommand()
 
@@ -173,18 +180,22 @@ def handle_state(req):
 
     MotionSerialKey = GetMissionSerialKey(Get_Req)
     
+    # rate = rospy.Rate(10)
+    # Delay for publish to topic, if the frequency set too large value would lose the data in first call.
+
     while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
+        # rate.sleep() 
+        # Make the while-loop work at 10Hz, and set delay before send data to topic
         if not(MobileCommandSet.MobileIsBusy()): #or DualArmCommandSet.DualArmIsBusy()):
             MotionKey = MotionSerialKey[SerialKeyIndex]
+            time.sleep(1)
             MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
-            print(MotionKey,SerialKeyIndex)
             if(MotionKey != STOP):
                 SerialKeyIndex += 1
-                print(SerialKeyIndex)
             else:
                 SerialKeyIndex = 0
                 MissionExecuteFlag = False
-    
+
     ### Response the result of Strategy
     res = AssistantStateResponse()
     res.success = True            # Bool
