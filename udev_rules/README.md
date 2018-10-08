@@ -9,12 +9,12 @@ sudo cp *.rules /etc/udev/rules.d
 
 2. Restart udev
 ```bash
+# maybe not work following lines
 sudo /etc/init.d/udev restart
-```
-* or
-```bash
+# or
 sudo udevadm control --reload-rules
 ```
+* Or re-plugin device
 
 ## How To Create the Rule :sunglasses:
 
