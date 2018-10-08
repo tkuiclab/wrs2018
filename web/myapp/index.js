@@ -6,12 +6,12 @@ var https   = require('https');
 var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
 
-app.get('/', function (req, res) {
-  app.use(express.static(path.join(__dirname, '../web')));
-  app.use(express.static(path.join(__dirname, '..')));
+// app.get('/', function (req, res) {
+//   app.use(express.static(path.join(__dirname, '../web')));
+//   app.use(express.static(path.join(__dirname, '..')));
 
-  res.sendFile(path.join(__dirname + '/../web/index.html'));
-});
+//   res.sendFile(path.join(__dirname + '/../web/index.html'));
+// });
 app.get('/origin', function (req, res) {
   app.use(express.static(path.join(__dirname, '../web')));
   app.use(express.static(path.join(__dirname, '..')));
@@ -23,6 +23,12 @@ app.get('/simple', function (req, res) {
   app.use(express.static(path.join(__dirname, '..')));
 
   res.sendFile(path.join(__dirname + '/../web/index_simple.html'));
+});
+app.get('/', function (req, res) {
+  app.use(express.static(path.join(__dirname, '../web')));
+  app.use(express.static(path.join(__dirname, '..')));
+
+  res.sendFile(path.join(__dirname + '/../web/demo03.html'));
 });
 https.createServer({
   key: fs.readFileSync('server.key'),

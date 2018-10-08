@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from assistant_pkg.srv import *
+from strategy.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
 import rospy
