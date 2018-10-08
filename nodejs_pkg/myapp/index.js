@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 'use strict';
 
 var express = require('express');
@@ -14,6 +13,27 @@ var server  = https.createServer({
 server.listen(8080);
 var io = require('socket.io').listen(server);
 
+const rosnodejs = require('rosnodejs');
+const AssistantState = rosnodejs.require('strategy').srv.AssistantState;
+var serviceClient;
+
+rosnodejs.initNode('index')
+.then((rosNode) => {
+  serviceClient = rosNode.serviceClient('/assistant_service','strategy/AssistantState');
+  rosNode.waitForService(serviceClient.getService(), 2000)
+    .then((available) => {
+      if (available) {
+        const request = new AssistantState.Request();
+        request.state = 0;
+        serviceClient.call(request).then((resp) => {
+          console.log('Service response ' + JSON.stringify(resp));
+        });
+      } else {
+        console.log('Service not available');
+      }
+    });
+});
+
 app.get('/', function (req, res) {
   app.use(express.static(path.join(__dirname, '../web')));
   app.use(express.static(path.join(__dirname, '..')));
@@ -27,7 +47,13 @@ io.on('connect', (socket) => {
   io.emit("news", "Hello from Socket.io server");
 
   socket.on('message', (data) => {
-    console.log(data);
+    console.log('Call service with: '+data);
+    const request = new AssistantState.Request();
+    request.state = data;
+    // Need to and Timeout ?
+    serviceClient.call(request).then((resp) => {
+      console.log('Service response ' + JSON.stringify(resp));
+    });
   });
   socket.on('error', (error) => {
     console.log("Socket.io error occured: " + error);

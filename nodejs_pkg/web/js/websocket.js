@@ -5,7 +5,7 @@ function __log(e, data) {
   log.innerHTML += "\n" + e + " " + (data || '');
 }
 
-var socket = io.connect('https://163.13.164.162:8080', {secure: true});
+var socket = io.connect('https://'+location.host, {secure: true});
 socket.on('news', function(m) {
   console.log('Socket.IO Connected: '+m);
   __log('Socket.IO Connected');
@@ -43,35 +43,6 @@ ws.onmessage = function(evt){
   if (IsJsonString(evt.data)) {
     var j = JSON.parse(evt.data)
     if (j.role === "State Machine") {
-      // switch(j.state) {
-      //   case 1:
-      //     console.log('State: ' + j.state);
-      //     __log('State: ' + j.state);
-      //     var request = new ROSLIB.ServiceRequest({
-      //       state : j.state
-      //     });
-      //     AssistantClient.callService(request, function(result) {
-      //       console.log('Result from server: '+result.success+', '+result.info);
-      //     });
-      //     break;
-      //   case 2:
-      //     console.log('State: ' + j.state);
-      //     __log('State: ' + j.state);
-      //     var request = new ROSLIB.ServiceRequest({
-      //       state : j.state
-      //     });
-      //     AssistantClient.callService(request, function(result) {
-      //       console.log('Result from server: '+result.success+', '+result.info);
-      //     });
-      //     break;
-      //   case 3:
-      //     console.log('State: ' + j.state);
-      //     __log('State: ' + j.state);
-      //     break;
-      //   default:
-      //     console.log('I dont know this state.');
-      //     __log('I dont know this state.');
-      // }
       __log('Pass '+j.state+' to socket server');
       socket.emit('message', j.state);
     }
@@ -88,14 +59,6 @@ ws.onmessage = function(evt){
     console.log(evt+" , "+evt.data);
     output.src = window.URL.createObjectURL(evt.data);
     output.play();
-    // $('#output')[0].src = window.URL.createObjectURL(evt.data);
-    // $('#output')[0].load();
-    // $('#output')[0].play();
-    // $('#output')[0].pause();
-    // setTimeout(function() {
-    //   $('#output')[0].currentTime = 0;
-    //   $('#output')[0].play();
-    // }, 2000);
     __log('play audio');
   }
 };
