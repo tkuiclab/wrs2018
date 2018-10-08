@@ -30,6 +30,8 @@ ros::Publisher costII("consume", &str_msg);
 #define ADJ_STEP  4
 #define POS_LMT   1024
 
+// Marco for debug
+//#define SERIAL_PRINT
 
 ros::NodeHandle  nh;
 using vacuum_cmd_msg::VacuumCmd;
@@ -126,25 +128,32 @@ void setup()
   MinPos_H_left = EEPROM.read(addressMin_H_left);
   MinPos_left = MinPos_H_left << 8 | MinPos_L_left;
 
+#ifdef SERIAL_PRINT
   Serial.begin(57600);
   while (!Serial);    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
- 
+#endif
+
   SPI.begin(); // Init SPI bus
   //mfrc522.PCD_Init(); // Init MFRC522 
   nh.advertise(chatter);
   nh.advertise(costII);
-  for(uint8_t reader = 0; reader < NR_OF_READERS; reader++){
-    mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN); // Init each MFRC522 card/
+
+  for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
+    mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN); // Init each MFRC522 card
+    
+#ifdef SERIAL_PRINT
     Serial.print(F("Reader "));
     Serial.print(reader);
     Serial.print(F(": "));
+#endif
   }
-
 }
+
 DynamixelClass wDxl(bool isRight)
 {
-  return (isRight)?Dxl_right:Dxl_left;
+  return (isRight)? Dxl_right: Dxl_left;
 }
+
 void callback_right(const VacuumCmd::Request& req, VacuumCmd::Response& res)
 {
   bool isRight = true;
@@ -154,6 +163,7 @@ void callback_right(const VacuumCmd::Request& req, VacuumCmd::Response& res)
   MinPos = MinPos_right;
   callback(req, res, isRight);
 }
+
 void callback_left(const VacuumCmd::Request& req, VacuumCmd::Response& res)
 {
   bool isRight = false;
@@ -166,7 +176,7 @@ void callback_left(const VacuumCmd::Request& req, VacuumCmd::Response& res)
 
 void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRight)
 {
-  if(strcmp(req.cmd, "setMaxPos") == 0)
+  if (strcmp(req.cmd, "setMaxPos") == 0)
   {
     MaxPos = wDxl(isRight).readPosition(ID) - ADJ_STEP;
     MaxPos = MaxPos > 0 ? MaxPos : 0;
@@ -175,14 +185,14 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
       res.success = false;
       return;
     }
-    if(isRight)
+    if (isRight)
     {
       MaxPos_L_right = MaxPos;
       MaxPos_H_right = MaxPos >> 8;
       MaxPos_right = MaxPos;
       EEPROM.write(addressMax_H_right, MaxPos_H_right);
       EEPROM.write(addressMax_L_right, MaxPos_L_right);
-    }else{
+    } else {
       MaxPos_L_left = MaxPos;
       MaxPos_H_left = MaxPos >> 8;
       MaxPos_left = MaxPos;
@@ -190,7 +200,7 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
       EEPROM.write(addressMax_L_left, MaxPos_L_left);
     }
   }
-  else if(strcmp(req.cmd, "setMinPos") == 0)
+  else if (strcmp(req.cmd, "setMinPos") == 0)
   {
     MinPos = wDxl(isRight).readPosition(ID) + ADJ_STEP;
     MinPos = MinPos < POS_LMT ? MinPos : POS_LMT - 1;
@@ -200,14 +210,14 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
       return;
     }
 
-    if(isRight)
+    if (isRight)
     {
       MinPos_L_right = MinPos;
       MinPos_H_right = MinPos >> 8;
       MinPos_right = MinPos;
       EEPROM.write(addressMin_H_right, MinPos_H_right);
       EEPROM.write(addressMin_L_right, MinPos_L_right);
-    }else{
+    } else {
       MinPos_L_left = MinPos;
       MinPos_H_left = MinPos >> 8;
       MinPos_left = MinPos;
@@ -215,51 +225,51 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
       EEPROM.write(addressMin_L_left, MinPos_L_left);
     }
   }
-  else if(strcmp(req.cmd, "suctionUp") == 0)
+  else if (strcmp(req.cmd, "suctionUp") == 0)
   {
     int count = 0;
     while (wDxl(isRight).moveSpeed(ID, MaxPos, UPSPEED) != 0)
     {
       delay(10);
-      if(count++ >=10)
+      if (count++ >=10)
       {
         res.success = false;
         return;
       }
     }
   }
-  else if(strcmp(req.cmd, "suctionDown") == 0)
+  else if (strcmp(req.cmd, "suctionDown") == 0)
   {   
     int count = 0;
     while (wDxl(isRight).moveSpeed(ID, MinPos, DOWNSPEED) != 0)
     {
       delay(10);
-      if(count++ >=10)
+      if (count++ >=10)
       {
         res.success = false;
         return;
       }
     }
   }
-  else if(strcmp(req.cmd, "calibration") == 0)
+  else if (strcmp(req.cmd, "calibration") == 0)
   {
     int count = 0;
     while (wDxl(isRight).torqueStatus(ID, 0) != 0)
     {
       delay(10);
-      if(count++ >=10)
+      if (count++ >=10)
       {
         res.success = false;
         return;
       }
     }
   }
-  else if(strcmp(req.cmd, "vacuumOn") == 0)
+  else if (strcmp(req.cmd, "vacuumOn") == 0)
   {   
     digitalWrite(vac_pin, HIGH);
     digitalWrite(led_pin, HIGH);
   }
-  else if(strcmp(req.cmd, "vacuumOff") == 0)
+  else if (strcmp(req.cmd, "vacuumOff") == 0)
   {   
     digitalWrite(vac_pin, LOW);
     digitalWrite(led_pin, LOW);
@@ -274,7 +284,7 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
     while (wDxl(isRight).moveSpeed(ID, pos, DOWNSPEED) != 0)
     {
       delay(10);
-      if(count++ >=10)
+      if (count++ >=10)
       {
         res.success = false;
         return;
@@ -291,7 +301,11 @@ void RFID()
     if (mfrc522[reader].PICC_IsNewCardPresent() && mfrc522[reader].PICC_ReadCardSerial()) 
     {
       byte* id = mfrc522[reader].uid.uidByte;
+
+#ifdef SERIAL_PRINT
       dump_byte_array(id, mfrc522[reader].uid.size);
+#endif
+
       pub_topic(id, "90", 101, 183, 231, 43);
       pub_topic(id, "91", 167, 227, 232, 43);
       pub_topic(id, "90", 176, 53, 41, 164);
@@ -314,11 +328,14 @@ void RFID()
       pub_topic2(id, "consumeB", 89, 10, 232, 43);
       
       pub_topic2(id, "spare", 98, 80, 27, 65);
+
+#ifdef SERIAL_PRINT
       Serial.print(F("Reader "));
       Serial.print(reader);
       Serial.print(F(": Card UID:"));
       Serial.println();
-      }
+#endif
+    }
   }
 }
 
@@ -330,21 +347,21 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   Serial.println();
 }
 
-void pub_topic(byte *buffer, const char out_str[], byte arg0, byte arg1, byte arg2, byte arg3){
-  if(buffer[0] == arg0
+void pub_topic(byte *buffer, const char out_str[], byte arg0, byte arg1, byte arg2, byte arg3) {
+  if ( buffer[0] == arg0
     && buffer[1] == arg1
     && buffer[2] == arg2
-    && buffer[3] == arg3){
+    && buffer[3] == arg3) {
       str_msg.data = out_str;
       chatter.publish(&str_msg);
     }
 }
 
-void pub_topic2(byte *buffer, const char out_str[], byte arg0, byte arg1, byte arg2, byte arg3){
-  if(buffer[0] == arg0
+void pub_topic2(byte *buffer, const char out_str[], byte arg0, byte arg1, byte arg2, byte arg3) {
+  if ( buffer[0] == arg0
     && buffer[1] == arg1
     && buffer[2] == arg2
-    && buffer[3] == arg3){
+    && buffer[3] == arg3) {
       str_msg.data = out_str;
       costII.publish(&str_msg);
     }
