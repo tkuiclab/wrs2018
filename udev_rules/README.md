@@ -11,6 +11,10 @@ sudo cp *.rules /etc/udev/rules.d
 ```bash
 sudo /etc/init.d/udev restart
 ```
+* or
+```bash
+sudo udevadm control --reload-rules
+```
 
 ## How To Create the Rule :sunglasses:
 
