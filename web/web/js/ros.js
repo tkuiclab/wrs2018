@@ -1,7 +1,7 @@
 // Connecting to ROS
 // -----------------
 var ros = new ROSLIB.Ros({
-  url : 'ws://localhost:9090'
+  url : 'ws://163.13.164.162:9090'
 });
 
 ros.on('connection', function() {

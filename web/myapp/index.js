@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var express = require('express');
 var fs      = require('fs');
 var path    = require('path');
@@ -6,24 +8,6 @@ var https   = require('https');
 var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
 
-// app.get('/', function (req, res) {
-//   app.use(express.static(path.join(__dirname, '../web')));
-//   app.use(express.static(path.join(__dirname, '..')));
-
-//   res.sendFile(path.join(__dirname + '/../web/index.html'));
-// });
-app.get('/origin', function (req, res) {
-  app.use(express.static(path.join(__dirname, '../web')));
-  app.use(express.static(path.join(__dirname, '..')));
-
-  res.sendFile(path.join(__dirname + '/../web/example_simple_exportwav.html'));
-});
-app.get('/simple', function (req, res) {
-  app.use(express.static(path.join(__dirname, '../web')));
-  app.use(express.static(path.join(__dirname, '..')));
-
-  res.sendFile(path.join(__dirname + '/../web/index_simple.html'));
-});
 app.get('/', function (req, res) {
   app.use(express.static(path.join(__dirname, '../web')));
   app.use(express.static(path.join(__dirname, '..')));
