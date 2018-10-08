@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from mobile_platform.srv import *
 from strategy.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
@@ -82,35 +82,39 @@ class CDualArmCommand(object):
 class CMobileCommand(object):
     def __init__(self):
         self.pub_behavior= rospy.Publisher('scan_black/strategy_behavior', Int32, queue_size = 1)
-        self.pub_start   = rospy.Publisher('scan_black/strategy_start', Bool, queue_size = 1)
+        #self.pub_start   = rospy.Publisher('scan_black/strategy_start', Bool, queue_size = 1)
+        self.srv_start   = rospy.ServiceProxy('scan_black/strategy_start', strategy_start)
         rospy.Subscriber("scan_black/dualarm_start", Bool, self.Sub_DualArm_Start)
 
         self.MobileIsBusyFlag = False
+        self.SendToSrvSucessFlag = False
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
-        #self.MobileIsBusyFlag = True
-        start = Bool()
-        start.data = True
-        self.pub_start.publish(start)
+        self.MobileIsBusyFlag = True
+        srvData = strategy_start()
+        srvData.data = True
+        #self.pub_start.publish(start)
+        self.SendToSrvSucessFlag = self.srv_start(srvData.data)
+        print(self.SendToSrvSucessFlag)
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
-        #self.MobileIsBusyFlag = True
+        self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 11
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_ORDER(self):
         # Turn to abs +90 deg
-        #self.MobileIsBusyFlag = True
+        self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 12
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_NEXT(self):
         # Move to point 2 (0 deg)
-        #self.MobileIsBusyFlag = True
+        self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data =  3
         self.pub_behavior.publish(behavior_type)
@@ -179,19 +183,16 @@ def handle_state(req):
     MissionExecuteFlag = True
 
     MotionSerialKey = GetMissionSerialKey(Get_Req)
-    
-    # rate = rospy.Rate(10)
-    # Delay for publish to topic, if the frequency set too large value would lose the data in first call.
-
+  
     while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
-        # rate.sleep() 
-        # Make the while-loop work at 10Hz, and set delay before send data to topic
         if not(MobileCommandSet.MobileIsBusy()): #or DualArmCommandSet.DualArmIsBusy()):
             MotionKey = MotionSerialKey[SerialKeyIndex]
-            time.sleep(1)
             MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
             if(MotionKey != STOP):
-                SerialKeyIndex += 1
+                if not ((MotionKey == MoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                    # Check the data send to service or not.
+                    # if there were not, it would keep execute the motion (MoveToP1).
+                    SerialKeyIndex += 1
             else:
                 SerialKeyIndex = 0
                 MissionExecuteFlag = False
