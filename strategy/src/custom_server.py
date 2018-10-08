@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-
+from mobile_platform.srv import *
 from strategy.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
 import rospy
+import time
 
 IDEL          = 0
 MoveToP1      = 1
@@ -81,17 +82,21 @@ class CDualArmCommand(object):
 class CMobileCommand(object):
     def __init__(self):
         self.pub_behavior= rospy.Publisher('scan_black/strategy_behavior', Int32, queue_size = 1)
-        self.pub_start   = rospy.Publisher('scan_black/strategy_start', Bool, queue_size = 1)
+        #self.pub_start   = rospy.Publisher('scan_black/strategy_start', Bool, queue_size = 1)
+        self.srv_start   = rospy.ServiceProxy('scan_black/strategy_start', strategy_start)
         rospy.Subscriber("scan_black/dualarm_start", Bool, self.Sub_DualArm_Start)
 
         self.MobileIsBusyFlag = False
+        self.SendToSrvSucessFlag = False
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
         self.MobileIsBusyFlag = True
-        start = Bool()
-        start.data = True
-        self.pub_start.publish(start)
+        srvData = strategy_start()
+        srvData.data = True
+        #self.pub_start.publish(start)
+        self.SendToSrvSucessFlag = self.srv_start(srvData.data)
+        print(self.SendToSrvSucessFlag)
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
@@ -139,15 +144,20 @@ def GetMissionSerialKey(MissionReq):
 
 def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
     if(Key == IDEL):
+        print("IDEL")
         MobileCommandSet.IDLE()
         DualArmCommandSet.IDEL()       
     elif(Key == MoveToP1):
+        print("MoveToP1")
         MobileCommandSet.Mobile_START()
     elif(Key == MoveToP2):
+        print("MoveToP2")
         MobileCommandSet.Mobile_NEXT()
     elif(Key == RotToDeg90):
+        print("RotToDeg90")
         MobileCommandSet.Mobile_ORDER()
     elif(Key == RotToDeg0):
+        print("RotToDeg0")
         MobileCommandSet.Mobile_AID()
     elif(Key == TakeObj):
         DualArmCommandSet.TakeObj()
@@ -156,15 +166,16 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
     elif(Key == GiveObj_Type2):
         DualArmCommandSet.GiveObj_Type2
     elif(Key == STOP):
+        print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
         pass
+
+index = 0
 
 def handle_state(req):
     Get_Req = req.state
     print("Returning [%s]"%(req.state)) # Show the state from Assistant
 
-    print(type(Get_Req))
-    print(Get_Req)
     MobileCommandSet = CMobileCommand()
     DualArmCommandSet= CDualArmCommand()
 
@@ -172,19 +183,20 @@ def handle_state(req):
     MissionExecuteFlag = True
 
     MotionSerialKey = GetMissionSerialKey(Get_Req)
-    
+  
     while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
         if not(MobileCommandSet.MobileIsBusy()): #or DualArmCommandSet.DualArmIsBusy()):
             MotionKey = MotionSerialKey[SerialKeyIndex]
             MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
-            print(MotionKey,SerialKeyIndex)
             if(MotionKey != STOP):
-                SerialKeyIndex += 1
-                print(SerialKeyIndex)
+                if not ((MotionKey == MoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                    # Check the data send to service or not.
+                    # if there were not, it would keep execute the motion (MoveToP1).
+                    SerialKeyIndex += 1
             else:
                 SerialKeyIndex = 0
                 MissionExecuteFlag = False
-    
+
     ### Response the result of Strategy
     res = AssistantStateResponse()
     res.success = True            # Bool
