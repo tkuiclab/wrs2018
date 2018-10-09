@@ -311,7 +311,7 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
 
   // std::cout<<"<<<<<<<<<<<<<<<<<<<slide_->goal_slide_pos<<<<<<<<<<<<<<<<<"<<std::endl<<slide_->goal_slide_pos<<std::endl;
   bool    ik_success = manipulator_->inverseKinematics(robotis_->ik_id_end_,
-                                                            p2p_positoin, p2p_rotation, p2p_phi, slide_->goal_slide_pos, max_iter, ik_tol);
+                                                            p2p_positoin, p2p_rotation, p2p_phi, slide_->goal_slide_pos, true);
 
   if (ik_success == true && slide_success == true)
   {
@@ -479,6 +479,8 @@ void BaseModule::generateTaskTrajProcess()
   double mov_time = 1.5;
   double slide_diff;
 
+  manipulator_->manipulator_link_data_[0]->mov_speed_ = mov_speed;
+
   Eigen::Vector3d goal_positoin;
   goal_positoin << robotis_->kinematics_pose_msg_.pose.position.x, 
                    robotis_->kinematics_pose_msg_.pose.position.y, 
@@ -617,7 +619,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
       robotis_->is_ik = true;
       
       bool    ik_success  = manipulator_->inverseKinematics(robotis_->ik_id_end_,robotis_->ik_target_position_, 
-                                                              robotis_->ik_target_rotation_, robotis_->ik_target_phi_, tar_slide_pos, max_iter, ik_tol);
+                                                              robotis_->ik_target_rotation_, robotis_->ik_target_phi_, tar_slide_pos, false);
     
       if (ik_success == true)
       {
@@ -625,6 +627,13 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
           joint_state_->goal_joint_state_[id].position_ = manipulator_->manipulator_link_data_[id]->joint_angle_;
         slide_->goal_slide_pos = robotis_->calc_slide_tra_(robotis_->cnt_, 0);
         slide_->result_slide_pos = robotis_->calc_slide_tra_(robotis_->cnt_, 0);
+        if(manipulator_->manipulator_link_data_[0]->singularity_ && robotis_->cnt_ > 1)
+        {
+          std::cout<<"====robotis_->cnt_====="<<robotis_->cnt_<<" ";
+          robotis_->cnt_--;
+          // robotis_->cnt_ = (robotis_->cnt_ > 1) ? (robotis_->cnt_-1) : robotis_->cnt_;
+          std::cout<<robotis_->cnt_<<std::endl;
+        }
           // std::cout<<"==========================process after ik"<<std::endl;
           // manipulator_->forwardKinematics(7);
           // assert(false);
