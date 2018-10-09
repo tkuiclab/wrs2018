@@ -31,6 +31,7 @@ BaseModule::BaseModule()
   : control_cycle_msec_(0)
 {
   stop_flag     = false;
+  wait_flag     = false;
   enable_       = false;
   module_name_  = "base_module";
   control_mode_ = robotis_framework::PositionControl;
@@ -124,7 +125,8 @@ void BaseModule::queueThread()
   /* subscribe topics */
   ros::Subscriber stop_sub = ros_node.subscribe("/robot/is_stop", 5,
                                                 &BaseModule::stopMsgCallback, this);
-
+  ros::Subscriber wait_sub = ros_node.subscribe("/robot/wait", 5,
+                                                &BaseModule::waitMsgCallback, this);
   ros::Subscriber ini_pose_msg_sub = ros_node.subscribe("/robotis/base/ini_pose_msg", 5,
                                                         &BaseModule::initPoseMsgCallback, this);
   ros::Subscriber set_mode_msg_sub = ros_node.subscribe("/robotis/base/set_mode_msg", 5,
@@ -155,6 +157,10 @@ void BaseModule::stopMsgCallback(const std_msgs::Bool::ConstPtr& msg)
     stop();
   else
     stop_flag = false;
+}
+void BaseModule::waitMsgCallback(const std_msgs::Bool::ConstPtr& msg)
+{
+  wait_flag = msg->data;
 }
 void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -563,7 +569,7 @@ void BaseModule::generateTaskTrajProcess()
 void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> dxls,
                          std::map<std::string, double> sensors)
 {
-  if (enable_ == false)
+  if (enable_ == false || wait_flag == true)
     return;
 
   /*----- write curr position -----*/
