@@ -99,6 +99,7 @@ class ArmTask:
 
         elif 'End Trajectory' in msg.status_msg:
             self.__is_busy = False
+            print('Arm task receive End Trajectory')
 
     def __stop_callback(self, msg):
         if msg.data:

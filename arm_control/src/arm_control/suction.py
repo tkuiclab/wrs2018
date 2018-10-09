@@ -79,7 +79,9 @@ class SuctionTask:
                     print "Service call (Vacuum) failed: %s" % e
         else:
             suction_service = self.name + '/suction_cmd'
-            rospy.wait_for_service(suction_service)
+            print('suction service:', suction_service)
+            rospy.wait_for_service(suction_service, timeout=2.)
+            print('suction service:', suction_service, 2)
             try:
                 client = rospy.ServiceProxy(
                     suction_service,
@@ -148,7 +150,7 @@ class SuctionTask:
         print('Suction Move : ' + str_deg)
 
     def is_grip_callback(self, msg):
-        self.gripped = True#msg.data
+        self.gripped = msg.data
 
     @property
     def is_grip(self):

@@ -378,7 +378,7 @@ void loop()
   is_stop_msg.data = !digitalRead(is_stop);
   isStop.publish(&is_stop_msg);
 
-  RFID();
+  // RFID();
 
   nh.spinOnce();
 }

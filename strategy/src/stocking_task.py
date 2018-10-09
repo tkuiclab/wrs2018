@@ -13,7 +13,7 @@ from arm_control import ArmTask, SuctionTask
 
 
 PICKORDER = 0
-SPEED     = 100
+SPEED     = 20
 LUNCHBOX_H = 0.05
 
 idle            = 0
@@ -50,10 +50,10 @@ lunchboxPos = [[-0.424,  0.16, -0.695],
                [-0.424,  0.16, -0.695],
                [-0.424,  0.16, -0.695]]
 
-drinkPos =    [[-0.183, 0.11, -0.6445],
-               [-0.288, 0.11, -0.6445],                   
-               [-0.183, 0.21, -0.6445],                              
-               [-0.288, 0.21, -0.6445]]
+drinkPos =    [[-0.183, 0.11, -0.644],
+               [-0.288, 0.11, -0.644],                   
+               [-0.183, 0.21, -0.644],                              
+               [-0.288, 0.21, -0.644]]
 
 riceballPos = [[-0.172, -0.2, -0.715],
                [-0.267, -0.2, -0.715],
@@ -114,8 +114,9 @@ class stockingTask:
         """Initial object."""
         en_sim = False
         if len(sys.argv) >= 2:
-            rospy.set_param('en_sim', sys.argv[1])
-            en_sim = rospy.get_param('en_sim')
+            if type(sys.argv[1]) is bool:
+                rospy.set_param('en_sim', sys.argv[1])
+                en_sim = rospy.get_param('en_sim')
         self.name = _name
         self.state = initPose
         self.nextState = idle
@@ -389,9 +390,13 @@ class stockingTask:
             self.state = busy
             if self.suction.is_grip:
                 self.nextState = leaveBin
+                print('pickObject 1')
             else:
                 self.nextState = pickObject
-                self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.002)
+                # self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.002)
+                print('pickObject 2')
+
+            print('pickObject 3')
             self.suction.gripper_vaccum_on()
             
         elif self.state == placeObject:
@@ -444,6 +449,7 @@ if __name__ == '__main__':
         rate.sleep()
 
     # robot arm back home
+    rospy.loginfo('back home')
     left.arm.wait_busy()
     left.arm.jointMove(0, (0, -1, 0, 2, 0, -0.7, 0))
     right.arm.wait_busy()
