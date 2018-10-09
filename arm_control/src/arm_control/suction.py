@@ -35,7 +35,7 @@ class SuctionTask:
                     queue_size=1
                 )
                 self.is_grip_sub = rospy.Subscriber(
-                    self.name + '/robot/right_vacuum_gripper/grasping',
+                    '/robot/right_gazebo/vacuum_gripper1/grasping',
                     Bool,
                     self.is_grip_callback,
                     queue_size=1
@@ -48,7 +48,7 @@ class SuctionTask:
                     queue_size=1
                 )
                 self.is_grip_sub = rospy.Subscriber(
-                    self.name + '/robot/left_vacuum_gripper/grasping',
+                    '/robot/left_gazebo/vacuum_gripper1/grasping',
                     Bool,
                     self.is_grip_callback,
                     queue_size=1
@@ -92,7 +92,7 @@ class SuctionTask:
 
     def gripper_vaccum_on(self):
         self.robot_cmd_client('vacuumOn')
-        print('Vaccum On')
+        print('Vaccum On', self.gripped)
         rospy.sleep(0.5)
 
     def gripper_vaccum_off(self):
@@ -145,11 +145,14 @@ class SuctionTask:
         else:
             self.robot_cmd_client(str_deg)
 
-        
         print('Suction Move : ' + str_deg)
 
     def is_grip_callback(self, msg):
-        self.gripped = msg.data
+        self.gripped = True#msg.data
+
+    @property
+    def is_grip(self):
+        return self.gripped
 
 
 if __name__ == '__main__':
