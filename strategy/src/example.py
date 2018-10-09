@@ -56,14 +56,18 @@ class exampleTask:
     def getRearSafetyPos(self):
         if self.name == 'right':
             self.pos, self.euler, self.phi = (-0.1, -0.45, -0.45), (90, 0, 0), -30
+            print "a1"
         elif self.name == 'left':
             self.pos, self.euler, self.phi = (-0.1, 0.45, -0.45), (-90, 0, 0),  30
+            print "b1"
 
     def getFrontSafetyPos(self):
         if self.name == 'right':
             self.pos, self.euler, self.phi = (0.1, -0.45, -0.45), (0, 20, 0), 45
+            print "a2"
         elif self.name == 'left':
             self.pos, self.euler, self.phi = (0.1, 0.45, -0.45), (0, 20, 0), -45
+            print "b2"
 
     def getObjectPos(self):
         lunchboxPos = [[-0.5, -0.15, -0.6],
@@ -72,8 +76,10 @@ class exampleTask:
                     [-0.5, 0.15, -0.6]]
         if self.name == 'right':
             self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
+            print "a3"
         elif self.name == 'left':
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
+            print "b3"
 
     def getPlacePos(self):
         lunchboxPos = [[0.5, -0.25, -0.54],
@@ -82,8 +88,10 @@ class exampleTask:
                     [0.42, 0.25, -0.5]]
         if self.name == 'right':
             self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (0, 90, 0), 45
+            print "a4"
         elif self.name == 'left':
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (0, 90, 0), -45
+            print "b4"
 
 
     def proces(self):
@@ -105,6 +113,7 @@ class exampleTask:
             self.arm.set_speed(30)
             self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
             self.suction.gripper_suction_deg(0)
+            print "1"
 
         elif self.state == frontSafetyPos:
             self.state = busy
@@ -113,12 +122,14 @@ class exampleTask:
             self.arm.set_speed(30)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)           
             self.suction.gripper_suction_deg(-20)
+            print "2"
 
         elif self.state == rearSafetyPos:
             self.state = busy
             self.nextState = move2Bin
             self.getRearSafetyPos()
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            print "3"
 
         elif self.state == move2Bin:
             self.state = busy
@@ -126,6 +137,7 @@ class exampleTask:
             self.getObjectPos()
             self.pos[2] += 0.2
             self.arm.ikMove('line', self.pos, self.euler, self.phi) 
+            print "4"
 
         elif self.state == move2Shelf:
             self.state = busy
@@ -135,6 +147,7 @@ class exampleTask:
             self.pos[2] += 0.1
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
             self.suction.gripper_suction_deg(-90)
+            print "5"
         
         elif self.state == moveIn2Shelf:
             self.state = busy
@@ -142,12 +155,14 @@ class exampleTask:
             self.getPlacePos()
             self.pos[2] += 0.1
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            print "6"
 
         elif self.state == leaveBin:
             self.state = busy
             self.nextState = frontSafetyPos
             self.arm.set_speed(20)
             self.arm.relative_move_pose('line', [0, 0, 0.2])
+            print "7"
 
         elif self.state == leaveShelf:
             self.state = busy
@@ -155,26 +170,31 @@ class exampleTask:
             self.arm.relative_move_pose('line', [-0.3, 0, 0.1])
             self.pick_list -= 1
             self.suction.gripper_suction_deg(0)
+            print "8"
 
         elif self.state == move2Object:
             self.state = busy
             self.nextState = pickObject
             self.arm.relative_move_pose('line', [0, 0, -0.2])
+            print "9"
 
         elif self.state == move2PlacedPos:
             self.state = busy
             self.nextState = placeObject
             self.arm.relative_move_pose('line', [0, 0, -0.1])
+            print "10"
 
         elif self.state == pickObject:
             self.state = busy
             self.nextState = leaveBin
             self.suction.gripper_vaccum_on()
+            print "11"
             
         elif self.state == placeObject:
             self.state = busy
             self.nextState = leaveShelf
             self.suction.gripper_vaccum_off()
+            print "12"
 
         elif self.state == busy:
             if self.arm.is_busy:
@@ -183,6 +203,7 @@ class exampleTask:
                 self.state = self.nextState
             
 if __name__ == '__main__':
+    print "2222222"
     rospy.init_node('example')        #enable this node
     right = exampleTask('right')      #Set up right arm controller
     left  = exampleTask('left')       #Set up left arm controller
