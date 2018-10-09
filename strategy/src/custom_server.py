@@ -91,7 +91,7 @@ class CMobileCommand(object):
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         srvData = strategy_start()
         srvData.data = True
         #self.pub_start.publish(start)
@@ -100,21 +100,21 @@ class CMobileCommand(object):
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 11
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_ORDER(self):
         # Turn to abs +90 deg
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 12
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_NEXT(self):
         # Move to point 2 (0 deg)
-        self.MobileIsBusyFlag = True
+        #self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data =  3
         self.pub_behavior.publish(behavior_type)
@@ -141,6 +141,8 @@ def GetMissionSerialKey(MissionReq):
         return SerialKey_TakeObjToCustom_Type1
     elif(MissionReq == TakeObjToCustom_Type2):
         return SerialKey_TakeObjToCustom_Type2
+    else:
+        return SerialKey_RobotIdel
 
 def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
     if(Key == IDEL):
@@ -169,38 +171,72 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
         print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
         pass
-
-index = 0
+    else:
+        MobileCommandSet.IDLE()
+        DualArmCommandSet.IDEL()  
 
 def handle_state(req):
-    Get_Req = req.state
-    print("Returning [%s]"%(req.state)) # Show the state from Assistant
+    try:
+        Get_Req = req.state
+        print("Returning [%s]"%(req.state)) # Show the state from Assistant
 
-    MobileCommandSet = CMobileCommand()
-    DualArmCommandSet= CDualArmCommand()
+        if type(Get_Req) != int:
+            # Input: Mission
+            #   0  : Robot idel
+            #   1  : Lead customer
+            #   2  : Take object to customer type1
+            #   3  : Take object to customer type2
+            # Other: Robot idel
+            raise NotImplementedError("Request state input illegal. Please input an integer.")
 
-    SerialKeyIndex   = 0
-    MissionExecuteFlag = True
+        MobileCommandSet = CMobileCommand()
+        DualArmCommandSet= CDualArmCommand()
 
-    MotionSerialKey = GetMissionSerialKey(Get_Req)
+        SerialKeyIndex   = 0
+        MissionExecuteFlag = True
+        MotionSerialKey = GetMissionSerialKey(Get_Req)
   
-    while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
-        if not(MobileCommandSet.MobileIsBusy()): #or DualArmCommandSet.DualArmIsBusy()):
-            MotionKey = MotionSerialKey[SerialKeyIndex]
-            MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
-            if(MotionKey != STOP):
-                if not ((MotionKey == MoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
-                    # Check the data send to service or not.
-                    # if there were not, it would keep execute the motion (MoveToP1).
-                    SerialKeyIndex += 1
-            else:
-                SerialKeyIndex = 0
-                MissionExecuteFlag = False
+        while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
+            if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
+                MotionKey = MotionSerialKey[SerialKeyIndex]
+                MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
+
+                if(MotionKey != STOP):
+                    if not ((MotionKey == MoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                        # Check the data send to service or not.
+                        # if there were not, it would keep execute the motion (MoveToP1).
+                        SerialKeyIndex += 1
+                else:
+                    SerialKeyIndex = 0
+                    MissionExecuteFlag = False
+
+    except Exception, exception:
+        ResponseFlag = False
+        ResponseInfo = exception.message
+
+    except NotImplementedError, e:
+        ResponseFlag = False
+        ResponseInfo = e.message
+
+    else:
+        ResponseFlag = True
+        if(MotionSerialKey == SerialKey_RobotIdel):
+            # ResponseInfo = "Mission: Robot idel finish."
+            ResponseInfo = "Mission: Robot idel finish."
+        elif(MotionSerialKey == SerialKey_LeadCustom):
+            # ResponseInfo = "Mission: Lead customer finish."
+            ResponseInfo = "We have arrived at Sprite's shelves, do you need anything else?"
+        elif(MotionSerialKey == SerialKey_TakeObjToCustom_Type1):
+            # ResponseInfo = "Mission: Take object to customer type1 finish."
+            ResponseInfo = "Here you are, do you need anything else?"
+        elif(MotionSerialKey == SerialKey_TakeObjToCustom_Type2):
+            # ResponseInfo = "Mission: Take object to customer type2 finish."
+            ResponseInfo = "Mission: Take object to customer type2 finish."
 
     ### Response the result of Strategy
     res = AssistantStateResponse()
-    res.success = True            # Bool
-    res.info    = "Test response" # String
+    res.success = ResponseFlag    # Bool
+    res.info    = ResponseInfo    # String
     return res
 
 def assistant_server():
@@ -211,25 +247,6 @@ def assistant_server():
 
 if __name__ == "__main__":
     assistant_server()
-
-    # MissionExecuteFlag = False
-    # SerialKeyIndex   = 0
-    # MobileCommandSet = CMobileCommand()
-    # DualArmCommandSet= CDualCommand()
-
-    # while(True):
-    #     if(MissionExecuteFlag == False):
-    #         MissionExecuteFlag = True
-    #         MotionSerialKey = GetMissionSerialKey(Get_Req)
-    #     elif((MissionExecuteFlag == True) and (MotionSerialKey != None)):
-    #         if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
-    #             MotionKey = MotionSerialKey[SerialKeyIndex]
-    #             MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
-                
-    #             if(MotionKey != STOP):
-    #                 SerialKeyIndex += 1
-    #             else:
-    #                 SerialKeyIndex = 0
-    #                 MissionExecuteFlag = False
+    # Execute in the handle_state callback function
             
     
