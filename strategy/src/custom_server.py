@@ -1,10 +1,15 @@
 #!/usr/bin/env python
+import os
+import sys
+import rospy
+import time
+
 from mobile_platform.srv import *
 from strategy.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
-import rospy
-import time
+from arm_control import ArmTask, SuctionTask
+
 
 IDEL          = 0
 MoveToP1      = 1
@@ -60,6 +65,23 @@ class CDualArmCommand(object):
         self.left  = exampleTask('left')       #Set up left arm controller
 
         self.DualArmIsBusyFlag = False
+    #  Right        X       Y       Z      ROLL     PITCH     YAW      PHI    
+    #  step1.      0.3  -0.3006   -0.46    5.029    82.029    4.036     60      
+
+    #  step2.      0.3  -0.3006   -0.56    5.029    82.029    4.036     60    
+
+    #  step3.     0.55  -0.3006   -0.56    5.029    82.029    4.036     60
+
+    #  step4.     0.55  -0.3006   -0.46    5.029    82.029    4.036     60
+
+    #  Left
+    #  step1.      0.3   0.3506   -0.46    5.029    82.029    4.036     -60
+ 
+    #  step2.      0.3   0.3506   -0.56    5.029    82.029    4.036     -60         
+ 
+    #  step3.     0.55   0.3506   -0.56    5.029    82.029    4.036     -60
+
+    #  step4.     0.55   0.3506   -0.46    5.029    82.029    4.036     -60
 
     def InitialPos(self):
         pass
@@ -79,6 +101,7 @@ class CDualArmCommand(object):
     def IDEL(self):
         # self.DualArmIsBusyFlag = False
         # Do nothing
+        pass
     
     def DualArmIsBusy(self):
         #self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)
@@ -94,23 +117,6 @@ class CMobileCommand(object):
 
         self.MobileIsBusyFlag = False
         self.SendToSrvSucessFlag = False
-#         右手  X       Y       Z      ROLL     PITCH     YAW      PHI    
-#  step1.點位： 0.3  -0.3006   -0.46    5.029    82.029    4.036     60      
-
-#  step2.      0.3  -0.3006   -0.56    5.029    82.029    4.036     60    
-
-#  step3.     0.55  -0.3006   -0.56    5.029    82.029    4.036     60
-
-#  step4.     0.55  -0.3006   -0.46    5.029    82.029    4.036     60
-
-#    左手
-# step1.點位： 0.3   0.3506   -0.46    5.029    82.029    4.036     -60
- 
-# step2.      0.3   0.3506   -0.56    5.029    82.029    4.036     -60         
- 
-# step3.     0.55   0.3506   -0.56    5.029    82.029    4.036     -60
-
-# step4.     0.55   0.3506   -0.46    5.029    82.029    4.036     -60
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
