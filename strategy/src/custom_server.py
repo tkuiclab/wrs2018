@@ -40,25 +40,49 @@ class exampleTask:
         if len(sys.argv) >= 2:
             rospy.set_param('en_sim', sys.argv[1])
             en_sim = rospy.get_param('en_sim')
-        # if en_sim:
-        #     print en_sim
-        #     return
-        
-        # self.name  = _name
-        # self.state = initPose
-        # self.nextState = idle
-        # self.arm   = ArmTask(self.name + '_arm')
-        # self.pick_list = 2
-        # self.pos   = (0, 0, 0)
-        # self.euler = (0, 0, 0)
-        # self.phi   = 0
-        # if en_sim:
-        #     self.suction = SuctionTask(self.name + '_gazebo')
-        #     print "aa"
-        # else:
-        #     self.suction = SuctionTask(self.name)
-        #     print "bb"
+       
+        self.name  = _name
+        self.arm   = ArmTask(self.name + '_arm')
+        self.pick_list = 2
+        self.pos   = (0, 0, 0)
+        self.euler = (0, 0, 0)
+        self.phi   = 0
+
+        if en_sim:
+            self.suction = SuctionTask(self.name + '_gazebo')
+            print "aa"
+        else:
+            self.suction = SuctionTask(self.name)
+            print "bb"
+
+    def InitialPos(self):
+        self.arm.set_speed(30)
+        self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
+        self.suction.gripper_suction_deg(0)
+
+    def MoveAbs(self, Line_PtP, Pos, Euler, Redun):
+        if(Line_PtP == 'line'):
+            Line_PtP = 'line'
+        else:
+            Line_PtP = 'p2p'
+        self.arm.ikMove(Line_PtP, Pos, Euler, Redun)
     
+    def MoveRelPos(self, Line_PtP, Pos):
+        if(Line_PtP == 'line'):
+            Line_PtP = 'line'
+        else:
+            Line_PtP = 'p2p'
+        self.arm.relative_move_pose(Line_PtP, Pos)
+
+    def SuctionEnable(self, On_Off):
+        if(On_Off == True):
+            self.suction.gripper_vaccum_on()
+        elif(On_Off == False):
+            self.success.gripper_vaccum_off()
+    
+    def SetSuctionDeg(self, Deg):
+        self.suction.gripper_suction_deg(Deg)
+        
 class CDualArmCommand(object):
     def __init__(self):
         self.right = exampleTask('right')      #Set up right arm controller
@@ -83,12 +107,65 @@ class CDualArmCommand(object):
 
     #  step4.     0.55   0.3506   -0.46    5.029    82.029    4.036     -60
 
-    def InitialPos(self):
-        pass
+    def InitArmPos(self):
+        self.right.InitialPos()
+        self.left.InitialPos()
 
     def TakeObj(self):
         # self.DualArmIsBusyFlag = True
         pass
+
+    def TakeObj_Step1(self):
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.3, -0.3006, -0.46]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.3, 0.3506, -0.46]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+        
+        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def TakeObj_Step2(self):
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.3, -0.3006, -0.56]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.3, 0.3506, -0.56]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+        
+        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def TakeObj_Step3(self):
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.55, -0.3006, -0.56]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.55, 0.3506, -0.56]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+        
+        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def TakeObj_Step4(self):
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.55, -0.3006, -0.46]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.55, 0.3506, -0.46]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+        
+        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
     def GiveObj_Type1(self):
         # self.DualArmIsBusyFlag = True
@@ -104,8 +181,8 @@ class CDualArmCommand(object):
         pass
     
     def DualArmIsBusy(self):
-        #self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)
-        self.DualArmIsBusyFlag = False
+        self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)
+        #self.DualArmIsBusyFlag = False
         return self.DualArmIsBusyFlag
 
 class CMobileCommand(object):
