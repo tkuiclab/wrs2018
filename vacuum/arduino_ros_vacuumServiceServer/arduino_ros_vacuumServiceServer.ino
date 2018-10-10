@@ -45,12 +45,15 @@ ros::Publisher isStop("robot/is_stop", &is_stop_msg);
 void callback(const VacuumCmd::Request& , VacuumCmd::Response& ,bool);
 void callback_right(const VacuumCmd::Request& , VacuumCmd::Response& );
 void callback_left(const VacuumCmd::Request& , VacuumCmd::Response& );
+void armTaskCallback(const std_msgs::Bool& msg);
 ros::ServiceServer<VacuumCmd::Request, VacuumCmd::Response> vac_srv_right("right/suction_cmd", &callback_right);
 ros::ServiceServer<VacuumCmd::Request, VacuumCmd::Response> vac_srv_left("left/suction_cmd", &callback_left);
+ros::Subscriber<std_msgs::Bool> armTask_sub("/robot/armTask", 5, &armTaskCallback);
 
 DynamixelClass Dxl_right(Serial1);
 DynamixelClass Dxl_left(Serial3);
 
+bool armTask = false;
 int MaxPos;
 int MinPos;
 int MaxPos_right;
@@ -91,6 +94,7 @@ void setup()
   nh.advertise(isGripR);
   nh.advertise(isGripL);
   nh.advertise(isStop);
+  nh.subscribe(armTask_sub);
   
   nh.advertiseService(vac_srv_right);
   nh.advertiseService(vac_srv_left);
@@ -147,6 +151,11 @@ void setup()
     Serial.print(F(": "));
 #endif
   }
+}
+
+void armTaskCallback(const std_msgs::Bool& msg)
+{
+  armTask = msg.data;
 }
 
 DynamixelClass wDxl(bool isRight)
@@ -369,16 +378,20 @@ void pub_topic2(byte *buffer, const char out_str[], byte arg0, byte arg1, byte a
 
 void loop()
 { 
-  is_grip_msg.data = digitalRead(is_grip_right);
-  isGripR.publish(&is_grip_msg);
+  if(armTask)
+  {
+    is_grip_msg.data = digitalRead(is_grip_right);
+    isGripR.publish(&is_grip_msg);
 
-  is_grip_msg.data = digitalRead(is_grip_left);
-  isGripL.publish(&is_grip_msg);
-
+    is_grip_msg.data = digitalRead(is_grip_left);
+    isGripL.publish(&is_grip_msg);
+  }
+  else
+  {
+    RFID();
+  }
   is_stop_msg.data = !digitalRead(is_stop);
   isStop.publish(&is_stop_msg);
-
-   RFID();
 
   nh.spinOnce();
 }

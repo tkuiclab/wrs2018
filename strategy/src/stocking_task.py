@@ -12,8 +12,8 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 0
-SPEED     = 30
+PICKORDER = 4
+SPEED     = 100
 LUNCHBOX_H = 0.05
 
 idle            = 0
@@ -36,30 +36,31 @@ safePose3       = 16
 riceballEuler   = 17
 rearSafetyPos2  = 18
 leavePlacePos   = 19
+grasping        = 20
 
 # The lesser one
-lunchQuan = 1              
-drinkQuan = 1
-riceQuan  = 1
+lunchQuan = 2              
+drinkQuan = 2
+riceQuan  = 2
 
 objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
               'riceball', 'riceball', 'riceball', 'riceball']
 
-lunchboxPos = [[-0.424,  0.16, -0.695],
-               [-0.424,  0.16, -0.695],
-               [-0.424,  0.16, -0.695],
-               [-0.424,  0.16, -0.695]]
+lunchboxPos = [[-0.42,  0.16, -0.67],
+               [-0.42,  0.16, -0.67],
+               [-0.42,  0.16, -0.67],
+               [-0.42,  0.16, -0.67]]
 
-drinkPos =    [[-0.183, 0.11, -0.64],
-               [-0.288, 0.11, -0.64],                   
-               [-0.183, 0.21, -0.64],                              
-               [-0.288, 0.21, -0.64]]
+drinkPos =    [[-0.183, 0.11, -0.6],
+               [-0.288, 0.11, -0.6],                   
+               [-0.183, 0.21, -0.6],                              
+               [-0.288, 0.21, -0.6]]
 
-riceballPos = [[-0.172, -0.2, -0.72],
-               [-0.267, -0.2, -0.72],
-               [-0.172, -0.1, -0.72],                             
-               [-0.267, -0.1, -0.72]]
+riceballPos = [[-0.172, -0.2, -0.68],
+               [-0.267, -0.2, -0.68],
+               [-0.172, -0.1, -0.68],                             
+               [-0.267, -0.1, -0.68]]
 
 lunchboxEu = [150, 0, 0]
 
@@ -115,12 +116,12 @@ def setQuantity():
 class stockingTask:
     def __init__(self, _name = '/robotis'):
         """Initial object."""
-        en_sim = False
+        self.en_sim = False
         if len(sys.argv) >= 2:
             print(type(sys.argv[1]))
             if sys.argv[1] == 'True':
-                rospy.set_param('en_sim', sys.argv[1])
-                en_sim = rospy.get_param('en_sim')
+                rospy.set_param('self.en_sim', sys.argv[1])
+                self.en_sim = rospy.get_param('self.en_sim')
         self.name = _name
         self.state = initPose
         self.nextState = idle
@@ -135,7 +136,7 @@ class stockingTask:
             self.is_right = 1
         if self.name == 'left':
             self.is_right = -1
-        if en_sim:
+        if self.en_sim:
             self.suction = SuctionTask(self.name + '_gazebo')
         else:
             self.suction = SuctionTask(self.name)
@@ -159,7 +160,7 @@ class stockingTask:
     #     print lunchboxPos
 
     def getRearSafetyPos(self):
-        self.pos   = (0, -0.5*self.is_right, -0.5)
+        self.pos   = [0, -0.5*self.is_right, -0.5]
         self.euler = [-90*self.is_right, -20, 30*self.is_right]
         self.phi   = -60*self.is_right
 
@@ -230,6 +231,7 @@ class stockingTask:
         if self.arm.is_stop:                                       # must be include in your strategy
             self.finish = True                                     # must be include in your strategy
             print "!!! Robot is stop !!!"                          # must be include in your strategy
+            self.suction.gripper_vaccum_off()                      # must be include in your strategy
             return                                                 # must be include in your strategy
 
         if self.state == idle:
@@ -256,7 +258,7 @@ class stockingTask:
         elif self.state == leavePlacePos:
             self.state = busy
             self.nextState = leaveShelf
-            self.arm.noa_move_suction('line', suction_angle=self.sucAngle, n=0, o=0, a=-0.02)
+            self.arm.noa_move_suction('line', suction_angle=self.sucAngle, n=0, o=0, a=-0.04)
 
         elif self.state == safePose3:
             self.state = busy
@@ -278,7 +280,8 @@ class stockingTask:
             self.getRearSafetyPos()
             self.euler[0] = -90*self.is_right
             if 'drink' in objectName[self.pickList]:
-                self.euler[1] = -35
+                self.pos[2] = -0.4
+                self.euler[1] = -25
             self.arm.set_speed(SPEED)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
@@ -352,8 +355,9 @@ class stockingTask:
             self.getObjectPos()
             self.pos[2] = -0.47
             if 'drink' in objectName[self.pickList]:
-                self.pos[0] -= 0.02 
-                self.euler[1] = -40
+                self.pos[0] -= 0.02
+                self.pos[2] = -0.42
+                self.euler[1] = -30
                 self.euler[2] = 40*self.is_right
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
@@ -373,7 +377,6 @@ class stockingTask:
                 self.euler[0] = 0
             self.pos[0] = 0.36
             self.pos[2] += 0.1
-            
             self.arm.set_speed(SPEED)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
             self.pickList += 1
@@ -394,23 +397,27 @@ class stockingTask:
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == pickObject:
-            self.state = busy
-            if self.suction.is_grip:
-                self.nextState = leaveBin
-                print('pickObject 1')
-            else:
-                self.nextState = pickObject
-                # self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.002)
-                print('pickObject 2')
-
-            print('pickObject 3')
+            self.state = grasping
+            self.arm.set_speed(SPEED/2)
+            self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.05)
+            rospy.sleep(.1)
             self.suction.gripper_vaccum_on()
             
         elif self.state == placeObject:
             self.state = busy
             self.nextState = leavePlacePos
+            if 'lunchbox' in objectName[self.pickList]:
+                self.nextState = leaveShelf
             rospy.sleep(.5)
             self.suction.gripper_vaccum_off()
+
+        elif self.state == grasping:
+            if self.suction.is_grip or self.en_sim:
+                self.arm.clear_cmd()
+                rospy.sleep(.1)
+                self.state = leaveBin
+            elif not self.arm.is_busy:
+                self.state = leaveBin
 
         elif self.state == busy:
             if self.arm.is_busy:
