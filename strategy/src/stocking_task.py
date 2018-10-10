@@ -12,8 +12,8 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 0
-SPEED     = 20
+PICKORDER = 4
+SPEED     = 25
 LUNCHBOX_H = 0.05
 
 idle            = 0
@@ -38,7 +38,7 @@ rearSafetyPos2  = 18
 
 # The lesser one
 lunchQuan = 2              
-drinkQuan = 1
+drinkQuan = 2
 riceQuan  = 2
 
 objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
@@ -78,8 +78,8 @@ bottomLeft  = [0.5,  0.2, -1.03]
 
 topRightEu    = [-170, 35, 25]
 topLeftEu     = [-127, 55, 45]
-middleRightEu = [0, 90,  -30]
-middleLeftEu  = [0, 90,  -45]
+middleRightEu = [0, 90,  -45]
+middleLeftEu  = [0, 90,  -30]
 bottomRightEu = [0, 90,  30]
 bottomLeftEu  = [0, 90, -30]
 
@@ -114,7 +114,8 @@ class stockingTask:
         """Initial object."""
         en_sim = False
         if len(sys.argv) >= 2:
-            if type(sys.argv[1]) is bool:
+            print(type(sys.argv[1]))
+            if sys.argv[1] == 'True':
                 rospy.set_param('en_sim', sys.argv[1])
                 en_sim = rospy.get_param('en_sim')
         self.name = _name
