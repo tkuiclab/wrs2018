@@ -61,17 +61,23 @@ class CDualArmCommand(object):
 
         self.DualArmIsBusyFlag = False
 
+    def InitialPos(self):
+        pass
+
     def TakeObj(self):
+        # self.DualArmIsBusyFlag = True
         pass
 
     def GiveObj_Type1(self):
+        # self.DualArmIsBusyFlag = True
         pass
 
     def GiveObj_Type2(self):
+        # self.DualArmIsBusyFlag = True
         pass
 
     def IDEL(self):
-        self.DualArmIsBusyFlag = False
+        # self.DualArmIsBusyFlag = False
         # Do nothing
     
     def DualArmIsBusy(self):
@@ -88,10 +94,27 @@ class CMobileCommand(object):
 
         self.MobileIsBusyFlag = False
         self.SendToSrvSucessFlag = False
+#         右手  X       Y       Z      ROLL     PITCH     YAW      PHI    
+#  step1.點位： 0.3  -0.3006   -0.46    5.029    82.029    4.036     60      
+
+#  step2.      0.3  -0.3006   -0.56    5.029    82.029    4.036     60    
+
+#  step3.     0.55  -0.3006   -0.56    5.029    82.029    4.036     60
+
+#  step4.     0.55  -0.3006   -0.46    5.029    82.029    4.036     60
+
+#    左手
+# step1.點位： 0.3   0.3506   -0.46    5.029    82.029    4.036     -60
+ 
+# step2.      0.3   0.3506   -0.56    5.029    82.029    4.036     -60         
+ 
+# step3.     0.55   0.3506   -0.56    5.029    82.029    4.036     -60
+
+# step4.     0.55   0.3506   -0.46    5.029    82.029    4.036     -60
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
-        #self.MobileIsBusyFlag = True
+        self.MobileIsBusyFlag = True
         srvData = strategy_start()
         srvData.data = True
         #self.pub_start.publish(start)
@@ -100,21 +123,21 @@ class CMobileCommand(object):
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
-        #self.MobileIsBusyFlag = True
+        self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 11
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_ORDER(self):
         # Turn to abs +90 deg
-        #self.MobileIsBusyFlag = True
+        self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data = 12
         self.pub_behavior.publish(behavior_type)
 
     def Mobile_NEXT(self):
         # Move to point 2 (0 deg)
-        #self.MobileIsBusyFlag = True
+        self.MobileIsBusyFlag = True
         behavior_type = Int32()
         behavior_type.data =  3
         self.pub_behavior.publish(behavior_type)
@@ -219,24 +242,28 @@ def handle_state(req):
         ResponseInfo = e.message
 
     else:
-        ResponseFlag = True
         if(MotionSerialKey == SerialKey_RobotIdel):
+            ResponseFlag = False
             # ResponseInfo = "Mission: Robot idel finish."
             ResponseInfo = "Mission: Robot idel finish."
         elif(MotionSerialKey == SerialKey_LeadCustom):
+            ResponseFlag = True
             # ResponseInfo = "Mission: Lead customer finish."
             ResponseInfo = "We have arrived at Sprite's shelves, do you need anything else?"
         elif(MotionSerialKey == SerialKey_TakeObjToCustom_Type1):
+            ResponseFlag = True
             # ResponseInfo = "Mission: Take object to customer type1 finish."
             ResponseInfo = "Here you are, do you need anything else?"
         elif(MotionSerialKey == SerialKey_TakeObjToCustom_Type2):
+            ResponseFlag = False
             # ResponseInfo = "Mission: Take object to customer type2 finish."
             ResponseInfo = "Mission: Take object to customer type2 finish."
 
     ### Response the result of Strategy
     res = AssistantStateResponse()
-    res.success = ResponseFlag    # Bool
-    res.info    = ResponseInfo    # String
+    res.success = ResponseFlag    # Bool  : An flag for Watson speaking or not.
+    res.info    = ResponseInfo    # String: It's Watson contents of speaking when flag is true.
+                                  # String: It's Watson mission commit when flag is false.
     return res
 
 def assistant_server():
