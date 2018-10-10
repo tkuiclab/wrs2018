@@ -50,6 +50,8 @@ public:
   double joint_acceleration_;
   double slide_position_;  //new
   double phi_; //new
+  double mov_speed_;  //new
+  bool singularity_;
 
   Eigen::MatrixXd position_;
   Eigen::MatrixXd orientation_;

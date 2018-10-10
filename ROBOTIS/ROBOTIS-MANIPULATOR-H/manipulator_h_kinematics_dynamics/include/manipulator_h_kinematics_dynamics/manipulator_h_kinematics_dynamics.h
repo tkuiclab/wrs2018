@@ -74,15 +74,16 @@ public:
                             Eigen::MatrixXd tar_orientation, Eigen::MatrixXd curr_orientation);
 
   bool inverseKinematics(int to, Eigen::MatrixXd tar_position, Eigen::MatrixXd tar_orientation,
-                         double tar_phi, double tar_slide_pos, int max_iter, double ik_err);
+                         double tar_phi, double tar_slide_pos, bool is_p2p);
   bool inverseKinematics(int from, int to, Eigen::MatrixXd tar_position, Eigen::MatrixXd tar_orientation,
                          int max_iter, double ik_err);
   Eigen::MatrixXd Trans( double &Theta, Eigen::VectorXd &DH );
   Eigen::Vector3d forwardKinematics_7(int joint_ID, Eigen::VectorXd angle);
-  bool InverseKinematics_7( Eigen::VectorXd position, Eigen::Matrix3d rotation, double phi, double slide_position, Eigen::VectorXd Old_JointAngle );
+  bool InverseKinematics_7( Eigen::VectorXd position, Eigen::Matrix3d rotation, double phi, 
+                            double slide_position, Eigen::VectorXd Old_JointAngle, bool is_p2p);
   bool slideInverseKinematics(Eigen::Vector3d goal_position, Eigen::Matrix3d rotation, 
                                                             double slide_pos, double& goal_slide_pos);
-  Eigen::MatrixXd rotation2rpy( Eigen::MatrixXd rotation );
+  static Eigen::MatrixXd rotation2rpy( Eigen::MatrixXd rotation );
   void load_LinkParam();
   void getPhiAngle();
 };

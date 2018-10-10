@@ -8,7 +8,7 @@
   <!-- Constants for robot dimensions -->
 
 
-  <xacro:macro name="single_arm" params="side parent child *origin">
+  <xacro:macro name="single_arm" params="side parent child toolrot *origin">
   
 	  <link
 	    name="${side}_Base">
@@ -113,7 +113,7 @@
 	      lower="-3.14"
 	      upper="3.14"
 	      effort="75"
-	      velocity="5" />
+	      velocity="65" />
 	  </joint>
 	  <link
 	    name="${side}_Link_2">
@@ -171,7 +171,7 @@
 	      lower="-3.14"
 	      upper="3.14"
 	      effort="75"
-	      velocity="5" />
+	      velocity="65" />
 	  </joint>
 	  <link
 	    name="${side}_Link_3">
@@ -229,7 +229,7 @@
 	      lower="-3.14"
 	      upper="3.14"
 	      effort="65"
-	      velocity="5" />
+	      velocity="65" />
 	  </joint>
 	  <link
 	    name="${side}_Link_4">
@@ -287,7 +287,7 @@
 	      lower="-3.14"
 	      upper="3.14"
 	      effort="65"
-	      velocity="50" />
+	      velocity="65" />
 	  </joint>
 	  <link
 	    name="${side}_Link_5">
@@ -345,7 +345,7 @@
 	      lower="-3.14"
 	      upper="3.14"
 	      effort="65"
-	      velocity="50" />
+	      velocity="65" />
 	  </joint>
 	  <link
 	    name="${side}_Link_6">
@@ -403,7 +403,7 @@
 	      lower="-3.14"
 	      upper="3.14"
 	      effort="65"
-	      velocity="5" />
+	      velocity="65" />
 	  </joint>
 	  <!-- <link
 	    name="${side}_Link_7">
@@ -445,24 +445,24 @@
 	      </geometry>
 	    </collision>
 	  </link> -->
-	  <joint
-	    name="${side}_joint_7"
-	    type="revolute">
-	    <origin
-	      xyz="0 -0.1345 0"
-	      rpy="1.5708 4.5659E-16 1.2025E-31" />
-	    <parent
-	      link="${side}_Link_6" />
-	    <child
-	      link="${child}" />
-	    <axis 
-	      xyz="0 0 1" />
-	    <limit
-	      lower="-3.14"
-	      upper="3.14"
-	      effort="22"
-	      velocity="5" />
-	  </joint>
+		<joint
+			name="${side}_joint_7"
+			type="revolute">
+			<origin
+				xyz="0 -0.1345 0"
+				rpy="1.5708 ${toolrot} 0" />
+			<parent
+				link="${side}_Link_6" />
+			<child
+				link="${child}" />
+			<axis 
+				xyz="0 0 1" />
+			<limit
+				lower="-3.14"
+				upper="3.14"
+				effort="22"
+				velocity="65" />
+		</joint>
 		
           <!--
 	  <link

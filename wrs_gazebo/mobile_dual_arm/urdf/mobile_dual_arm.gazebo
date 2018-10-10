@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <robot>
-
+  <physics type='ode'>
+    <max_step_size>0.001</max_step_size>
+    <real_time_factor>0.1</real_time_factor>
+    <real_time_update_rate>1000</real_time_update_rate>
+    <gravity>0 0 -9.8</gravity>
+  </physics>
   <!-- ros_control plugin -->
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
@@ -10,7 +15,7 @@
   </gazebo>
 
   <gazebo>
-    <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
+    <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum.so">
       <robotNamespace>/robot/left_gazebo/vacuum_gripper1</robotNamespace>
       <bodyName>l_end_Link1</bodyName>
       <topicName>grasping</topicName>

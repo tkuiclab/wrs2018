@@ -6,7 +6,7 @@ import os
 import sys
 import rospy
 from arm_control import ArmTask, SuctionTask
-
+from std_msgs.msg import String, Float64, Bool, Int32
 
 idle            = 0
 busy            = 1
@@ -23,6 +23,32 @@ move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
 
+
+def start_callback(msg):
+    global is_start
+    if not is_start:
+        is_start = msg.data
+
+def next_pub(msg):
+    pub = rospy.Publisher(
+        'scan_black/strategy_behavior',
+        Int32,
+        # latch=True,
+        queue_size=1
+    )
+    if msg != 0:
+        pub.publish(msg)
+
+def start_sub():
+    global is_start
+    rospy.Subscriber(
+        'scan_black/dualarm_start',
+        Bool,
+        start_callback,
+        queue_size=1
+    )
+    
+    
 
 class exampleTask:
     def __init__(self, _name = '/robotis'):
@@ -66,10 +92,10 @@ class exampleTask:
             self.pos, self.euler, self.phi = (0.1, 0.45, -0.45), (0, 20, 0), -45
 
     def getObjectPos(self):
-        lunchboxPos = [[-0.5, -0.15, -0.6],
-                       [-0.5, -0.15, -0.65]]
-        drinkPos = [[-0.4, 0.15, -0.6],
-                    [-0.5, 0.15, -0.6]]
+        lunchboxPos = [[-0.4, -0.15, -0.63],
+                       [-0.4, -0.15, -0.68]]
+        drinkPos = [[-0.4, 0.15, -0.63],
+                    [-0.4, 0.15, -0.68]]
         if self.name == 'right':
             self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
         elif self.name == 'left':
@@ -187,10 +213,25 @@ if __name__ == '__main__':
     right = exampleTask('right')      #Set up right arm controller
     left  = exampleTask('left')       #Set up left arm controller
     rospy.sleep(0.3)
-
+    is_start = False
+    is_stop = False
+    print is_start
+    start_sub()
+    next_pub(0)
+    print 'aaaa'
     rate = rospy.Rate(30)  # 30hz
-    while not rospy.is_shutdown() and (not right.finish or not left.finish):
-        left.proces()
-        right.proces()
+    while not rospy.is_shutdown()  and not is_stop:
+        global is_start
+        if is_start:
+            while not rospy.is_shutdown() and (not right.finish or not left.finish):
+                left.proces()
+                right.proces()
+                rate.sleep()
+            is_start = False
+            is_stop = True
+            next_pub(3)
+            rospy.sleep(3)
         rate.sleep()
-
+        # rospy.spin()
+    
+   
