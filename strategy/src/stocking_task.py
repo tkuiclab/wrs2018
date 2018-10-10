@@ -13,7 +13,7 @@ from arm_control import ArmTask, SuctionTask
 
 
 PICKORDER = 4
-SPEED     = 25
+SPEED     = 100
 LUNCHBOX_H = 0.05
 
 idle            = 0
@@ -35,6 +35,7 @@ safePose2       = 15
 safePose3       = 16 
 riceballEuler   = 17
 rearSafetyPos2  = 18
+leavePlacePos   = 19
 
 # The lesser one
 lunchQuan = 2              
@@ -64,8 +65,8 @@ lunchboxEu = [150, 0, 0]
 
 drinkEu =    [0, 0, 0]
             
-riceballXXEu = [80, 0, 0]
-riceballEu   = [120, 0 0]
+riceballXXEu = [75, 0, 0]
+riceballEu   = [40, 0, 0]
 
                
 objectPos = [lunchboxPos, drinkPos, riceballPos]
@@ -79,7 +80,7 @@ bottomRight = [0.5, -0.2, -1.03]
 bottomLeft  = [0.5,  0.2, -1.03]
 
 topRightEu    = [-170, 35, 25]
-topLeftEu     = [-127, 55, 45]
+topLeftEu     = [-140, 55, 45]
 middleRightEu = [0, 90,  -45]
 middleLeftEu  = [0, 90,  -30]
 bottomRightEu = [0, 90,  30]
@@ -93,7 +94,7 @@ bottomRightPhi = 25
 bottomLeftPhi  = 25
 
 topRightSuc   = -60.2 
-topLeftSuc    = -51.6
+topLeftSuc    = -55
 
 
 def setQuantity():
@@ -177,7 +178,7 @@ class stockingTask:
         self.pos   = objectPos[self.pickList/4][self.pickList%4][:]
         self.euler = objectEu[self.pickList/4][:]
         if objectName[self.pickList] == 'riceballXX':
-            self.euler = riceballXXEu
+            self.euler = riceballXXEu[:]
         self.euler[0] *= self.is_right
         self.euler[2] *= self.is_right
         self.phi   = -30*self.is_right
@@ -252,11 +253,10 @@ class stockingTask:
             self.arm.set_speed(SPEED)
             self.arm.ikMove('p2p', self.pos, self.euler, self.phi)
 
-        elif self.state == safePose2:
+        elif self.state == leavePlacePos:
             self.state = busy
-            self.nextState = safePose3
-            self.arm.set_speed(SPEED)
-            self.arm.relative_move_pose('p2p', [0, 0.1, -0.1])
+            self.nextState = leaveShelf
+            self.arm.noa_move_suction('line', suction_angle=self.sucAngle, n=0, o=0, a=-0.02)
 
         elif self.state == safePose3:
             self.state = busy
@@ -406,7 +406,7 @@ class stockingTask:
             
         elif self.state == placeObject:
             self.state = busy
-            self.nextState = leaveShelf
+            self.nextState = leavePlacePos
             self.suction.gripper_vaccum_off()
 
         elif self.state == busy:
