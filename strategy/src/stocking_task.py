@@ -12,8 +12,8 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 4
-SPEED     = 100
+PICKORDER = 0
+SPEED     = 30
 LUNCHBOX_H = 0.05
 
 idle            = 0
@@ -38,9 +38,9 @@ rearSafetyPos2  = 18
 leavePlacePos   = 19
 
 # The lesser one
-lunchQuan = 2              
-drinkQuan = 2
-riceQuan  = 2
+lunchQuan = 1              
+drinkQuan = 1
+riceQuan  = 1
 
 objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
@@ -56,17 +56,17 @@ drinkPos =    [[-0.183, 0.11, -0.64],
                [-0.183, 0.21, -0.64],                              
                [-0.288, 0.21, -0.64]]
 
-riceballPos = [[-0.172, -0.2, -0.715],
-               [-0.267, -0.2, -0.715],
-               [-0.172, -0.1, -0.715],                             
-               [-0.267, -0.1, -0.715]]
+riceballPos = [[-0.172, -0.2, -0.72],
+               [-0.267, -0.2, -0.72],
+               [-0.172, -0.1, -0.72],                             
+               [-0.267, -0.1, -0.72]]
 
 lunchboxEu = [150, 0, 0]
 
 drinkEu =    [0, 0, 0]
             
-riceballXXEu = [75, 0, 0]
-riceballEu   = [40, 0, 0]
+riceballXXEu = [45, 0, 0]
+riceballEu   = [10, 0, 0]
 
                
 objectPos = [lunchboxPos, drinkPos, riceballPos]
@@ -322,8 +322,8 @@ class stockingTask:
             
             self.arm.set_speed(SPEED)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
-            if 'riceball' not in objectName[self.pickList]:
-                self.suction.gripper_suction_deg(-90)
+            self.suction.gripper_calibration()
+
 
         elif self.state == riceballEuler:
             self.state = busy
@@ -342,6 +342,8 @@ class stockingTask:
             self.pos[2] += 0.1
             self.arm.set_speed(SPEED)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            if 'riceball' not in objectName[self.pickList]:
+                self.suction.gripper_suction_deg(-90)
 
         elif self.state == leaveBin:
             self.state = busy
@@ -407,6 +409,7 @@ class stockingTask:
         elif self.state == placeObject:
             self.state = busy
             self.nextState = leavePlacePos
+            rospy.sleep(.5)
             self.suction.gripper_vaccum_off()
 
         elif self.state == busy:

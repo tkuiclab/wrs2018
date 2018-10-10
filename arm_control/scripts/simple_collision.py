@@ -20,7 +20,7 @@ rate = rospy.Rate(10)
 while not rospy.is_shutdown():
     right_arm_pos = right_arm.get_fb().group_pose.position
     left_arm_pos  = left_arm.get_fb().group_pose.position
-    if right_arm_pos.x > 0 and right_arm_pos.y > -0.15 and -0.2 > right_arm_pos.z > -0.5:
+    if right_arm_pos.x > 0 and right_arm_pos.y > -0.15 and -0.2 > right_arm_pos.z > -0.5 or right_arm.wait:
         if not areaAbove:
             if right_arm.wait:
                 right_arm.freeze(False)
@@ -36,7 +36,7 @@ while not rospy.is_shutdown():
         whoInsideAbove = ''
         areaAbove = False
 
-    if left_arm_pos.x > 0 and left_arm_pos.y < 0.15 and -0.2 > left_arm_pos.z > -0.5:
+    if left_arm_pos.x > 0 and left_arm_pos.y < 0.15 and -0.2 > left_arm_pos.z > -0.5 or left_arm.wait:
         if not areaAbove:
             if left_arm.wait:
                 left_arm.freeze(False)
