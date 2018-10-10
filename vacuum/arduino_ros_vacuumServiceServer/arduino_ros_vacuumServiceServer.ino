@@ -279,7 +279,7 @@ void callback(const VacuumCmd::Request& req, VacuumCmd::Response& res, bool isRi
     String cmd(req.cmd);
     double angle = cmd.toDouble();
 
-    int pos = map(angle, 0.0, -90.0, MaxPos, MinPos);
+    int pos = map(angle, -90.0, 0.0, MaxPos, MinPos);
     int count = 0;
     while (wDxl(isRight).moveSpeed(ID, pos, DOWNSPEED) != 0)
     {

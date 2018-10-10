@@ -50,10 +50,10 @@ lunchboxPos = [[-0.424,  0.16, -0.695],
                [-0.424,  0.16, -0.695],
                [-0.424,  0.16, -0.695]]
 
-drinkPos =    [[-0.183, 0.11, -0.644],
-               [-0.288, 0.11, -0.644],                   
-               [-0.183, 0.21, -0.644],                              
-               [-0.288, 0.21, -0.644]]
+drinkPos =    [[-0.183, 0.11, -0.64],
+               [-0.288, 0.11, -0.64],                   
+               [-0.183, 0.21, -0.64],                              
+               [-0.288, 0.21, -0.64]]
 
 riceballPos = [[-0.172, -0.2, -0.715],
                [-0.267, -0.2, -0.715],
@@ -64,15 +64,17 @@ lunchboxEu = [150, 0, 0]
 
 drinkEu =    [0, 0, 0]
             
-riceballEu = [80, 0, 0]
+riceballXXEu = [80, 0, 0]
+riceballEu   = [120, 0 0]
+
                
 objectPos = [lunchboxPos, drinkPos, riceballPos]
 objectEu  = [lunchboxEu,  drinkEu,  riceballEu]
 
-topRight    = [0.34, -0.1, -0.2]
-topLeft     = [0.34,  0.1, -0.2]
-middleRight = [0.42, -0.1, -0.52]
-middleLeft  = [0.42,  0.1, -0.52]
+topRight    = [0.34, -0.1, -0.21]
+topLeft     = [0.34,  0.1, -0.21]
+middleRight = [0.42, -0.1, -0.555]
+middleLeft  = [0.42,  0.1, -0.555]
 bottomRight = [0.5, -0.2, -1.03]
 bottomLeft  = [0.5,  0.2, -1.03]
 
@@ -174,6 +176,8 @@ class stockingTask:
                 return
         self.pos   = objectPos[self.pickList/4][self.pickList%4][:]
         self.euler = objectEu[self.pickList/4][:]
+        if objectName[self.pickList] == 'riceballXX':
+            self.euler = riceballXXEu
         self.euler[0] *= self.is_right
         self.euler[2] *= self.is_right
         self.phi   = -30*self.is_right
