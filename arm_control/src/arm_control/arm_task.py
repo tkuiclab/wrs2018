@@ -59,6 +59,12 @@ class ArmTask:
             # latch=True,
             queue_size=1
         )
+        self.__clear_pub = rospy.Publisher(
+            str(self.name) + '/clear_cmd',
+            Bool,
+            # latch=True,
+            queue_size=1
+        )
         self.__joint_pub = rospy.Publisher(
             str(self.name) + '/joint_pose_msg',
             JointPose,
@@ -351,6 +357,9 @@ class ArmTask:
 
     def freeze(self,  enable):
         self.__wait_pub.publish(enable)
+
+    def clear_cmd(self):
+        self.__clear_pub.publish(True)
 
 # if __name__ == '__main__':
 #     rospy.init_node('test_arm_task')
