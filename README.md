@@ -36,3 +36,8 @@ $ npm install
 ```bash
 $ node index.js
 ```
+### Rotate Touch Screen
+```bash
+$ cd <timda_ws>/src/nodejs_pkg/web/script
+$ ./rotate_desktop.sh [normal|inverted|right|left] [revert_seconds]
+```
