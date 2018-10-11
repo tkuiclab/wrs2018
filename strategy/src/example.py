@@ -23,6 +23,9 @@ move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
 
+move2point      = 14
+catchobj        = 15
+back2point      = 16
 
 def start_callback(msg):
     global is_start
@@ -82,9 +85,11 @@ class exampleTask:
     def getRearSafetyPos(self):
         if self.name == 'right':
             self.pos, self.euler, self.phi = (-0.1, -0.45, -0.45), (90, 0, 0), -30
+            #self.pos, self.euler, self.phi = (0.3, -0.3006, -0.46), (5.029, 82.029, 4.036), 60
             print "a1"
         elif self.name == 'left':
             self.pos, self.euler, self.phi = (-0.1, 0.45, -0.45), (-90, 0, 0),  30
+            #self.pos, self.euler, self.phi = (0.3, 0.3506, -0.46), (5.029, 82.029, 4.036), -60
             print "b1"
 
     def getFrontSafetyPos(self):
@@ -118,7 +123,32 @@ class exampleTask:
         elif self.name == 'left':
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (0, 90, 0), -45
             print "b4"
+    
+    #new test
+    def getPlace(self):
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = (0.3, -0.3006, -0.56), (5.029, 82.029, 4.036), 60
+            print "newA"
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = (0.3, 0.3506, -0.56), (5.029, 82.029, 4.036), -60
+            print "newB"
 
+    def catchobj(self):
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = (0.55, -0.3006, -0.56), (5.029, 82.029, 4.036), 60
+            print "catchA"
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = (0.55, 0.3506, -0.56), (5.029, 82.029, 4.036), -60
+            print "catchB" 
+
+    def backPlace(self):
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = (0.3, -0.3006, -0.46), (5.029, 82.029, 4.036), 60
+            print "newA"
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = (0.3, 0.3506, -0.46), (5.029, 82.029, 4.036), -60
+            print "newB"               
+    #end
 
     def proces(self):
         if self.arm.is_stop:                                       # must be include in your strategy
@@ -138,9 +168,10 @@ class exampleTask:
             self.nextState = idle
             self.arm.set_speed(30)
             self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
+            #self.arm.jointMove(0, (0, 0, 0, 0, 0, 0, 0))
             self.suction.gripper_suction_deg(0)
             print "1"
-
+        
         elif self.state == frontSafetyPos:
             self.state = busy
             self.nextState = move2Shelf
@@ -153,9 +184,33 @@ class exampleTask:
         elif self.state == rearSafetyPos:
             self.state = busy
             self.nextState = move2Bin
+            #self.nextState = move2point
             self.getRearSafetyPos()
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
             print "3"
+
+        #new test
+        elif self.state == move2point:
+            self.state = busy
+            self.nextState = catchobj
+            self.getPlace()
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            print "1111111"
+
+        elif self.state == catchobj:   
+            self.state = busy
+            self.nextState = back2point
+            self.catchobj()
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            print "2222222" 
+
+        elif self.state == back2point:
+            self.state = busy
+            self.nextState = initPose
+            self.backPlace()
+            self.arm.ikMove('line', self.pos, self.euler, self.phi)
+            print "3333333"    
+        #end
 
         elif self.state == move2Bin:
             self.state = busy
@@ -213,13 +268,13 @@ class exampleTask:
         elif self.state == pickObject:
             self.state = busy
             self.nextState = leaveBin
-            self.suction.gripper_vaccum_on()
+            #self.suction.gripper_vaccum_on()
             print "11"
             
         elif self.state == placeObject:
             self.state = busy
             self.nextState = leaveShelf
-            self.suction.gripper_vaccum_off()
+            #self.suction.gripper_vaccum_off()
             print "12"
 
         elif self.state == busy:
