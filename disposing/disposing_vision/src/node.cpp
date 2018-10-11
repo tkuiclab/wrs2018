@@ -12,23 +12,23 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "tf/message_filter.h"
 
-ros::Publisher pub_pose,pub_procced;
+ros::Publisher pub_normal,pub_pose,pub_procced;
 Pcl_tutorial Pcl_function;
 float x_coordinate_min,y_coordinate_min,z_coordinate_min;
 float x_coordinate_Max,y_coordinate_Max,z_coordinate_Max;
-// disposing_vision::coordinate_normal object_normal;
-geometry_msgs::PoseStamped object_normal;
+disposing_vision::coordinate_normal object_normal;
+geometry_msgs::PoseStamped object_pose;
 
-geometry_msgs::PoseStamped average_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud
+disposing_vision::coordinate_normal average_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud
                                                   ,pcl::PointCloud<pcl::PointNormal>::Ptr input_normal){
 
-  geometry_msgs::PoseStamped average_normal;
-  average_normal.pose.position.x=0;
-  average_normal.pose.position.y=0;
-  average_normal.pose.position.z=0;
-  average_normal.pose.orientation.x = 0.0;
-  average_normal.pose.orientation.y = 0.0;
-  average_normal.pose.orientation.z = 0.0;
+  disposing_vision::coordinate_normal average_normal;
+  average_normal.x=0;
+  average_normal.y=0;
+  average_normal.z=0;
+  average_normal.normal_x = 0.0;
+  average_normal.normal_y = 0.0;
+  average_normal.normal_z = 0.0;
   int count = 0;
 
   for (size_t currentPoint = 0; currentPoint < input_normal->points.size(); currentPoint++)
@@ -37,19 +37,19 @@ geometry_msgs::PoseStamped average_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr
          isnan(input_normal->points[currentPoint].normal[1])||
          isnan(input_normal->points[currentPoint].normal[2])))
     {
-      average_normal.pose.position.x = average_normal.pose.position.x + input_cloud->points[currentPoint].x;
-      average_normal.pose.position.y = average_normal.pose.position.y + input_cloud->points[currentPoint].y;
-      average_normal.pose.position.z = average_normal.pose.position.z + input_cloud->points[currentPoint].z;
-      average_normal.pose.orientation.x = average_normal.pose.orientation.x + input_normal->points[currentPoint].normal[0];
-      average_normal.pose.orientation.y = average_normal.pose.orientation.y + input_normal->points[currentPoint].normal[1];
-      average_normal.pose.orientation.z = average_normal.pose.orientation.z + input_normal->points[currentPoint].normal[2];
+      average_normal.x = average_normal.x + input_cloud->points[currentPoint].x;
+      average_normal.y = average_normal.y + input_cloud->points[currentPoint].y;
+      average_normal.z = average_normal.z + input_cloud->points[currentPoint].z;
+      average_normal.normal_x = average_normal.normal_x + input_normal->points[currentPoint].normal[0];
+      average_normal.normal_y = average_normal.normal_y + input_normal->points[currentPoint].normal[1];
+      average_normal.normal_z = average_normal.normal_z + input_normal->points[currentPoint].normal[2];
 		  
       count++;
       // std::cout << "Point:" << std::endl;
       // cout << currentPoint << std::endl;
-		  // std::cout << "\town:" << average_normal.orientation.x << " "
-		  		                  // << average_normal.orientation.y << " "
-		  		                  // << average_normal.orientation.z << std::endl;
+		  // std::cout << "\town:" << average_normal.x << " "
+		  		                  // << average_normal.y << " "
+		  		                  // << average_normal.z << std::endl;
 
 		  // std::cout << "\tNormal:" << input_cloud->points[currentPoint].x << " "
 		  // 		                      << input_cloud->points[currentPoint].y << " "
@@ -58,12 +58,12 @@ geometry_msgs::PoseStamped average_normal(pcl::PointCloud<pcl::PointXYZRGB>::Ptr
   }
   // printf("================\ncloud_size = %d \n",count);
 
-  average_normal.pose.position.x = average_normal.pose.position.x/count;
-  average_normal.pose.position.y = average_normal.pose.position.y/count;
-  average_normal.pose.position.z = average_normal.pose.position.z/count;
-  average_normal.pose.orientation.x = average_normal.pose.orientation.x/count;
-  average_normal.pose.orientation.y = average_normal.pose.orientation.y/count;
-  average_normal.pose.orientation.z = average_normal.pose.orientation.z/count;
+  average_normal.x = average_normal.x/count;
+  average_normal.y = average_normal.y/count;
+  average_normal.z = average_normal.z/count;
+  average_normal.normal_x = average_normal.normal_x/count;
+  average_normal.normal_y = average_normal.normal_y/count;
+  average_normal.normal_z = average_normal.normal_z/count;
   
   return average_normal;
 }
@@ -93,7 +93,7 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
 
   object_normal = average_normal(object_cloud,cloud_normal);
 
-
+  pub_normal.publish(object_normal);
   //<<<Save file for debug>>>
   // pcl::PCDWriter writer;
   // writer.write ("object.pcd", *object_cloud, false);
@@ -104,15 +104,15 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
   pcl::toROSMsg(*object_cloud, ros_object_cloud);
   pub_procced.publish(ros_object_cloud);
 
-  // object_normal.header.frame_id = "base_link";
-  object_normal.header.frame_id = "camera_depth_optical_frame";
-  object_normal.header.stamp = ros::Time::now();;
-  object_normal.header.seq = 1;
+  // object_pose.header.frame_id = "base_link";
+  object_pose.header.frame_id = "camera_depth_optical_frame";
+  object_pose.header.stamp = ros::Time::now();;
+  object_pose.header.seq = 1;
   
   geometry_msgs::Quaternion msg;
 
   // extracting surface normals
-  tf::Vector3 axis_vector(object_normal.pose.orientation.x, object_normal.pose.orientation.y, object_normal.pose.orientation.z);
+  tf::Vector3 axis_vector(object_normal.normal_x, object_normal.normal_y, object_normal.normal_z);
   tf::Vector3 up_vector(1.0, 0.0, 0.0);
 
   tf::Vector3 right_vector = axis_vector.cross(up_vector);
@@ -120,17 +120,17 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
   tf::Quaternion q(right_vector, -1.0*acos(axis_vector.dot(up_vector)));
   q.normalize();
   tf::quaternionTFToMsg(q, msg);
-  object_normal.pose.orientation = msg;
+  object_pose.pose.orientation = msg;
     
-  std::cout << "\tTotal Point:" << object_normal.pose.position.x << " "
-			                          << object_normal.pose.position.y << " "
-			                          << object_normal.pose.position.z << std::endl;
-	std::cout << "\tTotal Normal:" << object_normal.pose.orientation.x << " "
-			                           << object_normal.pose.orientation.y << " "
-			                           << object_normal.pose.orientation.z << " "
-			                           << object_normal.pose.orientation.w << std::endl;
+  std::cout << "\tTotal Point:" << object_pose.pose.position.x << " "
+			                          << object_pose.pose.position.y << " "
+			                          << object_pose.pose.position.z << std::endl;
+	std::cout << "\tTotal Normal:" << object_pose.pose.orientation.x << " "
+			                           << object_pose.pose.orientation.y << " "
+			                           << object_pose.pose.orientation.z << " "
+			                           << object_pose.pose.orientation.w << std::endl;
   
-  pub_pose.publish (object_normal);
+  pub_pose.publish (object_pose);
 }
 
 void set_coordinate_limit_min(const geometry_msgs::Point& input)
@@ -169,6 +169,7 @@ int main (int argc, char** argv)
   // Create a ROS publisher for the output point cloud
   pub_pose = nh.advertise<geometry_msgs::PoseStamped> ("/object/pose", 1);
   pub_procced = nh.advertise<sensor_msgs::PointCloud2> ("/object/procced", 1);
+  pub_normal = nh.advertise<disposing_vision::coordinate_normal> ("/object/normal", 1);
 
   // Spin
   ros::spin ();
