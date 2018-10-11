@@ -618,7 +618,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
   /* ----- send trajectory ----- */
 
 //    ros::Time time = ros::Time::now();
-  if (robotis_->is_moving_ == true)
+  if (robotis_->is_moving_ == true && robotis_->cnt_ < robotis_->all_time_steps_)
   {
     if (robotis_->cnt_ == 0)
     {
@@ -688,7 +688,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
   slide_->slide_pub();
   /*---------- initialize count number ----------*/
 
-  if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true)
+  if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true && !slide_->is_busy)
   {
     ROS_INFO("[end] send trajectory");
     publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");

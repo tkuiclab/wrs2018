@@ -4,16 +4,8 @@ void slide_callback(const manipulator_h_base_module_msgs::SlideCommand::ConstPtr
 {
     goal_pos = -(double)100000.0*msg->pos;
 
-    if(goal_pos <= FULL_16_BIT)
-    {
-        cmd_arr[4] = 0;
-        cmd_arr[5] = goal_pos;
-    }
-    else
-    {
-        cmd_arr[4] = 1;
-        cmd_arr[5] = goal_pos - FULL_16_BIT;
-    }
+    cmd_arr[4] = goal_pos>>16;
+    cmd_arr[5] = goal_pos;
 }
 
 modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRate)
@@ -34,9 +26,9 @@ modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRat
         Is_Success = true;
         // modbus_set_debug(ct, true);
     }
-    int rc = modbus_read_registers(ct, ADDRESS_FDB, 2, fdb_val);
+    int rc = modbus_read_registers(ct, ADDRESS_FDB, 6, fdb_val);
         
-    curr_pos = fdb_val[0] * FULL_16_BIT + fdb_val[1];
+    curr_pos = fdb_val[0]<<16 | fdb_val[1];
     goal_pos = curr_pos;
     return ct;
 }
@@ -55,9 +47,12 @@ void SendCmd()
             speed_tmp = (speed_tmp < MAX_SPEED) ? speed_tmp : MAX_SPEED;
             speed = (speed_tmp < speed) ? (((speed - speed_tmp) < smp_deleration) ? speed_tmp : speed - smp_deleration) : speed_tmp;
             // speed = (speed_tmp < speed) ? speed : speed_tmp;
+            // cmd_arr[6] = speed>>16;
             cmd_arr[7] = speed;
+            cmd_arr[9] = speed*2;
+            cmd_arr[11] = speed*2;
 
-            std::cout<<"speed = "<<cmd_arr[7]<<std::endl;
+            std::cout<<"speed = "<< (cmd_arr[7] | cmd_arr[6]<<16)<<std::endl;
             rc = modbus_write_registers(ct, ADDRESS_CMD, 16, cmd_arr);
             if (rc != 16) {
                 fprintf(stderr, "modbus write failed: %d %s\n", errno, modbus_strerror(errno));
@@ -67,19 +62,19 @@ void SendCmd()
         else
             speed = 0;
 
-        rc = modbus_read_registers(ct, ADDRESS_FDB, 2, fdb_val);
-        if (rc != 2) {
+        rc = modbus_read_registers(ct, ADDRESS_FDB, 6, fdb_val);
+        if (rc != 6) {
             fprintf(stderr, "modbus read failed: %d %s\n", errno, modbus_strerror(errno));
             errno = 0;
         }
 
-        curr_pos = fdb_val[0] * FULL_16_BIT + fdb_val[1];
+        curr_pos = fdb_val[0]<<16 | fdb_val[1];
+        curr_speed = fdb_val[4]<<16 | fdb_val[5];
         
         loop_rate.sleep();
         ros::spinOnce();
     }
 }
-
 
 
 int main(int argc, char **argv)
@@ -90,7 +85,6 @@ int main(int argc, char **argv)
     ros::NodeHandle nh_param("~");
     std::string side_str;
     int  baud_rate;
-    
 
     nh_param.param<std::string>("side", side_str, "");
     nh_param.param<int>("baud", baud_rate, 9600);
@@ -130,6 +124,7 @@ int main(int argc, char **argv)
     while (ros::ok())
     {
         msg_fdb.curr_pos = curr_pos;
+        msg_fdb.is_busy = (abs(curr_speed) > 10);
         pub.publish(msg_fdb);
         loop_rate.sleep();
         ros::spinOnce();
