@@ -221,30 +221,30 @@ if __name__ == '__main__':
     print 'aaaa'
     rate = rospy.Rate(30)  # 30hz
 
-    R_Pos   = [0.3, -0.3006, -0.46]
-    R_Euler = [5.029, 82.029, 4.036]
-    R_Redun = 60
+    # R_Pos   = [0.3, -0.3006, -0.46]
+    # R_Euler = [5.029, 82.029, 4.036]
+    # R_Redun = 60
         
-    L_Pos   = [0.3, 0.3506, -0.46]
-    L_Euler = [5.029, 82.029, 4.036]
-    L_Redun = -60
+    # L_Pos   = [0.3, 0.3506, -0.46]
+    # L_Euler = [5.029, 82.029, 4.036]
+    # L_Redun = -60
 
-    right.arm.ikMove('line', R_Pos, R_Euler, R_Redun)
-    left.arm.ikMove('line', L_Pos, L_Euler, L_Redun)
+    # right.arm.ikMove('line', R_Pos, R_Euler, R_Redun)
+    # left.arm.ikMove('line', L_Pos, L_Euler, L_Redun)
 
 
-    # while not rospy.is_shutdown()  and not is_stop:
-    #     global is_start
-    #     if is_start:
-    #         while not rospy.is_shutdown() and (not right.finish or not left.finish):
-    #             left.proces()
-    #             right.proces()
-    #             rate.sleep()
-    #         is_start = False
-    #         is_stop = True
-    #         next_pub(3)
-    #         rospy.sleep(3)
-    #     rate.sleep()
-    #     # rospy.spin()
+    while not rospy.is_shutdown()  and not is_stop:
+        global is_start
+        if is_start:
+            while not rospy.is_shutdown() and (not right.finish or not left.finish):
+                left.proces()
+                right.proces()
+                rate.sleep()
+            is_start = False
+            is_stop = True
+            next_pub(3)
+            rospy.sleep(3)
+        rate.sleep()
+        # rospy.spin()
     
    
