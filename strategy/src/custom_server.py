@@ -1,14 +1,15 @@
 #!/usr/bin/env python
-import os
-import sys
-import rospy
-import time
-
 from mobile_platform.srv import *
 from strategy.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
 from arm_control import ArmTask, SuctionTask
+
+import os
+import sys
+import rospy
+import time
+
 
 
 IDEL          = 0
@@ -17,13 +18,21 @@ MoveToP2      = 2
 RotToDeg90    = 3
 RotToDeg0     = 4
 TakeObj       = 5
-GiveObj_Type1 = 6
-GiveObj_Type2 = 7
-STOP          = 9
+TakeObjStep1  = 6
+TakeObjStep2  = 7
+TakeObjStep3  = 8
+TakeObjStep4  = 9
+TakeObjStep5  = 10
+GiveObj_Type1 = 11
+GiveObj_Type2 = 12
+STOP          = 13
+InitArm       = 14
 
 SerialKey_RobotIdel  = [IDEL, STOP]
 SerialKey_LeadCustom = [MoveToP1, STOP]
-SerialKey_TakeObjToCustom_Type1 = [RotToDeg90, TakeObj, RotToDeg0, GiveObj_Type1, STOP]
+#SerialKey_TakeObjToCustom_Type1 = [RotToDeg90, TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5, RotToDeg0, GiveObj_Type1, STOP]
+SerialKey_TakeObjToCustom_Type1 = [TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5, STOP] # Test for dual-arm command
+#SerialKey_TakeObjToCustom_Type1 = [RotToDeg90, TakeObj, RotToDeg0, GiveObj_Type1, STOP]
 SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, RotToDeg0, MoveToP2, GiveObj_Type2, STOP]
 #SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, MoveToP2, GiveObj_Type2, STOP]
 
@@ -47,7 +56,6 @@ class exampleTask:
         self.pos   = (0, 0, 0)
         self.euler = (0, 0, 0)
         self.phi   = 0
-
         if en_sim:
             self.suction = SuctionTask(self.name + '_gazebo')
             print "aa"
@@ -167,6 +175,19 @@ class CDualArmCommand(object):
         self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
+    def TakeObj_Step5(self):
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.2, -0.3006, -0.46]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.2, 0.3506, -0.46]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+        
+        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
     def GiveObj_Type1(self):
         # self.DualArmIsBusyFlag = True
         pass
@@ -236,6 +257,7 @@ class CMobileCommand(object):
         # Do nothing
         
     def MobileIsBusy(self):
+        # self.MobileIsBusyFlag = False # Force set flag for testing
         return self.MobileIsBusyFlag
 
 def GetMissionSerialKey(MissionReq):
@@ -268,11 +290,31 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
         print("RotToDeg0")
         MobileCommandSet.Mobile_AID()
     elif(Key == TakeObj):
+        print("TakeObj")
         DualArmCommandSet.TakeObj()
+    elif(Key == TakeObjStep1):
+        print("TakeObjStep1")
+        DualArmCommandSet.TakeObj_Step1()
+    elif(Key == TakeObjStep2):
+        print("TakeObjStep2")
+        DualArmCommandSet.TakeObj_Step2()
+    elif(Key == TakeObjStep3):
+        print("TakeObjStep3")
+        DualArmCommandSet.TakeObj_Step3()
+    elif(Key == TakeObjStep4):
+        print("TakeObjStep4")
+        DualArmCommandSet.TakeObj_Step4()
+    elif(Key == TakeObjStep5):
+        print("TakeObjStep5")
+        DualArmCommandSet.TakeObj_Step5()
     elif(Key == GiveObj_Type1):
-        DualArmCommandSet.GiveObj_Type1
+        print("GiveObj_Type1")
+        DualArmCommandSet.GiveObj_Type1()
     elif(Key == GiveObj_Type2):
-        DualArmCommandSet.GiveObj_Type2
+        print("GiveObj_Type2")
+        DualArmCommandSet.GiveObj_Type2()
+    elif(Key == InitArm):
+        DualArmCommandSet.InitArmPos()
     elif(Key == STOP):
         print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
@@ -285,7 +327,7 @@ def handle_state(req):
     try:
         Get_Req = req.state
         print("Returning [%s]"%(req.state)) # Show the state from Assistant
-
+        
         if type(Get_Req) != int:
             # Input: Mission
             #   0  : Robot idel
@@ -294,14 +336,12 @@ def handle_state(req):
             #   3  : Take object to customer type2
             # Other: Robot idel
             raise NotImplementedError("Request state input illegal. Please input an integer.")
-
+            
         MobileCommandSet = CMobileCommand()
         DualArmCommandSet= CDualArmCommand()
-
         SerialKeyIndex   = 0
         MissionExecuteFlag = True
         MotionSerialKey = GetMissionSerialKey(Get_Req)
-  
         while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
             if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
@@ -315,7 +355,6 @@ def handle_state(req):
                 else:
                     SerialKeyIndex = 0
                     MissionExecuteFlag = False
-
     except Exception, exception:
         ResponseFlag = False
         ResponseInfo = exception.message
