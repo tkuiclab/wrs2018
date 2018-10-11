@@ -85,8 +85,8 @@ class exampleTask:
         
 class CDualArmCommand(object):
     def __init__(self):
-        self.right = exampleTask('right')      #Set up right arm controller
-        self.left  = exampleTask('left')       #Set up left arm controller
+        self.right = exampleTask('right') # Set up right arm controller
+        self.left  = exampleTask('left')  # Set up left arm controller
 
         self.DualArmIsBusyFlag = False
     #  Right        X       Y       Z      ROLL     PITCH     YAW      PHI    
@@ -182,7 +182,7 @@ class CDualArmCommand(object):
     
     def DualArmIsBusy(self):
         self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)
-        #self.DualArmIsBusyFlag = False
+        
         return self.DualArmIsBusyFlag
 
 class CMobileCommand(object):
