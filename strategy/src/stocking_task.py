@@ -13,10 +13,10 @@ from arm_control import ArmTask, SuctionTask
 
 
 PICKORDER = 0
-SPEED     = 100
+SPEED     = 60
 LUNCHBOX_H = 0.05
 # The lesser one
-lunchQuan = 1              
+lunchQuan = 2              
 drinkQuan = 2
 riceQuan  = 2
 
