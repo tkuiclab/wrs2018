@@ -10,8 +10,6 @@ import sys
 import rospy
 import time
 
-
-
 IDEL          = 0
 MoveToP1      = 1
 MoveToP2      = 2
@@ -34,8 +32,9 @@ TakeObjStep9  = 18
 
 SerialKey_RobotIdel  = [IDEL, STOP]
 SerialKey_LeadCustom = [MoveToP1, STOP]
-#SerialKey_TakeObjToCustom_Type1 = [RotToDeg90, TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5, RotToDeg0, GiveObj_Type1, STOP]
-SerialKey_TakeObjToCustom_Type1 = [TakeObjStep1, TakeObjStep2, TakeObjStep6, TakeObjStep7, TakeObjStep8, TakeObjStep7, TakeObjStep9, TakeObjStep7, STOP] # Test for dual-arm command
+
+SerialKey_TakeObjToCustom_Type1 = [RotToDeg90, TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5, RotToDeg0, GiveObj_Type1, STOP]
+#SerialKey_TakeObjToCustom_Type1 = [TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5, STOP] # Test for dual-arm command
 #SerialKey_TakeObjToCustom_Type1 = [RotToDeg90, TakeObj, RotToDeg0, GiveObj_Type1, STOP]
 SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, RotToDeg0, MoveToP2, GiveObj_Type2, STOP]
 #SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, MoveToP2, GiveObj_Type2, STOP]
@@ -97,8 +96,8 @@ class exampleTask:
         
 class CDualArmCommand(object):
     def __init__(self):
-        self.right = exampleTask('right')      #Set up right arm controller
-        self.left  = exampleTask('left')       #Set up left arm controller
+        self.right = exampleTask('right') # Set up right arm controller
+        self.left  = exampleTask('left')  # Set up left arm controller
 
         self.DualArmIsBusyFlag = False
     #  Right        X       Y       Z      ROLL     PITCH     YAW      PHI    
@@ -259,7 +258,7 @@ class CDualArmCommand(object):
     
     def DualArmIsBusy(self):
         self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)
-        #self.DualArmIsBusyFlag = False
+        
         return self.DualArmIsBusyFlag
 
 class CMobileCommand(object):
@@ -406,17 +405,17 @@ def handle_state(req):
             #   3  : Take object to customer type2
             # Other: Robot idel
             raise NotImplementedError("Request state input illegal. Please input an integer.")
-            
+
         MobileCommandSet = CMobileCommand()
         DualArmCommandSet= CDualArmCommand()
         SerialKeyIndex   = 0
         MissionExecuteFlag = True
         MotionSerialKey = GetMissionSerialKey(Get_Req)
-        while((MissionExecuteFlag == True) and (MotionSerialKey != None)):
-            if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
+
+        while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
+            if not(MobileCommandSet.MobileIsBusy() ):#or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
-
                 if(MotionKey != STOP):
                     if not ((MotionKey == MoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
                         # Check the data send to service or not.
@@ -425,6 +424,7 @@ def handle_state(req):
                 else:
                     SerialKeyIndex = 0
                     MissionExecuteFlag = False
+
     except Exception, exception:
         ResponseFlag = False
         ResponseInfo = exception.message
