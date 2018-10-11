@@ -12,9 +12,13 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 4
+PICKORDER = 0
 SPEED     = 100
 LUNCHBOX_H = 0.05
+# The lesser one
+lunchQuan = 1              
+drinkQuan = 2
+riceQuan  = 2
 
 idle            = 0
 busy            = 1
@@ -37,11 +41,6 @@ riceballEuler   = 17
 rearSafetyPos2  = 18
 leavePlacePos   = 19
 grasping        = 20
-
-# The lesser one
-lunchQuan = 2              
-drinkQuan = 2
-riceQuan  = 2
 
 objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
@@ -73,12 +72,12 @@ riceballEu   = [10, 0, 0]
 objectPos = [lunchboxPos, drinkPos, riceballPos]
 objectEu  = [lunchboxEu,  drinkEu,  riceballEu]
 
-topRight    = [0.34, -0.1, -0.21]
-topLeft     = [0.34,  0.1, -0.21]
-middleRight = [0.42, -0.1, -0.555]
-middleLeft  = [0.42,  0.1, -0.555]
-bottomRight = [0.5, -0.2, -1.03]
-bottomLeft  = [0.5,  0.2, -1.03]
+topRight    = [0.365, -0.1, -0.21]
+topLeft     = [0.365,  0.1, -0.21]
+middleRight = [0.445, -0.1, -0.555]
+middleLeft  = [0.445,  0.1, -0.555]
+bottomRight = [0.55, -0.2, -1.07]
+bottomLeft  = [0.515,  0.2, -1.07]
 
 topRightEu    = [-170, 35, 25]
 topLeftEu     = [-140, 55, 45]
@@ -140,6 +139,7 @@ class stockingTask:
             self.suction = SuctionTask(self.name + '_gazebo')
         else:
             self.suction = SuctionTask(self.name)
+            rospy.on_shutdown(self.suction.gripper_vaccum_off)
         
     @property
     def finish(self):
@@ -282,6 +282,8 @@ class stockingTask:
             if 'drink' in objectName[self.pickList]:
                 self.pos[2] = -0.4
                 self.euler[1] = -25
+            elif 'lunchbox' in objectName[self.pickList]:
+                self.pos[2] = -0.45
             self.arm.set_speed(SPEED)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
@@ -398,11 +400,15 @@ class stockingTask:
 
         elif self.state == pickObject:
             self.state = grasping
-            self.arm.set_speed(SPEED/2)
+            self.suction.gripper_vaccum_on()
+            rospy.sleep(1)
+            if 'lunchbox' in objectName[self.pickList]:
+                self.arm.set_speed(20)
+            else:
+                self.arm.set_speed(3)
             self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.05)
             rospy.sleep(.1)
-            self.suction.gripper_vaccum_on()
-            
+                        
         elif self.state == placeObject:
             self.state = busy
             self.nextState = leavePlacePos
@@ -456,6 +462,8 @@ if __name__ == '__main__':
     while not rospy.is_shutdown() and not is_start:
         rospy.loginfo('waiting for start signal')
         rospy.sleep(.5)
+    
+    SuctionTask.switch_mode(True)
 
     rate = rospy.Rate(30)  # 30hz
     while not rospy.is_shutdown() and (not right.finish or not left.finish):
@@ -464,11 +472,20 @@ if __name__ == '__main__':
         rate.sleep()
 
     # robot arm back home
-    rospy.loginfo('back home')
-    left.arm.wait_busy()
-    left.arm.jointMove(0, (0, -1, 0, 2, 0, -0.7, 0))
-    right.arm.wait_busy()
-    right.arm.jointMove(0, (0, -1, 0, 2, 0, -0.7, 0))
+    if right.arm.is_stop is not True:
+        rospy.loginfo('back home')
+        left.arm.wait_busy()
+        left.arm.jointMove(0, (0, -1, 0, 2, 0, -0.7, 0))
 
+        right.arm.wait_busy()
+        right.arm.jointMove(0, (0, -1, 0, 2, 0, -0.7, 0))
+    
+        left.arm.wait_busy()
+        left.arm.jointMove(0, (0, 0, 0, 0, 0, 0, 0))
+
+        right.arm.wait_busy()
+        right.arm.jointMove(0, (0, 0, 0, 0, 0, 0, 0))
+
+    SuctionTask.switch_mode(False)
     # publish finish signal to wheels
     pub.publish(3)

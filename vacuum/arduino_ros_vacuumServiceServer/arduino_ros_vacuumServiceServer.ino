@@ -48,7 +48,7 @@ void callback_left(const VacuumCmd::Request& , VacuumCmd::Response& );
 void armTaskCallback(const std_msgs::Bool& msg);
 ros::ServiceServer<VacuumCmd::Request, VacuumCmd::Response> vac_srv_right("right/suction_cmd", &callback_right);
 ros::ServiceServer<VacuumCmd::Request, VacuumCmd::Response> vac_srv_left("left/suction_cmd", &callback_left);
-ros::Subscriber<std_msgs::Bool> armTask_sub("/robot/armTask", 5, &armTaskCallback);
+ros::Subscriber<std_msgs::Bool> armTask_sub("/arduino/mode", &armTaskCallback);
 
 DynamixelClass Dxl_right(Serial1);
 DynamixelClass Dxl_left(Serial3);
@@ -155,7 +155,7 @@ void setup()
 
 void armTaskCallback(const std_msgs::Bool& msg)
 {
-  armTask = msg.data;
+  armTask = (bool)msg.data;
 }
 
 DynamixelClass wDxl(bool isRight)
