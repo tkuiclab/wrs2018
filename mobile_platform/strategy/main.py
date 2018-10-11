@@ -7,14 +7,16 @@ import rospy
 
 ''' stage 1 '''
 ''' imu '''
-from lib.strategy import Strategy
+# from lib.strategy import Strategy
+
 
 ''' rfid '''
 # from lib.strategy_rfid import Strategy
 
 ''' stage 2 '''
 ''' imu '''
-# from lib.strategy2 import Strategy
+from lib.strategy2 import Strategy
+
 ''' rfid '''
 # from lib.strategy2_rfid import Strategy
 ''' stage 3 '''
