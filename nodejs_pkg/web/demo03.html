@@ -35,7 +35,7 @@
     <p>Also before you enable microphone input either plug in headphones or turn the volume down if you want to avoid ear splitting feedback!</p>
   </div>
 
-  <audio id = "output" style="display: none;" autoplay preload controls></audio>
+  <audio id = "output" class = "full-view" autoplay preload controls></audio>
   <div class = "centered">
     <button id = "recordBtn" class = "btn" type="button" value="Record" onclick="Recording(this)">Record</button>
   </div>
@@ -52,6 +52,7 @@
 <script src="js/eventemitter2.min.js"></script>
 <script src="js/roslib.min.js"></script>
 <script src="../dist/recorder.js"></script>
+<script src="js/beep.js"></script>
 <script src="js/socket.io.js"></script>
 <script src="js/websocket.js"></script>
 <script src="js/shopping.js"></script>
@@ -85,8 +86,7 @@ window.onload = function(){
 
     /* Record Button Status Switch */
     var btn = document.getElementById('recordBtn');
-    btn.onclick = 
-    function Recording(e) {
+    btn.onclick = function Recording(e) {
       if (btn.value=="Record") {
         btn.value = "";
         document.getElementById('recordBtn').className = "recording";

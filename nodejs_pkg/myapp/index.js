@@ -53,6 +53,7 @@ io.on('connect', (socket) => {
     // Need to and Timeout ?
     serviceClient.call(request).then((resp) => {
       console.log('Service response ' + JSON.stringify(resp));
+      io.emit("news", JSON.stringify(resp));
     });
   });
   socket.on('error', (error) => {

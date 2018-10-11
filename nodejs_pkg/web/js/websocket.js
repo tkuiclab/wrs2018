@@ -7,8 +7,15 @@ function __log(e, data) {
 
 var socket = io.connect('https://'+location.host, {secure: true});
 socket.on('news', function(m) {
-  console.log('Socket.IO Connected: '+m);
-  __log('Socket.IO Connected');
+  if (IsJsonString(m)) {
+    let j = JSON.parse(m);
+    if (j.success) {
+      Sayit(j.info);
+    }
+  }else {
+    console.log('Socket.IO Connected: '+m);
+    __log('Socket.IO Connected');
+  }
 });
 
 ws.onopen = function(){
@@ -39,12 +46,14 @@ ws.onerror = function(){
 ws.onclose = function () {
   __log('[Chat Disconnected]');
 }
+var state, record;
 ws.onmessage = function(evt){
   if (IsJsonString(evt.data)) {
     var j = JSON.parse(evt.data)
     if (j.role === "State Machine") {
-      __log('Pass '+j.state+' to socket server');
-      socket.emit('message', j.state);
+      state = j.state;
+      record = j.record;
+      console.log("State Machine: "+state+", "+record);
     }
     return;
   }
@@ -56,12 +65,22 @@ ws.onmessage = function(evt){
     return;
   }
   if (evt.data[2] != "m") {
-    console.log(evt+" , "+evt.data);
+    // console.log(evt+" , "+evt.data);
     output.src = window.URL.createObjectURL(evt.data);
     output.play();
     __log('play audio');
+    output.onended = function() {
+      if (record) {
+        PlayBeepSound(2);
+        document.getElementById('recordBtn').click();
+      }else {
+        __log('Pass '+state+' to socket server');
+        socket.emit('message', state);
+      }
+    }
   }
 };
+
 function IsJsonString (json) {
   var str = json.toString();
   try {
@@ -70,4 +89,10 @@ function IsJsonString (json) {
     return false;
   }
   return true;
+}
+function Sayit (string) {
+  string = '--Says:--'+string; // Add check code
+  ws.send(string);
+  console.log("Let robot says: "+string);
+  __log("Let robot says: "+string);
 }
