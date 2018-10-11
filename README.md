@@ -9,6 +9,9 @@ youjun well done!!
 ```bash
 $ sudo apt-get install ros-<distro>-qt-ros
 $ sudo apt-get install ros-<distro>-rosbridge-server
+$ sudo apt-get install ros-<distro>-rosbridge-server
+$ sudo apt-get install libmodbus-dev
+$ sudo apt-get install ros-kinetic-rosserial-python ros-kinetic-rosserial-arduino
 # install nvm, nodejs, npm
 $ git clone git://github.com/creationix/nvm.git ~/.nvm
 $ echo ". ~/.nvm/nvm.sh" >> ~/.bashrc
