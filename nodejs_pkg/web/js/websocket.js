@@ -102,3 +102,8 @@ function Sayit (string) {
   console.log("Let robot says: "+string);
   __log("Let robot says: "+string);
 }
+
+function SendOrder() {
+  __log('Pass 3 to socket server');
+  socket.emit('message', 3);
+}
