@@ -12,8 +12,8 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 0
-SPEED     = 60
+PICKORDER = 4
+SPEED     = 100
 LUNCHBOX_H = 0.05
 # The lesser one
 lunchQuan = 2              
@@ -239,7 +239,7 @@ class stockingTask:
             if self.finish:
                 return
             else:
-                if 'riceball' in objectName[self.pickList] and self.pickList!=8 or self.pickList==7:
+                if 'riceball' in objectName[self.pickList] and self.pickList!=8:# or self.pickList==7:
                     self.state = safePose3
                 else:
                     self.state = rearSafetyPos
@@ -247,13 +247,11 @@ class stockingTask:
 
         elif self.state == safePose1:
             self.state = busy
-            self.nextState = safePose3
-            fb = self.arm.get_fb()
-            pos = fb.group_pose.position
-            self.pos = (pos.x-0.1, pos.y, pos.z)
-            self.euler = (0, 0, -85)
-            self.arm.set_speed(SPEED)
-            self.arm.ikMove('p2p', self.pos, self.euler, self.phi)
+            self.nextState = idle
+            self.pickList += 1
+            self.euler[2] = 90
+            self.euler[0] = -10
+            self.arm.relative_move('line', self.euler, [0, 0, -0.15], self.phi)
 
         elif self.state == leavePlacePos:
             self.state = busy
@@ -375,6 +373,8 @@ class stockingTask:
             self.getPlacePos()
             if 'riceball' in objectName[self.pickList]:
                 self.euler[0] = -45
+                self.nextState = safePose1
+                self.pickList -= 1
             else:
                 self.euler[0] = 0
             self.pos[0] = 0.36
@@ -401,7 +401,6 @@ class stockingTask:
         elif self.state == pickObject:
             self.state = grasping
             self.suction.gripper_vaccum_on()
-            rospy.sleep(1)
             if 'lunchbox' in objectName[self.pickList]:
                 self.arm.set_speed(20)
             else:
@@ -414,7 +413,7 @@ class stockingTask:
             self.nextState = leavePlacePos
             if 'lunchbox' in objectName[self.pickList]:
                 self.nextState = leaveShelf
-            rospy.sleep(.5)
+            rospy.sleep(.3)
             self.suction.gripper_vaccum_off()
 
         elif self.state == grasping:
