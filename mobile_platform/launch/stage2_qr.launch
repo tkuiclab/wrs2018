@@ -10,5 +10,5 @@
     <node name="detect_black2" pkg="mobile_platform" type="detect_black2"/>
     <node name="qrcode" pkg="mobile_platform" type="qrcode.py"/>
 
-    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0"/>
+    <!-- <node name="serial_node" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0"/> -->
 </launch>
