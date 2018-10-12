@@ -12,8 +12,8 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 4
-SPEED     = 100
+PICKORDER = 0
+SPEED     = 60
 LUNCHBOX_H = 0.05
 # The lesser one
 lunchQuan = 2              
@@ -251,7 +251,7 @@ class stockingTask:
             self.pickList += 1
             self.euler[2] = 90
             self.euler[0] = -10
-            self.arm.relative_move('line', self.euler, [0, 0, -0.15], self.phi)
+            self.arm.relative_move('line', self.euler, [0, -0.1, -0.15], self.phi)
 
         elif self.state == leavePlacePos:
             self.state = busy
