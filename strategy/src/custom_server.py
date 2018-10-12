@@ -421,9 +421,9 @@ def handle_state(req):
 
         SelectArm = 'dual'
         if(Get_Req == TakeObjToCustom_Type1):
-            SelectArm = 'left' # Use right arm to take object 1
+            SelectArm = 'left'  # Use right arm to take object 1
         elif(Get_Req == TakeObjToCustom_Type2):
-            SelectArm = 'right'  # Use left arm to take object 2
+            SelectArm = 'right' # Use left arm to take object 2
 
         while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
             if not(MobileCommandSet.MobileIsBusy() ):#or DualArmCommandSet.DualArmIsBusy()):
