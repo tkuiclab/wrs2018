@@ -29,9 +29,10 @@ DELIVERY = 11
 ORDER = 12
 
 # FILENAME 
-FILENAME = rospkg.RosPack().get_path('mobile_platform')+'/config/'+'stage1_imu.yaml'
-# FILENAME = rospkg.RosPack().get_path('mobile_platform')+'/config/'+'stage1_rfid.yaml'
-
+# FILENAME = rospkg.RosPack().get_path('mobile_platform')+'/config/'+'stage_imu.yaml'
+# FILENAME = rospkg.RosPack().get_path('mobile_platform')+'/config/'+'stage_rfid.yaml'
+FILENAME = rospkg.RosPack().get_path('mobile_platform')+'/config/'+'stage_qr.yaml'
+# FILENAME = rospkg.RosPack().get_path('mobile_platform')+'/config/'+'stage2_qr.yaml'
 class NodeHandle(object):
     '''
         strategy
@@ -144,9 +145,9 @@ class NodeHandle(object):
 
     def Save_Param(self,msg):
         # self.Set_Param()
-        if (rospy.has_param('mobile_platform')):
+        if (rospy.has_param('mobile_platform/strategy')):
             print('dump')
-            subprocess.call(['rosparam','dump',FILENAME,'/mobile_platform'])
+            subprocess.call(['rosparam','dump',FILENAME,'/mobile_platform/strategy'])
             self.Load_Param()
         else:
             print('Not found')
@@ -162,7 +163,6 @@ class NodeHandle(object):
             self.__rotateYaw = rospy.get_param("mobile_platform/strategy/rotateYaw")
         if (rospy.has_param('mobile_platform/strategy/crossTime')):
             self.__crossTime = rospy.get_param("mobile_platform/strategy/crossTime")
-        
         if (rospy.has_param('mobile_platform/strategy/errorRotate0')):
             self.__errorRotate0 = rospy.get_param("mobile_platform/strategy/errorRotate0")
         if (rospy.has_param('mobile_platform/strategy/errorRotate90')):
