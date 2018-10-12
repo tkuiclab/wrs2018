@@ -15,10 +15,21 @@ var io = require('socket.io').listen(server);
 
 const rosnodejs = require('rosnodejs');
 const AssistantState = rosnodejs.require('strategy').srv.AssistantState;
+const PaymentCallback = function(msg) {
+  if (msg.data == "Payment OK") {
+    var j = '{"info": "The payment process is complete, thank you"}';
+    io.emit("say", j); 
+  }else {
+  }
+}
+
 var serviceClient;
 
 rosnodejs.initNode('index')
 .then((rosNode) => {
+  /* Topic Subscriber */
+  const sub = rosNode.subscribe('/topic', 'std_msgs/String', PaymentCallback);
+
   /* Service Server */
   const LetRobotSay = (req, resp) => {
     console.log(req.info);
