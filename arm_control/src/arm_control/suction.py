@@ -22,6 +22,13 @@ cam2center_y_4_tote = 0.035#0.06 #0.05
 
 
 class SuctionTask:
+
+    switch_mode_pub = rospy.Publisher(
+                '/arduino/mode',
+                Bool,
+                queue_size=1
+            )
+
     def __init__(self, _name='/robotis'):
         """Inital object."""
         self.name    = _name
@@ -35,7 +42,7 @@ class SuctionTask:
                     queue_size=1
                 )
                 self.is_grip_sub = rospy.Subscriber(
-                    self.name + '/robot/right_vacuum_gripper/grasping',
+                    '/robot/right_gazebo/vacuum_gripper1/grasping',
                     Bool,
                     self.is_grip_callback,
                     queue_size=1
@@ -48,7 +55,7 @@ class SuctionTask:
                     queue_size=1
                 )
                 self.is_grip_sub = rospy.Subscriber(
-                    self.name + '/robot/left_vacuum_gripper/grasping',
+                    '/robot/left_gazebo/vacuum_gripper1/grasping',
                     Bool,
                     self.is_grip_callback,
                     queue_size=1
@@ -60,7 +67,11 @@ class SuctionTask:
                 self.is_grip_callback,
                 queue_size=1
             )
-        
+    
+    @staticmethod
+    def switch_mode(enable):
+        SuctionTask.switch_mode_pub.publish(enable)
+
     def robot_cmd_client(self, cmd):
         if 'gazebo' in self.name:
             for i in range(1, 5):
@@ -79,7 +90,9 @@ class SuctionTask:
                     print "Service call (Vacuum) failed: %s" % e
         else:
             suction_service = self.name + '/suction_cmd'
-            rospy.wait_for_service(suction_service)
+            print('suction service:', suction_service)
+            rospy.wait_for_service(suction_service, timeout=2.)
+            print('suction service:', suction_service, 2)
             try:
                 client = rospy.ServiceProxy(
                     suction_service,
@@ -92,13 +105,34 @@ class SuctionTask:
 
     def gripper_vaccum_on(self):
         self.robot_cmd_client('vacuumOn')
-        print('Vaccum On')
+        print('Vaccum On', self.gripped)
         rospy.sleep(0.5)
 
     def gripper_vaccum_off(self):
         self.robot_cmd_client('vacuumOff')
         print('Vaccum Off')
         rospy.sleep(0.3)
+
+    def gripper_calibration(self):
+        if 'gazebo' in self.name:
+            pass
+        else:
+            self.robot_cmd_client('calibration')
+        print('calibration')
+
+    def gripper_set_max(self):
+        if 'gazebo' in self.name:
+            pass
+        else:
+            self.robot_cmd_client('setMaxPos')
+        print('setMaxPos')
+    
+    def gripper_set_min(self):
+        if 'gazebo' in self.name:
+            pass
+        else:
+            self.robot_cmd_client('setMinPos')
+        print('setMinPos')
 
     def gripper_suction_up(self):
         if 'gazebo' in self.name:
@@ -124,27 +158,41 @@ class SuctionTask:
         else:
             self.robot_cmd_client(str_deg)
 
-        
         print('Suction Move : ' + str_deg)
 
     def is_grip_callback(self, msg):
         self.gripped = msg.data
 
+    @property
+    def is_grip(self):
+        return self.gripped
+
 
 if __name__ == '__main__':
     rospy.init_node('test_gripper')
     print('test_gripper')
-    right_gripper = SuctionTask(_name='right_gazebo')
+    right_gripper = SuctionTask(_name='right')
 
-    right_gripper.gripper_vaccum_on()
-    print('is grip: {}'.format(right_gripper.gripped))
-    rospy.sleep(2)
+    # right_gripper.gripper_vaccum_on()
+    # print('is grip: {}'.format(right_gripper.gripped))
+    # rospy.sleep(2)
 
-    right_gripper.gripper_vaccum_off()
-    print('is grip: {}'.format(right_gripper.gripped))
-    rospy.sleep(2)
-    right_gripper.gripper_suction_up()
-    rospy.sleep(2)
-    right_gripper.gripper_suction_down()
-    rospy.sleep(2)
-    right_gripper.gripper_suction_deg(-40)
+    # right_gripper.gripper_vaccum_off()
+    # print('is grip: {}'.format(right_gripper.gripped))
+    # rospy.sleep(2)
+    # right_gripper.gripper_suction_up()
+    # rospy.sleep(2)
+    # right_gripper.gripper_suction_down()
+    # rospy.sleep(2)
+    # right_gripper.gripper_suction_deg(-40)
+
+    # right_gripper.gripper_vaccum_on()
+    # right_gripper.gripper_vaccum_off()
+
+    # right_gripper.gripper_calibration()
+    # right_gripper.gripper_set_max()
+    # right_gripper.gripper_set_min()
+
+    # right_gripper.gripper_suction_up()
+    # right_gripper.gripper_suction_down()
+    right_gripper.gripper_suction_deg(0)
