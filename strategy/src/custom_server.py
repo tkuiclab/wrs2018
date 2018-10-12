@@ -92,10 +92,13 @@ class CDualArmTask:
         if(On_Off == True):
             self.suction.gripper_vaccum_on()
         elif(On_Off == False):
-            self.success.gripper_vaccum_off()
+            self.suction.gripper_vaccum_off()
     
     def SetSuctionDeg(self, Deg):
         self.suction.gripper_suction_deg(Deg)
+
+    def SuckSuccess(self):
+        return self.suction.is_grip()
         
 class CDualArmCommand(object):
     def __init__(self):
