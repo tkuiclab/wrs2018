@@ -18,29 +18,32 @@ nRotToDeg90         = 3
 nRotToDeg0          = 4
 nTakeObj_Ori        = 5
 nTakeObj_MoveDown   = 6
-nTakeObj_AboveObj   = 7
-nTakeObj_SuckObj    = 8
-nTakeObj_TakeOut    = 9
-nGiveObj1           = 10
-nGiveObj2           = 11
-nDelaySuctOffObj1   = 12
-nDelaySuctOffObj2   = 13
-nInitArmPos         = 14
-nSTOP               = 15
+nTakeObj_BesideObj  = 7
+nTakeObj_AboveObj   = 8
+nTakeObj_SuckDrink  = 9
+nTakeObj_SuckMeal   = 10
+nTakeObj_TakeOut    = 11
+nGiveObj1           = 12
+nGiveObj2           = 13
+nDelaySuctOffObj1   = 14
+nDelaySuctOffObj2   = 15
+nInitArmPos         = 16
+nIdelArmPos         = 17
+nSTOP               = 18
 
 # SerialKey motion command set
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
 SerialKey_LeadCustom = [nMoveToP1,  nSTOP]
 SerialKey_TakeObjToCustom_Type1 = \
-    [nRotToDeg90,       nInitArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown, nTakeObj_AboveObj,
-     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,   nRotToDeg0,
-     nGiveObj1,         nDelaySuctOffObj1,  nInitArmPos,
+    [nRotToDeg90,       nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
+     nTakeObj_BesideObj,nTakeObj_SuckDrink, nTakeObj_AboveObj,  nTakeObj_TakeOut,
+     nRotToDeg0,        nGiveObj1,          nDelaySuctOffObj1,  nInitArmPos,
      nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
-    [nRotToDeg90,       nInitArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,  nTakeObj_AboveObj,
-     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,   nRotToDeg0,
-     nMoveToP2,         nGiveObj2,          nDelaySuctOffObj2,  nInitArmPos,
-     nSTOP]
+    [nRotToDeg90,       nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
+     nTakeObj_AboveObj, nTakeObj_SuckMeal,  nTakeObj_AboveObj,  nTakeObj_TakeOut,
+     nRotToDeg0,        nMoveToP2,          nGiveObj2,          nDelaySuctOffObj2,
+     nInitArmPos,       nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
 RobotIdel  = 0
@@ -69,9 +72,14 @@ class CDualArmTask:
             self.suction = SuctionTask(self.name)
             print "bb"
 
-    def InitialPos(self):
+    def IdelPos(self):
         self.arm.set_speed(50)
         self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
+        self.suction.gripper_suction_deg(0)
+
+    def InitialPos(self):
+        self.arm.set_speed(50)
+        self.arm.jointMove(0, (0, 0, 0, 0, 0, 0, 0))
         self.suction.gripper_suction_deg(0)
 
     def MoveAbs(self, Line_PtP, Pos, Euler, Redun):
@@ -93,7 +101,7 @@ class CDualArmTask:
             self.suction.gripper_vaccum_on()
         elif(On_Off == False):
             self.suction.gripper_vaccum_off()
-    
+
     def SetSuctionDeg(self, Deg):
         self.suction.gripper_suction_deg(Deg)
 
@@ -115,6 +123,15 @@ class CDualArmCommand(object):
         else:
             self.right.InitialPos()     # Initial robot arm pose
             self.left.InitialPos()      # Initial robot arm pose
+
+    def IdelArmPos(self, select):                
+        if(select == 'right'):
+            self.right.IdelPos()     # Robot arm idel pose
+        elif(select == 'left'):
+            self.left.IdelPos()      # Robot arm idel pose
+        else:
+            self.right.IdelPos()     # Robot arm idel pose
+            self.left.IdelPos()      # Robot arm idel pose
 
     def TakeObj_Ori(self, select): # Take object orientation
         # self.DualArmIsBusyFlag = True
@@ -172,15 +189,60 @@ class CDualArmCommand(object):
             self.right.SetSuctionDeg(-90)
             self.left.SetSuctionDeg(-90)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)  
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_SuckObj(self, select):  # Take object and suck it
+    def TakeObj_BesideObj(self, select):
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.45, -0.3006, -0.56]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.45, 0.3506, -0.56]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+
+        if(select == 'right'):
+            self.right.SetSuctionDeg(0)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.SetSuctionDeg(0)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.SetSuctionDeg(0)
+            self.left.SetSuctionDeg(0)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+
+    def TakeObj_SuckMeal(self, select):  # Take object and suck it (Meal)
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.45, -0.3006, -0.60]
         R_Euler = [5.029, 82.029, 4.036]
         R_Redun = 60
         
         L_Pos   = [0.45, 0.3506, -0.60]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+        
+        if(select == 'right'):
+            self.right.SuctionEnable(True)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.SuctionEnable(True)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.SuctionEnable(True)
+            self.left.SuctionEnable(True)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def TakeObj_SuckDrink(self, select):  # Take object and suck it (Drink)
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.50, -0.3006, -0.56]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.50, 0.3506, -0.56]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
         
@@ -373,9 +435,15 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
     elif(Key == nTakeObj_AboveObj):
         print("TakeObj_AboveObj")
         DualArmCommandSet.TakeObj_AboveObj(SelectArm)
-    elif(Key == nTakeObj_SuckObj):
-        print("TakeObj_SuckObj")
-        DualArmCommandSet.TakeObj_SuckObj(SelectArm)
+    elif(Key == nTakeObj_BesideObj):
+        print("TakeObj_BesideObj")
+        DualArmCommandSet.TakeObj_BesideObj(SelectArm)
+    elif(Key == nTakeObj_SuckDrink):
+        print("TakeObj_SuckDrink")
+        DualArmCommandSet.TakeObj_SuckDrink(SelectArm)
+    elif(Key == nTakeObj_SuckMeal):
+        print("TakeObj_SuckMeal")
+        DualArmCommandSet.TakeObj_SuckMeal(SelectArm)
     elif(Key == nTakeObj_TakeOut):
         print("TakeObj_TakeOut")
         DualArmCommandSet.TakeObj_TakeOut(SelectArm)  
@@ -395,6 +463,9 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
     elif(Key == nInitArmPos):
         print("InitArmPos")
         DualArmCommandSet.InitArmPos(SelectArm)
+    elif(Key == nIdelArmPos):
+        print("IdelArmPos")
+        DualArmCommandSet.IdelArmPos(SelectArm)        
     elif(Key == nSTOP):
         print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
