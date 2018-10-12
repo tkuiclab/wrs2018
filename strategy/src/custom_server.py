@@ -19,29 +19,30 @@ nRotToDeg0          = 4
 nTakeObj_Ori        = 5
 nTakeObj_MoveDown   = 6
 nTakeObj_BesideObj  = 7
-nTakeObj_AboveObj   = 8
-nTakeObj_SuckDrink  = 9
-nTakeObj_SuckMeal   = 10
-nTakeObj_TakeOut    = 11
-nGiveObj1           = 12
-nGiveObj2           = 13
-nDelaySuctOffObj1   = 14
-nDelaySuctOffObj2   = 15
-nInitArmPos         = 16
-nIdelArmPos         = 17
-nSTOP               = 18
+nTakeObj_AboveMeal  = 8
+nTakeObj_DrinkUp    = 9
+nTakeObj_SuckDrink  = 10
+nTakeObj_SuckMeal   = 11
+nTakeObj_TakeOut    = 12
+nGiveObj1           = 13
+nGiveObj2           = 14
+nDelaySuctOffObj1   = 15
+nDelaySuctOffObj2   = 16
+nInitArmPos         = 17
+nIdelArmPos         = 18
+nSTOP               = 19
 
 # SerialKey motion command set
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
 SerialKey_LeadCustom = [nMoveToP1,  nSTOP]
 SerialKey_TakeObjToCustom_Type1 = \
     [nRotToDeg90,       nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_BesideObj,nTakeObj_SuckDrink, nTakeObj_AboveObj,  nTakeObj_TakeOut,
+     nTakeObj_BesideObj,nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_TakeOut,
      nRotToDeg0,        nGiveObj1,          nDelaySuctOffObj1,  nInitArmPos,
      nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
     [nRotToDeg90,       nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_AboveObj, nTakeObj_SuckMeal,  nTakeObj_AboveObj,  nTakeObj_TakeOut,
+     nTakeObj_AboveMeal,nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
      nRotToDeg0,        nMoveToP2,          nGiveObj2,          nDelaySuctOffObj2,
      nInitArmPos,       nSTOP]
 
@@ -71,6 +72,9 @@ class CDualArmTask:
         else:
             self.suction = SuctionTask(self.name)
             print "bb"
+
+    def SetSpeed(self, spd):
+        self.arm.set_speed(spd)
 
     def IdelPos(self):
         self.arm.set_speed(50)
@@ -113,6 +117,9 @@ class CDualArmCommand(object):
         self.right = CDualArmTask('right') # Set up right arm controller
         self.left  = CDualArmTask('left')  # Set up left arm controller
 
+        self.LowSpd = 40
+        self.HighSpd= 60
+
         self.DualArmIsBusyFlag = False
 
     def InitArmPos(self, select):                
@@ -144,10 +151,14 @@ class CDualArmCommand(object):
         L_Redun = -60
 
         if(select == 'right'):
+            self.right.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.HighSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.HighSpd)
+            self.left.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
@@ -162,14 +173,18 @@ class CDualArmCommand(object):
         L_Redun = -60
         
         if(select == 'right'):
+            self.right.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.HighSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.HighSpd)
+            self.left.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_AboveObj(self, select): # Above object 
+    def TakeObj_AboveMeal(self, select): # Above object (meal)
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.45, -0.3006, -0.56]
         R_Euler = [5.029, 82.029, 4.036]
@@ -178,36 +193,66 @@ class CDualArmCommand(object):
         L_Pos   = [0.45, 0.3506, -0.56]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
-
+        
         if(select == 'right'):
+            self.right.SetSpeed(self.LowSpd)
             self.right.SetSuctionDeg(-90)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.LowSpd)
             self.left.SetSuctionDeg(-90)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.right.SetSuctionDeg(-90)
             self.left.SetSuctionDeg(-90)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+    
+    def TakeObj_DrinkUp(self, select): # Above object 
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = [0.45, -0.3006, -0.54]
+        R_Euler = [5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = [0.45, 0.3506, -0.54]
+        L_Euler = [5.029, 82.029, 4.036]
+        L_Redun = -60
+
+        if(select == 'right'):
+            self.right.SetSpeed(self.LowSpd)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.SetSpeed(self.LowSpd)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
     def TakeObj_BesideObj(self, select):
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.45, -0.3006, -0.56]
+        R_Pos   = [0.40, -0.3006, -0.60]
         R_Euler = [5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.45, 0.3506, -0.56]
+        L_Pos   = [0.40, 0.3506, -0.60]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
 
         if(select == 'right'):
+            self.right.SetSpeed(self.LowSpd)
             self.right.SetSuctionDeg(0)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.LowSpd)
             self.left.SetSuctionDeg(0)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.right.SetSuctionDeg(0)
             self.left.SetSuctionDeg(0)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
@@ -225,12 +270,16 @@ class CDualArmCommand(object):
         L_Redun = -60
         
         if(select == 'right'):
+            self.right.SetSpeed(self.LowSpd)
             self.right.SuctionEnable(True)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.LowSpd)
             self.left.SuctionEnable(True)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.right.SuctionEnable(True)
             self.left.SuctionEnable(True)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
@@ -238,21 +287,25 @@ class CDualArmCommand(object):
 
     def TakeObj_SuckDrink(self, select):  # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.50, -0.3006, -0.56]
+        R_Pos   = [0.45, -0.3006, -0.60]
         R_Euler = [5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.50, 0.3506, -0.56]
+        L_Pos   = [0.45, 0.3506, -0.60]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
         
         if(select == 'right'):
+            self.right.SetSpeed(self.LowSpd)            
             self.right.SuctionEnable(True)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.LowSpd)
             self.left.SuctionEnable(True)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.right.SuctionEnable(True)
             self.left.SuctionEnable(True)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
@@ -269,10 +322,14 @@ class CDualArmCommand(object):
         L_Redun = -60
 
         if(select == 'right'):
+            self.right.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.HighSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.HighSpd)
+            self.left.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
@@ -287,10 +344,14 @@ class CDualArmCommand(object):
         L_Redun = -60
 
         if(select == 'right'):
+            self.right.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.HighSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.HighSpd)
+            self.left.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun) 
 
@@ -305,10 +366,14 @@ class CDualArmCommand(object):
         L_Redun = -60       
 
         if(select == 'right'):
+            self.right.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
+            self.left.SetSpeed(self.HighSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
+            self.right.SetSpeed(self.HighSpd)
+            self.left.SetSpeed(self.HighSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
@@ -393,7 +458,7 @@ class CMobileCommand(object):
         # Do nothing
         
     def MobileIsBusy(self):
-        # self.MobileIsBusyFlag = False # Force set flag for testing
+        self.MobileIsBusyFlag = False # Force set flag for testing
         return self.MobileIsBusyFlag
 
 def GetMissionSerialKey(MissionReq):
@@ -432,9 +497,12 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
     elif(Key == nTakeObj_MoveDown):
         print("TakeObj_MoveDown")
         DualArmCommandSet.TakeObj_MoveDown(SelectArm)
-    elif(Key == nTakeObj_AboveObj):
-        print("TakeObj_AboveObj")
-        DualArmCommandSet.TakeObj_AboveObj(SelectArm)
+    elif(Key == nTakeObj_AboveMeal):
+        print("TakeObj_AboveMeal")
+        DualArmCommandSet.TakeObj_AboveMeal(SelectArm)
+    elif(Key == nTakeObj_DrinkUp):
+        print("TakeObj_DrinkUp")
+        DualArmCommandSet.TakeObj_DrinkUp(SelectArm)
     elif(Key == nTakeObj_BesideObj):
         print("TakeObj_BesideObj")
         DualArmCommandSet.TakeObj_BesideObj(SelectArm)
