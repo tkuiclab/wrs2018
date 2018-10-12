@@ -8,126 +8,131 @@ void slide_callback(const manipulator_h_base_module_msgs::SlideCommand::ConstPtr
     cmd_arr[5] = goal_pos;
 }
 
-modbus_t* Init_Modus_RTU(bool &Is_Success, int ID, std::string Port, int BaudRate)
+void read_feedback()
 {
-    modbus_t*ct = modbus_new_rtu(Port.c_str(), 9600, 'E', 8, ID);
-    modbus_set_slave(ct, ID);
+    int rc = modbus_read_registers(ct, ADDRESS_FDB, FDB_LENGTH, fdb_val);
+    if (rc != FDB_LENGTH)
+    {
+        fprintf(stderr, "modbus read failed: %d %s\n", errno, modbus_strerror(errno));
+        errno = 0;
+    }
+
+    curr_pos   = fdb_val[0]<<16 | fdb_val[1];
+    curr_speed = fdb_val[4]<<16 | fdb_val[5];
+}
+
+void write_command()
+{
+    int rc = modbus_write_registers(ct, ADDRESS_CMD, CMD_LENGTH, cmd_arr);
+    if (rc != CMD_LENGTH)
+    {
+        fprintf(stderr, "modbus write failed: %d %s\n", errno, modbus_strerror(errno));
+        errno = 0;
+    }
+}
+
+modbus_t* init_modbus_rtu(int id, std::string port, int baud_rate)
+{
+    modbus_t* ct = modbus_new_rtu(port.c_str(), baud_rate, 'E', 8, id);
+    modbus_set_slave(ct, id);
     if (modbus_connect(ct) == -1)
     {
         fprintf(stderr, "Connection failed: %s\n",
-        modbus_strerror(errno));
-        std::cout<<"ERR connect\n";
+            modbus_strerror(errno));
+        std::cout << "Error connect" << std::endl;
         modbus_free(ct);
-        Is_Success = false;
+        return nullptr;
     }
-    else
-    {
-        std::cout<<"init ok\n";
-        Is_Success = true;
-        // modbus_set_debug(ct, true);
-    }
-    int rc = modbus_read_registers(ct, ADDRESS_FDB, 6, fdb_val);
-        
-    curr_pos = fdb_val[0]<<16 | fdb_val[1];
-    goal_pos = curr_pos;
+    std::cout << "Init success" << std::endl;
+    // modbus_set_debug(ct, true);
+
     return ct;
 }
 
-void SendCmd()
+void send_cmd()
+// for communication with driver
 {
-    int rc, diff_pos, speed = 0, speed_tmp;
+    int speed = 0;
     int smp_deleration = DECELERATION * smp_time;
+
     ros::Rate loop_rate(1 / smp_time);
-    while(ros::ok())
+    while (ros::ok())
     {
-        if(goal_pos != curr_pos)
+        if (goal_pos != curr_pos)
         {
-            diff_pos = abs(goal_pos - curr_pos);
-            speed_tmp = diff_pos / smp_time;
+            int diff_pos = abs(goal_pos - curr_pos);
+            int speed_tmp = diff_pos / smp_time;
             speed_tmp = (speed_tmp < MAX_SPEED) ? speed_tmp : MAX_SPEED;
-            speed = (speed_tmp < speed) ? (((speed - speed_tmp) < smp_deleration) ? speed_tmp : speed - smp_deleration) : speed_tmp;
+            speed = (speed_tmp < speed) ? (
+                ((speed - speed_tmp) < smp_deleration) ? speed_tmp : speed - smp_deleration
+                ) : speed_tmp;
             // speed = (speed_tmp < speed) ? speed : speed_tmp;
             // cmd_arr[6] = speed>>16;
-            cmd_arr[7] = speed;
-            cmd_arr[9] = speed*2;
+            cmd_arr[7]  = speed;
+            cmd_arr[9]  = speed*2;
             cmd_arr[11] = speed*2;
 
-            std::cout<<"speed = "<< (cmd_arr[7] | cmd_arr[6]<<16)<<std::endl;
-            rc = modbus_write_registers(ct, ADDRESS_CMD, 16, cmd_arr);
-            if (rc != 16) {
-                fprintf(stderr, "modbus write failed: %d %s\n", errno, modbus_strerror(errno));
-                errno = 0;
-            }
+            std::cout << "speed = " << (cmd_arr[7] | cmd_arr[6]<<16) <<std::endl;
+            write_command();
         }
         else
             speed = 0;
 
-        rc = modbus_read_registers(ct, ADDRESS_FDB, 6, fdb_val);
-        if (rc != 6) {
-            fprintf(stderr, "modbus read failed: %d %s\n", errno, modbus_strerror(errno));
-            errno = 0;
-        }
-
-        curr_pos = fdb_val[0]<<16 | fdb_val[1];
-        curr_speed = fdb_val[4]<<16 | fdb_val[5];
-        
+        read_feedback();
         loop_rate.sleep();
-        ros::spinOnce();
     }
 }
-
 
 int main(int argc, char **argv)
 {
     //========================= Initialize ROS =============================
     ros::init(argc, argv, "linear_z");
-    
-    ros::NodeHandle nh_param("~");
+
+    int baud_rate;
     std::string side_str;
-    int  baud_rate;
 
-    nh_param.param<std::string>("side", side_str, "");
+    ros::NodeHandle nh_param("~");
     nh_param.param<int>("baud", baud_rate, 9600);
-  
+    nh_param.param<std::string>("side", side_str, "");
+
     //========================= Initialize Modbus_RTU ============================= 
-    bool Connect_X_OK = false;
-    int  ID = side_str == "right" ? 1 : 3;
+    std::cout << "Preparing connection slide" << std::endl;
 
-    std::cout<<"Linear Start\n";
-
-    ct = Init_Modus_RTU(Connect_X_OK   , ID, "/dev/wrs/slide_" + side_str, 1000000);
-
-    std::cout<<"Linear Initted\n";
-
-    if(Connect_X_OK == false)
+    int id = side_str == "right" ? 1 : 3;
+    ct = init_modbus_rtu(id, "/dev/wrs/slide_" + side_str, baud_rate);
+    if (!ct)
     {
-        if(Connect_X_OK    == false)   std::cout<<"CONNECT " + side_str + " ERROR!!!!!\n";
-        //return -1;
+        std::cout << "Connect " + side_str + " fail!!!" << std::endl;
+        return -1;
     }
-    else
-    {
-        std::cout<<side_str + " Slide Connect ok\n";
-    }
- 
-    tra_gene_thread_ = new boost::thread(boost::bind( &SendCmd ));    
-    delete tra_gene_thread_;
+    std::cout << side_str + " slide connect ok" << std::endl;
+
+    read_feedback();
+    goal_pos = curr_pos;
+    std::cout << side_str + " slide connect ok " << goal_pos<<std::endl;
+
+
+    // generate thread to communicate with driver
+    com_driver_thread_ = new boost::thread(boost::bind( &send_cmd ));
 
     // ============================= Subscribe message =============================
-    // std::string side_label = "right" == side_str ? "r": "l";
     ros::NodeHandle n;
     ros::Subscriber sub = n.subscribe("/slide_command_msg", 1, slide_callback);
     ros::Publisher  pub = n.advertise<linear_motion::Slide_Feedback>("/slide_feedback_msg", 1);
     ros::Rate loop_rate(125);
 
     // ============================= ROS Loop =============================
-    // int i = 0;
+    // main thread to communicate with other node
     while (ros::ok())
     {
         msg_fdb.curr_pos = curr_pos;
-        msg_fdb.is_busy = (abs(curr_speed) > 10);
+        msg_fdb.is_busy  = abs(curr_speed) > 10;
         pub.publish(msg_fdb);
-        loop_rate.sleep();
         ros::spinOnce();
+
+        loop_rate.sleep();
     }
+
+    delete com_driver_thread_;
     return 0;
 }
