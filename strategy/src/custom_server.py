@@ -10,34 +10,37 @@ import sys
 import rospy
 import time
 
-IDEL          = 0
-MoveToP1      = 1
-MoveToP2      = 2
-RotToDeg90    = 3
-RotToDeg0     = 4
-TakeObj       = 5
-TakeObjStep1  = 6
-TakeObjStep2  = 7
-TakeObjStep3  = 8
-TakeObjStep4  = 9
-TakeObjStep5  = 10
-GiveObj_Type1 = 11
-GiveObj_Type2 = 12
-Delay_SuctOff_Type1 = 13
-Delay_SuctOff_Type2 = 14
-STOP          = 15
-InitArm       = 16
+# SerialKey motion command number
+nIDEL               = 0
+nMoveToP1           = 1
+nMoveToP2           = 2
+nRotToDeg90         = 3
+nRotToDeg0          = 4
+nTakeObj_Ori        = 5
+nTakeObj_MoveDown   = 6
+nTakeObj_AboveObj   = 7
+nTakeObj_SuckObj    = 8
+nTakeObj_TakeOut    = 9
+nGiveObj1           = 10
+nGiveObj2           = 11
+nDelaySuctOffObj1   = 12
+nDelaySuctOffObj2   = 13
+nInitArmPos         = 14
+nSTOP               = 15
 
-SerialKey_RobotIdel  = [IDEL, STOP]
-SerialKey_LeadCustom = [MoveToP1, STOP]
+# SerialKey motion command set
+SerialKey_RobotIdel  = [nIDEL,      nSTOP]
+SerialKey_LeadCustom = [nMoveToP1,  nSTOP]
 SerialKey_TakeObjToCustom_Type1 = \
-    [RotToDeg90, TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5,
-     RotToDeg0, GiveObj_Type1, Delay_SuctOff_Type1, STOP]
-#SerialKey_TakeObjToCustom_Type1 = [TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5, STOP] # Test for dual-arm command
+    [nRotToDeg90,       nTakeObj_Ori,       nTakeObj_MoveDown, nTakeObj_AboveObj,
+     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,  nRotToDeg0,
+     nGiveObj1,         nDelaySuctOffObj1,  nInitArmPos,
+     nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
-    [RotToDeg90, TakeObjStep1, TakeObjStep2, TakeObjStep3, TakeObjStep4, TakeObjStep5,
-     RotToDeg0, MoveToP2, GiveObj_Type2, Delay_SuctOff_Type2, STOP]
-#SerialKey_TakeObjToCustom_Type2 = [RotToDeg90, TakeObj, MoveToP2, GiveObj_Type2, STOP]
+    [nRotToDeg90,       nTakeObj_Ori,       nTakeObj_MoveDown,  nTakeObj_AboveObj,
+     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,   nRotToDeg0,
+     nMoveToP2,         nGiveObj2,          nDelaySuctOffObj2,  nInitArmPos,
+     nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
 RobotIdel  = 0
@@ -45,7 +48,7 @@ LeadCustom = 1
 TakeObjToCustom_Type1 = 2
 TakeObjToCustom_Type2 = 3
 
-class exampleTask:
+class CDualArmTask:
     def __init__(self, _name = '/robotis'):
         """Initial object."""
         en_sim = False
@@ -96,37 +99,21 @@ class exampleTask:
         
 class CDualArmCommand(object):
     def __init__(self):
-        self.right = exampleTask('right') # Set up right arm controller
-        self.left  = exampleTask('left')  # Set up left arm controller
+        self.right = CDualArmTask('right') # Set up right arm controller
+        self.left  = CDualArmTask('left')  # Set up left arm controller
 
         self.DualArmIsBusyFlag = False
-    #  Right        X       Y       Z      ROLL     PITCH     YAW      PHI    
-    #  step1.      0.3  -0.3006   -0.46    5.029    82.029    4.036     60      
 
-    #  step2.      0.3  -0.3006   -0.56    5.029    82.029    4.036     60    
+    def InitArmPos(self, select):                
+        if(select == 'right'):
+            self.right.InitialPos()     # Initial robot arm pose
+        elif(select == 'left'):
+            self.left.InitialPos()      # Initial robot arm pose
+        else:
+            self.right.InitialPos()     # Initial robot arm pose
+            self.left.InitialPos()      # Initial robot arm pose
 
-    #  step3.     0.55  -0.3006   -0.56    5.029    82.029    4.036     60
-
-    #  step4.     0.55  -0.3006   -0.46    5.029    82.029    4.036     60
-
-    #  Left
-    #  step1.      0.3   0.3506   -0.46    5.029    82.029    4.036     -60
- 
-    #  step2.      0.3   0.3506   -0.56    5.029    82.029    4.036     -60         
- 
-    #  step3.     0.55   0.3506   -0.56    5.029    82.029    4.036     -60
-
-    #  step4.     0.55   0.3506   -0.46    5.029    82.029    4.036     -60
-
-    def InitArmPos(self):
-        self.right.InitialPos()
-        self.left.InitialPos()
-
-    def TakeObj(self):
-        # self.DualArmIsBusyFlag = True
-        pass
-
-    def TakeObj_Step1(self):
+    def TakeObj_Ori(self, select): # Take object orientation
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.3, -0.3006, -0.46]
         R_Euler = [5.029, 82.029, 4.036]
@@ -135,14 +122,16 @@ class CDualArmCommand(object):
         L_Pos   = [0.3, 0.3506, -0.46]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
-        
-        self.right.SetSuctionDeg(0) # Initial suction degree
-        self.left.SetSuctionDeg(0)  # Initial suction degree
 
-        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        if(select == 'right'):
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_Step2(self):
+    def TakeObj_MoveDown(self, select): # Move down for take object 
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.3, -0.3006, -0.56]
         R_Euler = [5.029, 82.029, 4.036]
@@ -152,10 +141,15 @@ class CDualArmCommand(object):
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
         
-        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        if(select == 'right'):
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_Step3(self):       # Went above object 
+    def TakeObj_AboveObj(self, select): # Above object 
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.45, -0.3006, -0.56]
         R_Euler = [5.029, 82.029, 4.036]
@@ -164,14 +158,20 @@ class CDualArmCommand(object):
         L_Pos   = [0.45, 0.3506, -0.56]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
-        
-        self.right.SetSuctionDeg(-90)
-        self.left.SetSuctionDeg(-90)
 
-        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)   
+        if(select == 'right'):
+            self.right.SetSuctionDeg(-90)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.SetSuctionDeg(-90)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.SetSuctionDeg(-90)
+            self.left.SetSuctionDeg(-90)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)  
 
-    def TakeObj_Step4(self):      # Take object and suck it
+    def TakeObj_SuckObj(self, select):  # Take object and suck it
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.45, -0.3006, -0.60]
         R_Euler = [5.029, 82.029, 4.036]
@@ -180,14 +180,20 @@ class CDualArmCommand(object):
         L_Pos   = [0.45, 0.3506, -0.60]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
-
-        self.right.SuctionEnable(True)
-        self.left.SuctionEnable(True)
         
-        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        if(select == 'right'):
+            self.right.SuctionEnable(True)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.SuctionEnable(True)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.SuctionEnable(True)
+            self.left.SuctionEnable(True)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_Step5(self):      # Leave object region and take it
+    def TakeObj_TakeOut(self, select):  # Leave object region and take it
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.15, -0.3006, -0.50]
         R_Euler = [5.029, 82.029, 4.036]
@@ -197,10 +203,15 @@ class CDualArmCommand(object):
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
 
-        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        if(select == 'right'):
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def GiveObj_Type1(self):     # Give object to customer high
+    def GiveObj1(self, select):    # Give object to customer high
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.4, -0.3006, -0.40]
         R_Euler = [5.029, 82.029, 4.036]
@@ -210,10 +221,15 @@ class CDualArmCommand(object):
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
 
-        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)  
+        if(select == 'right'):
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun) 
 
-    def GiveObj_Type2(self):     # Give object to customer low
+    def GiveObj2(self, select):    # Give object to customer low
         # self.DualArmIsBusyFlag = True
         R_Pos   = [0.4, -0.3006, -0.60]
         R_Euler = [5.029, 82.029, 4.036]
@@ -223,18 +239,33 @@ class CDualArmCommand(object):
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60       
 
-        self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-        self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        if(select == 'right'):
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def DelayforGiveObj_Type1(self):
-        time.sleep(5)   # Delay for customer take object
-        self.right.SuctionEnable(False)
-        self.left.SuctionEnable(False)
+    def DelaySuctOffObj1(self, select):
+        time.sleep(5)   # Delay for customer take object        
+        if(select == 'right'):
+            self.right.SuctionEnable(False)
+        elif(select == 'left'):
+            self.left.SuctionEnable(False)
+        else:
+            self.right.SuctionEnable(False)
+            self.left.SuctionEnable(False)
 
-    def DelayforGiveObj_Type2(self):
+    def DelaySuctOffObj2(self, select):
         time.sleep(2)   # Delay for customer take object
-        self.right.SuctionEnable(False)
-        self.left.SuctionEnable(False)
+        if(select == 'right'):
+            self.right.SuctionEnable(False)
+        elif(select == 'left'):
+            self.left.SuctionEnable(False)
+        else:
+            self.right.SuctionEnable(False)
+            self.left.SuctionEnable(False)
 
     def IDEL(self):
         # self.DualArmIsBusyFlag = False
@@ -242,7 +273,8 @@ class CDualArmCommand(object):
         pass
     
     def DualArmIsBusy(self):
-        self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy)        
+        self.DualArmIsBusyFlag = (self.right.arm.is_busy) or (self.left.arm.is_busy) 
+        # self.DualArmIsBusyFlag = False # Force set flag for testing
         return self.DualArmIsBusyFlag
 
 class CMobileCommand(object):
@@ -311,56 +343,55 @@ def GetMissionSerialKey(MissionReq):
     else:
         return SerialKey_RobotIdel
 
-def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet):
-    if(Key == IDEL):
+def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
+    if(Key == nIDEL):
         print("IDEL")
         MobileCommandSet.IDLE()
         DualArmCommandSet.IDEL()       
-    elif(Key == MoveToP1):
+    elif(Key == nMoveToP1):
         print("MoveToP1")
         MobileCommandSet.Mobile_START()
-    elif(Key == MoveToP2):
+    elif(Key == nMoveToP2):
         print("MoveToP2")
         MobileCommandSet.Mobile_NEXT()
-    elif(Key == RotToDeg90):
+    elif(Key == nRotToDeg90):
         print("RotToDeg90")
         MobileCommandSet.Mobile_ORDER()
-    elif(Key == RotToDeg0):
+    elif(Key == nRotToDeg0):
         print("RotToDeg0")
         MobileCommandSet.Mobile_AID()
-    elif(Key == TakeObj):
-        print("TakeObj")
-        DualArmCommandSet.TakeObj()
-    elif(Key == TakeObjStep1):
-        print("TakeObjStep1")
-        DualArmCommandSet.TakeObj_Step1()
-    elif(Key == TakeObjStep2):
-        print("TakeObjStep2")
-        DualArmCommandSet.TakeObj_Step2()
-    elif(Key == TakeObjStep3):
-        print("TakeObjStep3")
-        DualArmCommandSet.TakeObj_Step3()
-    elif(Key == TakeObjStep4):
-        print("TakeObjStep4")
-        DualArmCommandSet.TakeObj_Step4()
-    elif(Key == TakeObjStep5):
-        print("TakeObjStep5")
-        DualArmCommandSet.TakeObj_Step5()       
-    elif(Key == GiveObj_Type1):
-        print("GiveObj_Type1")
-        DualArmCommandSet.GiveObj_Type1()
-    elif(Key == GiveObj_Type2):
-        print("GiveObj_Type2")
-        DualArmCommandSet.GiveObj_Type2()
-    elif(Key == Delay_SuctOff_Type1):
-        print("DelayforGiveObj_Type1")
-        DualArmCommandSet.DelayforGiveObj_Type1()
-    elif(Key == Delay_SuctOff_Type2):
-        print("DelayforGiveObj_Type2")
-        DualArmCommandSet.DelayforGiveObj_Type2()
-    elif(Key == InitArm):
-        DualArmCommandSet.InitArmPos()
-    elif(Key == STOP):
+
+    elif(Key == nTakeObj_Ori):
+        print("TakeObj_Ori")
+        DualArmCommandSet.TakeObj_Ori(SelectArm)
+    elif(Key == nTakeObj_MoveDown):
+        print("TakeObj_MoveDown")
+        DualArmCommandSet.TakeObj_MoveDown(SelectArm)
+    elif(Key == nTakeObj_AboveObj):
+        print("TakeObj_AboveObj")
+        DualArmCommandSet.TakeObj_AboveObj(SelectArm)
+    elif(Key == nTakeObj_SuckObj):
+        print("TakeObj_SuckObj")
+        DualArmCommandSet.TakeObj_SuckObj(SelectArm)
+    elif(Key == nTakeObj_TakeOut):
+        print("TakeObj_TakeOut")
+        DualArmCommandSet.TakeObj_TakeOut(SelectArm)  
+
+    elif(Key == nGiveObj1):
+        print("GiveObj1")
+        DualArmCommandSet.GiveObj1(SelectArm)
+    elif(Key == nGiveObj2):
+        print("nGiveObj2")
+        DualArmCommandSet.GiveObj2(SelectArm)
+    elif(Key == nDelaySuctOffObj1):
+        print("DelaySuctOffObj1")
+        DualArmCommandSet.DelaySuctOffObj1(SelectArm)
+    elif(Key == nDelaySuctOffObj2):
+        print("Delay_SuctOffObj2")
+        DualArmCommandSet.DelaySuctOffObj2(SelectArm)
+    elif(Key == nInitArmPos):
+        DualArmCommandSet.InitArmPos(SelectArm)
+    elif(Key == nSTOP):
         print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
         pass
@@ -388,12 +419,18 @@ def handle_state(req):
         MissionExecuteFlag = True
         MotionSerialKey = GetMissionSerialKey(Get_Req)
 
+        SelectArm = 'dual'
+        if(Get_Req == TakeObjToCustom_Type1):
+            SelectArm = 'left' # Use right arm to take object 1
+        elif(Get_Req == TakeObjToCustom_Type2):
+            SelectArm = 'right'  # Use left arm to take object 2
+
         while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
             if not(MobileCommandSet.MobileIsBusy() ):#or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
-                MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet)
-                if(MotionKey != STOP):
-                    if not ((MotionKey == MoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
+                if(MotionKey != nSTOP):
+                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
                         # Check the data send to service or not.
                         # if there were not, it would keep execute the motion (MoveToP1).
                         SerialKeyIndex += 1
