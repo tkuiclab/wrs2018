@@ -12,8 +12,8 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 0
-SPEED     = 200
+PICKORDER = 4
+SPEED     = 30
 LUNCHBOX_H = 0.05
 # The lesser one
 lunchQuan = 2              
@@ -188,10 +188,16 @@ class stockingTask:
         self.phi   = -30*self.is_right
         if self.reGripCnt != 0:
             if self.reGripCnt == 1:
-                self.pos[0] += 0.02
+                if self.pickList == 4 or self.pickList == 6 or self.pickList == 8 or self.pickList == 10:
+                    self.pos[0] += 0.01
+                else:
+                    self.pos[0] += 0.02
                 self.pos[1] += 0.01
             if self.reGripCnt == 2:
-                self.pos[0] += 0.02
+                if self.pickList == 4 or self.pickList == 6 or self.pickList == 8 or self.pickList == 10:
+                    self.pos[0] += 0.01
+                else:
+                    self.pos[0] += 0.02
                 self.pos[1] -= 0.01
             if self.reGripCnt == 3:
                 self.pos[0] -= 0.01
@@ -252,13 +258,14 @@ class stockingTask:
             if self.finish:
                 return
             else:
-                # if 'riceball' in objectName[self.pickList] and self.pickList!=8:# or self.pickList==7:
-                #     # self.state = safePose3
-                #     self.state = rearSafetyPos
-                # else:
-                #     self.state = rearSafetyPos
-                self.state = rearSafetyPos
+                if 'riceball' in objectName[self.pickList] and self.pickList!=8:# or self.pickList==7:
+                    self.state = safePose3
+                    # self.state = rearSafetyPos
+                else:
+                    self.state = rearSafetyPos
+                # self.state = rearSafetyPos
                 print "self.pickList = " + str(self.pickList)
+        
         elif self.state == busy:
             if self.arm.is_busy:
                 if (self.nowState == leaveBin or self.nowState == frontSafetyPos or self.nowState == move2Shelf) and not self.suction.is_grip:
@@ -287,7 +294,7 @@ class stockingTask:
             self.state = busy
             self.nextState = rearSafetyPos
             self.arm.set_speed(SPEED)
-            self.arm.jointMove(0, (0, -1.2, 0, 2.5, 0, -0.7, 0))
+            self.arm.jointMove(0, (0, -1.2, 0, 2.4, 0, -0.9, 0))
 
         elif self.state == initPose:
             self.state = busy
@@ -398,8 +405,8 @@ class stockingTask:
             self.getPlacePos()
             if 'riceball' in objectName[self.pickList]:
                 self.euler[0] = -45
-                # self.nextState = safePose1
-                # self.pickList -= 1
+                self.nextState = safePose1
+                self.pickList -= 1
             else:
                 self.euler[0] = 0
             self.pos[0] = 0.36
@@ -448,21 +455,27 @@ class stockingTask:
                 # rospy.sleep(.1)
                 self.state = busy
                 self.nextState = leaveBin
+                self.reGripCnt = 0
             elif not self.arm.is_busy:
                 self.state = missObj
         
         elif self.state == missObj:
-            if self.nowState == pickObject or leaveBin:
+            if self.nowState == pickObject or self.nowState == leaveBin:
                 self.state = busy
                 self.nextState = move2Bin
+                self.nowState = idle
                 self.arm.clear_cmd()
                 self.reGripCnt += 1
                 if self.reGripCnt > 3:
                     self.reGripCnt = 0
                     self.pickList += 1
-            elif self.nowState == frontSafetyPos or move2Shelf:
+                    if self.finish:
+                        self.nextState = idle
+            elif self.nowState == frontSafetyPos or self.nowState == move2Shelf:
                 self.state = busy
                 self.nextState = idle
+                self.nowState = idle
+                self.arm.clear_cmd()
                 self.pickList += 1 
                 self.arm.set_speed(20)
 
