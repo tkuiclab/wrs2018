@@ -32,12 +32,12 @@ nSTOP               = 15
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
 SerialKey_LeadCustom = [nMoveToP1,  nSTOP]
 SerialKey_TakeObjToCustom_Type1 = \
-    [nRotToDeg90,       nTakeObj_Ori,       nTakeObj_MoveDown, nTakeObj_AboveObj,
-     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,  nRotToDeg0,
+    [nRotToDeg90,       nInitArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown, nTakeObj_AboveObj,
+     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,   nRotToDeg0,
      nGiveObj1,         nDelaySuctOffObj1,  nInitArmPos,
      nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
-    [nRotToDeg90,       nTakeObj_Ori,       nTakeObj_MoveDown,  nTakeObj_AboveObj,
+    [nRotToDeg90,       nInitArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,  nTakeObj_AboveObj,
      nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,   nRotToDeg0,
      nMoveToP2,         nGiveObj2,          nDelaySuctOffObj2,  nInitArmPos,
      nSTOP]
@@ -70,7 +70,7 @@ class CDualArmTask:
             print "bb"
 
     def InitialPos(self):
-        self.arm.set_speed(30)
+        self.arm.set_speed(50)
         self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
         self.suction.gripper_suction_deg(0)
 
@@ -92,7 +92,7 @@ class CDualArmTask:
         if(On_Off == True):
             self.suction.gripper_vaccum_on()
         elif(On_Off == False):
-            self.success.gripper_vaccum_off()
+            self.suction.gripper_vaccum_off()
     
     def SetSuctionDeg(self, Deg):
         self.suction.gripper_suction_deg(Deg)
@@ -390,6 +390,7 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
         print("Delay_SuctOffObj2")
         DualArmCommandSet.DelaySuctOffObj2(SelectArm)
     elif(Key == nInitArmPos):
+        print("InitArmPos")
         DualArmCommandSet.InitArmPos(SelectArm)
     elif(Key == nSTOP):
         print("STOP")
@@ -425,18 +426,18 @@ def handle_state(req):
         elif(Get_Req == TakeObjToCustom_Type2):
             SelectArm = 'right' # Use left arm to take object 2
 
-        # while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
-        #     if not(MobileCommandSet.MobileIsBusy() ):#or DualArmCommandSet.DualArmIsBusy()):
-        #         MotionKey = MotionSerialKey[SerialKeyIndex]
-        #         MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
-        #         if(MotionKey != nSTOP):
-        #             if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
-        #                 # Check the data send to service or not.
-        #                 # if there were not, it would keep execute the motion (MoveToP1).
-        #                 SerialKeyIndex += 1
-        #         else:
-        #             SerialKeyIndex = 0
-        #             MissionExecuteFlag = False
+        while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
+            if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
+                MotionKey = MotionSerialKey[SerialKeyIndex]
+                MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
+                if(MotionKey != nSTOP):
+                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                        # Check the data send to service or not.
+                        # if there were not, it would keep execute the motion (MoveToP1).
+                        SerialKeyIndex += 1
+                else:
+                    SerialKeyIndex = 0
+                    MissionExecuteFlag = False
 
     except Exception, exception:
         ResponseFlag = False
