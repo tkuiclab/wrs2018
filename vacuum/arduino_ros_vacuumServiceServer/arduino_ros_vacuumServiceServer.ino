@@ -378,12 +378,12 @@ void pub_topic2(byte *buffer, const char out_str[], byte arg0, byte arg1, byte a
 
 void loop()
 { 
-  if(armTask)
+  if (armTask)
   {
-    is_grip_msg.data = digitalRead(is_grip_right);
+    is_grip_msg.data = (bool)digitalRead(is_grip_right);
     isGripR.publish(&is_grip_msg);
 
-    is_grip_msg.data = digitalRead(is_grip_left);
+    is_grip_msg.data = (bool)digitalRead(is_grip_left);
     isGripL.publish(&is_grip_msg);
   }
   else
@@ -394,4 +394,5 @@ void loop()
   isStop.publish(&is_stop_msg);
 
   nh.spinOnce();
+  delay(10);
 }
