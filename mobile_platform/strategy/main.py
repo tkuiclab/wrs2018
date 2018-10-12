@@ -9,16 +9,21 @@ import rospy
 ''' imu '''
 # from lib.strategy import Strategy
 
-
 ''' rfid '''
 # from lib.strategy_rfid import Strategy
 
+''' qrcode '''
+from lib.strategy_qr import Strategy
+
 ''' stage 2 '''
 ''' imu '''
-from lib.strategy2 import Strategy
-
+# from lib.strategy2 import Strategy
 ''' rfid '''
 # from lib.strategy2_rfid import Strategy
+
+''' qrcode '''
+# from lib.strategy2_qr import Strategy
+
 ''' stage 3 '''
 ''' imu '''
 ''' rfid '''
@@ -42,7 +47,7 @@ def main():
         if(robot._param.start):
             robot.Process()
         else:
-            print("Don't start up Strategy")
+            # print("Don't start up Strategy")
             robot.Robot_Stop()
         rate.sleep()
     try:

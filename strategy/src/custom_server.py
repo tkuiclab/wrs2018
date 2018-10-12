@@ -32,12 +32,12 @@ nSTOP               = 15
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
 SerialKey_LeadCustom = [nMoveToP1,  nSTOP]
 SerialKey_TakeObjToCustom_Type1 = \
-    [nRotToDeg90,       nTakeObj_Ori,       nTakeObj_MoveDown, nTakeObj_AboveObj,
-     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,  nRotToDeg0,
+    [nRotToDeg90,       nInitArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown, nTakeObj_AboveObj,
+     nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,   nRotToDeg0,
      nGiveObj1,         nDelaySuctOffObj1,  nInitArmPos,
      nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
-    [nRotToDeg90,       nTakeObj_Ori,       nTakeObj_MoveDown,  nTakeObj_AboveObj,
+    [nRotToDeg90,       nInitArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,  nTakeObj_AboveObj,
      nTakeObj_SuckObj,  nTakeObj_AboveObj,  nTakeObj_TakeOut,   nRotToDeg0,
      nMoveToP2,         nGiveObj2,          nDelaySuctOffObj2,  nInitArmPos,
      nSTOP]
@@ -70,7 +70,7 @@ class CDualArmTask:
             print "bb"
 
     def InitialPos(self):
-        self.arm.set_speed(30)
+        self.arm.set_speed(50)
         self.arm.jointMove(0, (0, -0.5, 0, 1, 0, -0.5, 0))
         self.suction.gripper_suction_deg(0)
 
@@ -393,6 +393,7 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
         print("Delay_SuctOffObj2")
         DualArmCommandSet.DelaySuctOffObj2(SelectArm)
     elif(Key == nInitArmPos):
+        print("InitArmPos")
         DualArmCommandSet.InitArmPos(SelectArm)
     elif(Key == nSTOP):
         print("STOP")
@@ -429,7 +430,7 @@ def handle_state(req):
             SelectArm = 'right' # Use left arm to take object 2
 
         while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
-            if not(MobileCommandSet.MobileIsBusy() ):#or DualArmCommandSet.DualArmIsBusy()):
+            if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
@@ -450,22 +451,26 @@ def handle_state(req):
         ResponseInfo = e.message
 
     else:
-        if(MotionSerialKey == SerialKey_RobotIdel):
+        if(Get_Req == RobotIdel):
             ResponseFlag = False
             # ResponseInfo = "Mission: Robot idel finish."
             ResponseInfo = "Mission: Robot idel finish."
-        elif(MotionSerialKey == SerialKey_LeadCustom):
+        elif(Get_Req == LeadCustom):
             ResponseFlag = True
             # ResponseInfo = "Mission: Lead customer finish."
             ResponseInfo = "We have arrived at Sprite's shelves, do you need anything else?"
-        elif(MotionSerialKey == SerialKey_TakeObjToCustom_Type1):
+        elif(Get_Req == TakeObjToCustom_Type1):
             ResponseFlag = True
             # ResponseInfo = "Mission: Take object to customer type1 finish."
             ResponseInfo = "Here you are, do you need anything else?"
-        elif(MotionSerialKey == SerialKey_TakeObjToCustom_Type2):
+        elif(Get_Req == TakeObjToCustom_Type2):
             ResponseFlag = False
             # ResponseInfo = "Mission: Take object to customer type2 finish."
             ResponseInfo = "Mission: Take object to customer type2 finish."
+        else:
+            ResponseFlag = False
+            ResponseInfo = "????????"
+  
 
     ### Response the result of Strategy
     res = AssistantStateResponse()

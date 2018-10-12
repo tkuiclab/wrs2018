@@ -78,7 +78,7 @@ class PIDControl_Y(object):
 class PIDControl_Yaw(object):
     def __init__(self):
         self._kp = 10.0
-        self._ki = 0.3
+        self._ki = 0.01
         self._kd = 2.0
         self.prevIntegral = 0
         self.lastError = 0
@@ -95,10 +95,44 @@ class PIDControl_Yaw(object):
         turn = self._kp*ang+self._ki*self.prevIntegral+self._kd*derivative
         turn = turn/30.0
 
-        if(turn >= (yaw+2)):
-            turn = (yaw+2)
-        elif(turn <= -(yaw+2)):
-            turn = -(yaw+2)
+        # if(turn >= (yaw+2)):
+        #     turn = (yaw+2)
+        # elif(turn <= -(yaw+2)):
+        #     turn = -(yaw+2)
 
         return turn
+
+class PIDControl_Qr(object):
+    def __init__(self,kp,ki,kd):
+        self._kp = kp
+        self._ki = ki
+        self._kd = kd
+        self.prevIntegral = 0
+        self.lastError = 0
+    
+    def Init(self):
+        self.prevIntegral = 0
+        self.lastError = 0
+    
+    def Process(self,dis,ang,minVel):
+
+        self.prevIntegral += dis
+        derivative = dis - self.lastError
+        self.lastError = dis
+        turn = self._kp*dis+self._ki*self.prevIntegral+self._kd*derivative
+        y = turn/500.0
+
+        # if(y > minVel-2):
+        #     y = minVel-2
+        # elif(y < -(minVel-2)):
+        #     y = -(minVel-2)
+
+        if(dis > 20):
+            return y
+        elif(dis < -20):
+            return y
+        else:
+            return 0.0
+
+        # return y
     

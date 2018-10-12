@@ -17,6 +17,12 @@ socket.on('news', function(m) {
     __log('Socket.IO Connected');
   }
 });
+socket.on('say', function(m) {
+  let j = JSON.parse(m);
+  console.log('Let Robot says: '+j.info);
+  __log('Let Robot says: '+j.info);
+  Sayit(j.info);
+});
 
 ws.onopen = function(){
   console.log("Connected websocket");

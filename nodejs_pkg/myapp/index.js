@@ -19,6 +19,16 @@ var serviceClient;
 
 rosnodejs.initNode('index')
 .then((rosNode) => {
+  /* Service Server */
+  const LetRobotSay = (req, resp) => {
+    console.log(req.info);
+    io.emit("say", JSON.stringify(req));
+    resp.success = true;
+    return resp;
+  };
+  let service = rosNode.advertiseService('/let_robot_say', 'nodejs_pkg/LetRobotSay', LetRobotSay);
+
+  /* Service Client */
   serviceClient = rosNode.serviceClient('/assistant_service','strategy/AssistantState');
   rosNode.waitForService(serviceClient.getService(), 2000)
     .then((available) => {

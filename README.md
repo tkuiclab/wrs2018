@@ -3,15 +3,20 @@ TKU ICLab join 2018 WRS in Tokoyo
 
 youjun well done!!
 
+```bash
+$ cd <timda_ws>/src/
+$ source devel/setup.bash
+```
+
 # TIMDA IBM Assistant Web UI
 
 ## Necessary Packages
 ```bash
-$ sudo apt-get install ros-<distro>-qt-ros
+$ sudo apt-get install ros-<distro>-qt-build
 $ sudo apt-get install ros-<distro>-rosbridge-server
 $ sudo apt-get install ros-<distro>-rosbridge-server
-$ sudo apt-get install libmodbus-dev
 $ sudo apt-get install ros-kinetic-rosserial-python ros-kinetic-rosserial-arduino
+# see linear_motion README.md to install libmodbus
 # install nvm, nodejs, npm
 $ git clone git://github.com/creationix/nvm.git ~/.nvm
 $ echo ". ~/.nvm/nvm.sh" >> ~/.bashrc
@@ -35,6 +40,10 @@ $ npm install
 ### Run Web Server
 ```bash
 $ node index.js
+```
+### Run Assistant Strategy
+```bash
+$ rosrun strategy custom_server.py
 ```
 ### Rotate Touch Screen
 ```bash
