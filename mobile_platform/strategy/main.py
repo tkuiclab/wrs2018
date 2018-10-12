@@ -17,7 +17,8 @@ from lib.strategy_qr import Strategy
 
 ''' stage 2 '''
 ''' imu '''
-# from lib.strategy2 import Strategy
+from lib.strategy2 import Strategy
+
 ''' rfid '''
 # from lib.strategy2_rfid import Strategy
 
