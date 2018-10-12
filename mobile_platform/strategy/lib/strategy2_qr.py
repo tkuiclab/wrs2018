@@ -227,7 +227,8 @@ class Strategy(object):
                     else:
                         self._param.behavior = PLATFORM
                         if(self._param.stopPoint == '1'):
-                            self.Voice_Start()
+                            # self.Voice_Start()
+                            self.Dual_Arm_Start()
                         elif(self._param.stopPoint == '2'):
                             print('state 2')
                             self.Dual_Arm_Start()

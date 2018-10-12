@@ -357,11 +357,11 @@ class CDualArmCommand(object):
 
     def GiveObj2(self, select):    # Give object to customer low
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.4, -0.3006, -0.60]
+        R_Pos   = [0.4, -0.3006, -0.55]
         R_Euler = [5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.4, 0.3506, -0.60]
+        L_Pos   = [0.4, 0.3506, -0.55]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60       
 
@@ -458,7 +458,7 @@ class CMobileCommand(object):
         # Do nothing
         
     def MobileIsBusy(self):
-        self.MobileIsBusyFlag = False # Force set flag for testing
+        # self.MobileIsBusyFlag = False # Force set flag for testing
         return self.MobileIsBusyFlag
 
 def GetMissionSerialKey(MissionReq):
