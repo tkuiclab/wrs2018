@@ -458,7 +458,7 @@ class CMobileCommand(object):
         # Do nothing
         
     def MobileIsBusy(self):
-        self.MobileIsBusyFlag = False # Force set flag for testing
+        # self.MobileIsBusyFlag = False # Force set flag for testing
         return self.MobileIsBusyFlag
 
 def GetMissionSerialKey(MissionReq):
