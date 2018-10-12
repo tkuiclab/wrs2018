@@ -46,8 +46,6 @@ modbus_t* init_modbus_rtu(int id, std::string port, int baud_rate)
     std::cout << "Init success" << std::endl;
     // modbus_set_debug(ct, true);
 
-    read_feedback();
-    goal_pos = curr_pos;
     return ct;
 }
 
@@ -108,6 +106,11 @@ int main(int argc, char **argv)
         return -1;
     }
     std::cout << side_str + " slide connect ok" << std::endl;
+
+    read_feedback();
+    goal_pos = curr_pos;
+    std::cout << side_str + " slide connect ok " << goal_pos<<std::endl;
+
 
     // generate thread to communicate with driver
     com_driver_thread_ = new boost::thread(boost::bind( &send_cmd ));
