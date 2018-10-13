@@ -107,7 +107,8 @@ class NodeHandle(object):
         """ topic pub """
         self.pub_cmdvel = rospy.Publisher('motion/cmd_vel',Twist, queue_size = 1)
         self.pub_behavior = rospy.Publisher('scan_black/strategy_behavior',Int32, queue_size = 1)
-        self.pub_dualArm = rospy.Publisher('scan_black/dualarm_start',Bool, queue_size = 1)
+        self.pub_dualArm1 = rospy.Publisher('scan_black/dualarm_start_1',Int32, queue_size = 1)
+        self.pub_dualArm2 = rospy.Publisher('scan_black/dualarm_start',Bool, queue_size = 1)
         self.pub_voice = rospy.Publisher('scan_black/voice_start',Bool, queue_size = 1)
         self.pub_startCamera = rospy.Publisher('scan_black/scanStart',Bool, queue_size = 1)
         self.pub_resetImu = rospy.Publisher('scan_black/resetImu',Bool, queue_size = 1)
