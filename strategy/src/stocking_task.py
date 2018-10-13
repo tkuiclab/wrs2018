@@ -481,8 +481,8 @@ class stockingTask:
 
 def start_callback(msg):
     global is_start
-    if not is_start:
-        is_start = msg.data
+    if msg.data == 1 and not is_start:
+        is_start = True
 
 
 if __name__ == '__main__':
@@ -490,8 +490,8 @@ if __name__ == '__main__':
 
     is_start = False
     rospy.Subscriber(
-        'scan_black/dualarm_start',
-        Bool,
+        'scan_black/dualarm_start_1',
+        Int32,
         start_callback,
         queue_size=1
     )
