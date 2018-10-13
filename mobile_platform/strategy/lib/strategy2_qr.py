@@ -97,6 +97,7 @@ class Strategy(object):
         self.not_find = 0
 
         self.stopTimes = 0
+        self.dualArm = 0
         # self._kp = 6
         # self._ki = 0.1
         # self._kd = 4.0
@@ -226,12 +227,14 @@ class Strategy(object):
                         self._param.behavior = CROSS
                     else:
                         self._param.behavior = CORRECTION
-                        # if(self._param.stopPoint == '1'):
-                        #     # self.Voice_Start()
-                        #     self.Dual_Arm_Start()
-                        # elif(self._param.stopPoint == '2'):
-                        #     print('state 2')
-                        #     self.Dual_Arm_Start()
+                        if(self._param.stopPoint == '1'):
+                            # self.Voice_Start()
+                            #self.Dual_Arm_Start()
+                            self.dualArm = 1
+                        elif(self._param.stopPoint == '2'):
+                            print('state 2')
+                            self.dualArm = 1
+                            # self.Dual_Arm_Start()
                         self.homeTimes += 1
 
                 if(self.stopTimes >= 3):
@@ -263,7 +266,7 @@ class Strategy(object):
             self.Robot_Stop()
 
     def Correction_Strategy(self):
-        # y = self.controlY.Process(self._param.dis,self._param.ang,self._param.minVel)
+        y = self.controlY.Process(self._param.dis,self._param.ang,self._param.minVel)
         if(self._param.qrX == None):
             print('fuck!!!!!!!!!!!!!!!!')
             dis = 0
@@ -297,11 +300,14 @@ class Strategy(object):
 
                     print('CORRECTION',self.rotateAng,self._param.errorRotate0)
                     self._param.behavior = PLATFORM
-                    if(self._param.stopPoint == '1'):
-                        # self.Voice_Start()
-                        self.Dual_Arm_Start()
-                    elif(self._param.stopPoint == '2'):
-                        print('state 2')
+                    # if(self._param.stopPoint == '1'):
+                    #     # self.Voice_Start()
+                    #     self.Dual_Arm_Start()
+                    # elif(self._param.stopPoint == '2'):
+                    #     print('state 2')
+                    #     self.Dual_Arm_Start()
+                    if(self.dualArm == 1):
+                        self.dualArm = 0
                         self.Dual_Arm_Start()
                     
                 self.not_find = 0
@@ -313,11 +319,8 @@ class Strategy(object):
                 else:
                     self.not_find = 0
                     self._param.behavior = PLATFORM
-                    if(self._param.stopPoint == '1'):
-                        # self.Voice_Start()
-                        self.Dual_Arm_Start()
-                    elif(self._param.stopPoint == '2'):
-                        print('state 2')
+                    if(self.dualArm == 1):
+                        self.dualArm = 0
                         self.Dual_Arm_Start()
             self._param.qrTheta = 999
         else:
@@ -350,6 +353,8 @@ class Strategy(object):
         
             
     def Rotate_Strategy(self):
+        if(self._param.qrX == None):
+            self._param.qrX = 0
         # yaw = self.controlYaw(self._param.qrTheta,self._param.velYaw)
         if(self._param.qrTheta is not None and self._param.qrTheta != 999):
             RPang = self.Norm_Angle(self.rotateAng - self._param.qrTheta)
