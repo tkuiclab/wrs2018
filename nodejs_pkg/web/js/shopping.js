@@ -18,12 +18,12 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-order.onclick = function() {
-  console.log("Send Order");
-  var request = new ROSLIB.ServiceRequest({
-    state : 7
-  });
-  AssistantClient.callService(request, function(result) {
-    console.log('Result from server: '+result.success+', '+result.info);
-  });
-}
+// order.onclick = function() {
+//   console.log("Send Order");
+//   var request = new ROSLIB.ServiceRequest({
+//     state : 3
+//   });
+//   AssistantClient.callService(request, function(result) {
+//     console.log('Result from server: '+result.success+', '+result.info);
+//   });
+// }

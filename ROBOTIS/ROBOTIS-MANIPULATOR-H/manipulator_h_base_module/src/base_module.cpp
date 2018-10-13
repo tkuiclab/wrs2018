@@ -171,6 +171,8 @@ void BaseModule::clearCmdCallback(const std_msgs::Bool::ConstPtr& msg)
     robotis_->is_moving_ = false;
     robotis_->ik_solve_ = false;
     robotis_->cnt_ = 0;
+    ROS_INFO("[end] send trajectory");
+    publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");
   }
 }
 void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg)

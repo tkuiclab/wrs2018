@@ -339,6 +339,20 @@ class ArmTask:
             degrees(phi)
         )
 
+    def relative_move(self, mode='p2p', euler=_ORI, pos = _POS, phi=_PHI):
+        fb = self.get_fb()
+        curr_pos = fb.group_pose.position
+        pos[0] += curr_pos.x
+        pos[1] += curr_pos.y
+        pos[2] += curr_pos.z
+
+        self.ikMove(
+            mode,
+            (pos[0], pos[1], pos[2]),
+            (euler[0], euler[1], euler[2]),
+            phi
+        )
+
     def move_euler(self, mode='p2p', euler=_ORI):
         fb = self.get_fb()
         pos = fb.group_pose.position
