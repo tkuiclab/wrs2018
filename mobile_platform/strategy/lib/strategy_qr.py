@@ -13,7 +13,7 @@ from lib.counter import TimeCounter
 
 # rostopic msg
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool,Int32
 
 
 # define behavior 
@@ -87,11 +87,8 @@ class Strategy(object):
         self.not_find = 0
 
         self.stopTimes = 0
-        # self._kp = 6
-        # self._ki = 0.1
-        # self._kd = 4.0
-        # self.prevIntegral = 0
-        # self.lastError = 0
+
+        self.dualArm = 0
         
         ''' rotate  '''
         self.rotateAng = self._param.errorRotate0
@@ -233,10 +230,12 @@ class Strategy(object):
                     elif(self.homeTimes == int(self._param.stopPoint)):
                         self._param.behavior = CROSS
                     elif(self._param.stopPoint == '2'):
-                        self._param.behavior = PLATFORM
+                        self._param.behavior = CORRECTION
                         print('state 2')
-                        self.Dual_Arm_Start()
+                        self.dualArm = 2
+                        self.Dual_Arm_Start_2()
                     else:
+                        self.dualArm = 1
                         self._param.behavior = CORRECTION
                         self.homeTimes += 1
                 if(self.stopTimes >= 3):
@@ -268,7 +267,7 @@ class Strategy(object):
             self.Robot_Stop()
 
     def Correction_Strategy(self):
-        y = self.controlY.Process(self._param.dis,self._param.ang,self._param.minVel)
+        # y = self.controlY.Process(self._param.dis,self._param.ang,self._param.minVel)
         if(self._param.qrX == None):
             print('fuck!!!!!!!!!!!!!!!!')
             dis = 0
@@ -301,13 +300,18 @@ class Strategy(object):
                     self.Robot_Stop()
 
                     print('CORRECTION',self.rotateAng,self._param.errorRotate0)
-                    if(self.rotateAng == self._param.errorRotate0):
-                        self._param.behavior = ROTATE
-                        self.rotateAng = self._param.errorRotate90
-                    else:
-                        self._param.behavior = PLATFORM
-                        self.rotateAng = self._param.errorRotate0
-                        self.initPID = 1
+                    if(self.dualArm == 1):
+                        if(self.rotateAng == self._param.errorRotate0):
+                            self._param.behavior = ROTATE
+                            self.rotateAng = self._param.errorRotate90
+                        else:
+                            self._param.behavior = PLATFORM
+                            self.rotateAng = self._param.errorRotate0
+                            self.initPID = 1
+                    elif(self.dualArm == 2):
+                        if(self.rotateAng == self._param.errorRotate0):
+                            self._param.behavior = PLATFORM
+        
                     
                 self.not_find = 0
             else:
@@ -317,12 +321,17 @@ class Strategy(object):
                     self.Robot_Stop()
                 else:
                     self.not_find = 0
-                    if(self.rotateAng == self._param.errorRotate0):
-                        self._param.behavior = ROTATE
-                        self.rotateAng = self._param.errorRotate90
-                    else:
-                        self._param.behavior = PLATFORM
-                        self.rotateAng = self._param.errorRotate0  
+                    if(self.dualArm == 1):
+                        if(self.rotateAng == self._param.errorRotate0):
+                            self._param.behavior = ROTATE
+                            self.rotateAng = self._param.errorRotate90
+                        else:
+                            self._param.behavior = PLATFORM
+                            self.rotateAng = self._param.errorRotate0
+                            self.initPID = 1
+                    elif(self.dualArm == 2):
+                        if(self.rotateAng == self._param.errorRotate0):
+                            self._param.behavior = PLATFORM  
                         self.initPID = 1
             self._param.qrTheta = 999
         else:
@@ -343,14 +352,17 @@ class Strategy(object):
             self.controlY.Init()
             self.initPID = 0
         self.Robot_Stop()
-        if(self.homeFlag == 0):
-            self.Dual_Arm_Start()
+        if(self.homeFlag == 0 and self.dualArm == 1):
+            self.Dual_Arm_Start_1()
+        elif(self.homeFlag == 0 and self.dualArm == 2):
+            self.Dual_Arm_Start_2()
     
     def Next_Point_Strategy(self):
         print('NEXT_POINT')
         self.Robot_Stop()
         self._param.behavior = ROTATE
         self.rotateAng = self._param.errorRotate0
+        self.dualArm = 0
         
             
     def Rotate_Strategy(self):
@@ -553,10 +565,15 @@ class Strategy(object):
         self.Robot_Stop()
         self._param.loadParam = False
     
-    def Dual_Arm_Start(self):
-        start = Bool()
-        start.data = True
-        self._param.pub_dualArm.publish(start)
+    def Dual_Arm_Start_1(self):
+        start = Int32()
+        start.data = 1
+        self._param.pub_dualArm1.publish(start)
+    
+    def Dual_Arm_Start_2(self):
+        start = Int32()
+        start.data = 2
+        self._param.pub_dualArm1.publish(start)
 
     def Scan_Camera_Start(self):
         start = Bool()

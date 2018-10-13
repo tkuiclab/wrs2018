@@ -32,6 +32,7 @@ class SuctionTask:
     def __init__(self, _name='/robotis'):
         """Inital object."""
         self.name    = _name
+        self.fail_cnt = 0
         self.gripped = False
         print 'name = ', self.name
         if 'gazebo' in self.name:
@@ -164,7 +165,15 @@ class SuctionTask:
         print('Suction Move : ' + str_deg)
 
     def is_grip_callback(self, msg):
-        self.gripped = msg.data
+        if not msg.data:
+            if self.fail_cnt >= 100:
+                self.gripped = False
+                self.fail_cnt = 100
+            else:
+                self.fail_cnt += 1
+        else:
+            self.fail_cnt = 0
+            self.gripped = True
 
     @property
     def is_grip(self):
