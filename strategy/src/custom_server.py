@@ -186,11 +186,11 @@ class CDualArmCommand(object):
 
     def TakeObj_AboveMeal(self, select): # Above object (meal)
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.45, -0.3006, -0.56]
+        R_Pos   = [0.48, -0.3006, -0.56]
         R_Euler = [5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.45, 0.3506, -0.56]
+        L_Pos   = [0.48, 0.3506, -0.56]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
         
@@ -261,11 +261,11 @@ class CDualArmCommand(object):
 
     def TakeObj_SuckMeal(self, select):  # Take object and suck it (Meal)
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.45, -0.3006, -0.60]
+        R_Pos   = [0.48, -0.3006, -0.64]
         R_Euler = [5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.45, 0.3506, -0.60]
+        L_Pos   = [0.48, 0.3506, -0.64]
         L_Euler = [5.029, 82.029, 4.036]
         L_Redun = -60
         
