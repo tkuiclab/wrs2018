@@ -18,33 +18,36 @@ nRotToDeg90         = 3
 nRotToDeg0          = 4
 nTakeObj_Ori        = 5
 nTakeObj_MoveDown   = 6
-nTakeObj_BesideObj  = 7
+nTakeObj_BesideDrink= 7
 nTakeObj_AboveMeal  = 8
 nTakeObj_DrinkUp    = 9
 nTakeObj_SuckDrink  = 10
 nTakeObj_SuckMeal   = 11
 nTakeObj_TakeOut    = 12
 nGiveObj1           = 13
-nGiveObj2           = 14
-nDelaySuctOffObj1   = 15
-nDelaySuctOffObj2   = 16
-nInitArmPos         = 17
-nIdelArmPos         = 18
-nSTOP               = 19
+nGiveObj2_AboveDesk = 14
+nGiveObj2_OnDesk    = 15
+nGiveObj2_LeaveDesk = 16
+nDelaySuctOffObj1   = 17
+nDelaySuctOffObj2   = 18
+nInitArmPos         = 19
+nIdelArmPos         = 20
+nSTOP               = 21
 
 # SerialKey motion command set
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
 SerialKey_LeadCustom = [nMoveToP1,  nSTOP]
 SerialKey_TakeObjToCustom_Type1 = \
-    [nRotToDeg90,       nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_BesideObj,nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_TakeOut,
-     nRotToDeg0,        nGiveObj1,          nDelaySuctOffObj1,  nInitArmPos,
-     nSTOP]
+    [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
+     nTakeObj_BesideDrink,  nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_TakeOut,
+     nRotToDeg0,            nGiveObj1,          nDelaySuctOffObj1,  nIdelArmPos,
+     nInitArmPos,           nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
-    [nRotToDeg90,       nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_AboveMeal,nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
-     nRotToDeg0,        nMoveToP2,          nGiveObj2,          nDelaySuctOffObj2,
-     nInitArmPos,       nSTOP]
+    [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
+     nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+     nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+     nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
+     nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
 RobotIdel  = 0
@@ -117,10 +120,76 @@ class CDualArmCommand(object):
         self.right = CDualArmTask('right') # Set up right arm controller
         self.left  = CDualArmTask('left')  # Set up left arm controller
 
+        self.DualArmIsBusyFlag = False
+
         self.LowSpd = 40
         self.HighSpd= 60
 
-        self.DualArmIsBusyFlag = False
+        self.SuckDrinkDeg   = 0 
+        self.SuckMealDeg    = -90
+
+        self.GiveObj1_DelayTime = 3 # sec
+        self.GiveObj2_DelayTime = 2 # sec
+
+        self.R_PosTakeObj_Ori        = [0.3,  -0.3006, -0.46]
+        self.R_OriTakeObj_Ori        = [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_Ori        = [0.3,   0.3506, -0.46]
+        self.L_OriTakeObj_Ori        = [5.029, 82.029, 4.036]
+
+        self.R_PosTakeObj_MoveDown   = [0.3,  -0.3006, -0.56]
+        self.R_OriTakeObj_MoveDown   = [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_MoveDown   = [0.3,   0.3506, -0.56]
+        self.L_OriTakeObj_MoveDown   = [5.029, 82.029, 4.036]
+
+        self.R_PosTakeObj_AboveMeal  = [0.45, -0.3006, -0.56]
+        self.R_OriTakeObj_AboveMeal  = [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_AboveMeal  = [0.45,  0.3506, -0.56]
+        self.L_OriTakeObj_AboveMeal  = [5.029, 82.029, 4.036]
+
+        self.R_PosTakeObj_DrinkUp    = [0.45, -0.3006, -0.54]
+        self.R_OriTakeObj_DrinkUp    = [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_DrinkUp    = [0.45,  0.3506, -0.54]
+        self.L_OriTakeObj_DrinkUp    = [5.029, 82.029, 4.036]
+
+        self.R_PosTakeObj_BesideDrink= [0.40, -0.3006, -0.60]
+        self.R_OriTakeObj_BesideDrink= [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_BesideDrink= [0.40,  0.3506, -0.60]
+        self.L_OriTakeObj_BesideDrink= [5.029, 82.029, 4.036]
+
+        self.R_PosTakeObj_SuckMeal   = [0.45, -0.3006, -0.60]
+        self.R_OriTakeObj_SuckMeal   = [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_SuckMeal   = [0.45,  0.3506, -0.60]
+        self.L_OriTakeObj_SuckMeal   = [5.029, 82.029, 4.036]
+
+        self.R_PosTakeObj_SuckDrink  = [0.45, -0.3006, -0.60]
+        self.R_OriTakeObj_SuckDrink  = [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_SuckDrink  = [0.45,  0.3506, -0.60]
+        self.L_OriTakeObj_SuckDrink  = [5.029, 82.029, 4.036]
+
+        self.R_PosTakeObj_TakeOut    = [0.15, -0.3006, -0.50]
+        self.R_OriTakeObj_TakeOut    = [5.029, 82.029, 4.036]
+        self.L_PosTakeObj_TakeOut    = [0.15,  0.3506, -0.50]
+        self.L_OriTakeObj_TakeOut    = [5.029, 82.029, 4.036]
+
+        self.R_PosGiveObj1           = [0.4,  -0.3006, -0.40]
+        self.R_OriGiveObj1           = [5.029, 82.029, 4.036]
+        self.L_PosGiveObj1           = [0.4,   0.3506, -0.40]
+        self.L_OriGiveObj1           = [5.029, 82.029, 4.036]
+
+        self.R_PosGiveObj2_AboveDesk = [0.45, -0.3006, -0.45]
+        self.R_OriGiveObj2_AboveDesk = [5.029, 82.029, 4.036]
+        self.L_PosGiveObj2_AboveDesk = [0.45,  0.3506, -0.45]
+        self.L_OriGiveObj2_AboveDesk = [5.029, 82.029, 4.036]
+
+        self.R_PosGiveObj2_OnDesk    = [0.45, -0.3006, -0.50]
+        self.R_OriGiveObj2_OnDesk    = [5.029, 82.029, 4.036]
+        self.L_PosGiveObj2_OnDesk    = [0.45,  0.3506, -0.50]
+        self.L_OriGiveObj2_OnDesk    = [5.029, 82.029, 4.036]
+   
+        self.R_PosGiveObj2_LeaveDesk = [0.25, -0.3006, -0.45]
+        self.R_OriGiveObj2_LeaveDesk = [5.029, 82.029, 4.036]
+        self.L_PosGiveObj2_LeaveDesk = [0.25,  0.3506, -0.45]
+        self.L_OriGiveObj2_LeaveDesk = [5.029, 82.029, 4.036]
 
     def InitArmPos(self, select):                
         if(select == 'right'):
@@ -140,14 +209,14 @@ class CDualArmCommand(object):
             self.right.IdelPos()     # Robot arm idel pose
             self.left.IdelPos()      # Robot arm idel pose
 
-    def TakeObj_Ori(self, select): # Take object orientation
+    def TakeObj_Ori(self, select):          # Take object orientation
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.3, -0.3006, -0.46]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_Ori# [0.3, -0.3006, -0.46]
+        R_Euler = self.R_OriTakeObj_Ori#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.3, 0.3506, -0.46]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_Ori#[0.3, 0.3506, -0.46]
+        L_Euler = self.L_OriTakeObj_Ori#[5.029, 82.029, 4.036]
         L_Redun = -60
 
         if(select == 'right'):
@@ -162,14 +231,14 @@ class CDualArmCommand(object):
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_MoveDown(self, select): # Move down for take object 
+    def TakeObj_MoveDown(self, select):     # Move down for take object 
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.3, -0.3006, -0.56]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_MoveDown#[0.3, -0.3006, -0.56]
+        R_Euler = self.R_OriTakeObj_MoveDown#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.3, 0.3506, -0.56]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_MoveDown#[0.3, 0.3506, -0.56]
+        L_Euler = self.L_OriTakeObj_MoveDown#[5.029, 82.029, 4.036]
         L_Redun = -60
         
         if(select == 'right'):
@@ -184,40 +253,40 @@ class CDualArmCommand(object):
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_AboveMeal(self, select): # Above object (meal)
+    def TakeObj_AboveMeal(self, select):    # Above object (meal)
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.45, -0.3006, -0.56]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_AboveMeal#[0.45, -0.3006, -0.56]
+        R_Euler = self.R_OriTakeObj_AboveMeal#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.45, 0.3506, -0.56]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_AboveMeal#[0.45, 0.3506, -0.56]
+        L_Euler = self.L_OriTakeObj_AboveMeal#[5.029, 82.029, 4.036]
         L_Redun = -60
         
         if(select == 'right'):
             self.right.SetSpeed(self.LowSpd)
-            self.right.SetSuctionDeg(-90)
+            self.right.SetSuctionDeg(self.SuckMealDeg)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
             self.left.SetSpeed(self.LowSpd)
-            self.left.SetSuctionDeg(-90)
+            self.left.SetSuctionDeg(self.SuckMealDeg)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
             self.right.SetSpeed(self.LowSpd)
             self.left.SetSpeed(self.LowSpd)
-            self.right.SetSuctionDeg(-90)
-            self.left.SetSuctionDeg(-90)
+            self.right.SetSuctionDeg(self.SuckMealDeg)
+            self.left.SetSuctionDeg(self.SuckMealDeg)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
     
-    def TakeObj_DrinkUp(self, select): # Above object 
+    def TakeObj_DrinkUp(self, select):      # Above object 
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.45, -0.3006, -0.54]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_DrinkUp#[0.45, -0.3006, -0.54]
+        R_Euler = self.R_OriTakeObj_DrinkUp#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.45, 0.3506, -0.54]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_DrinkUp#[0.45, 0.3506, -0.54]
+        L_Euler = self.L_OriTakeObj_DrinkUp#[5.029, 82.029, 4.036]
         L_Redun = -60
 
         if(select == 'right'):
@@ -232,41 +301,40 @@ class CDualArmCommand(object):
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_BesideObj(self, select):
+    def TakeObj_BesideDrink(self, select):    # Beside object (drink)
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.40, -0.3006, -0.60]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_BesideDrink#[0.40, -0.3006, -0.60]
+        R_Euler = self.R_OriTakeObj_BesideDrink#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.40, 0.3506, -0.60]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_BesideDrink#[0.40, 0.3506, -0.60]
+        L_Euler = self.L_OriTakeObj_BesideDrink#[5.029, 82.029, 4.036]
         L_Redun = -60
 
         if(select == 'right'):
             self.right.SetSpeed(self.LowSpd)
-            self.right.SetSuctionDeg(0)
+            self.right.SetSuctionDeg(self.SuckDrinkDeg)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
             self.left.SetSpeed(self.LowSpd)
-            self.left.SetSuctionDeg(0)
+            self.left.SetSuctionDeg(self.SuckDrinkDeg)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
             self.right.SetSpeed(self.LowSpd)
             self.left.SetSpeed(self.LowSpd)
-            self.right.SetSuctionDeg(0)
-            self.left.SetSuctionDeg(0)
+            self.right.SetSuctionDeg(self.SuckDrinkDeg)
+            self.left.SetSuctionDeg(self.SuckDrinkDeg)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
-
-
-    def TakeObj_SuckMeal(self, select):  # Take object and suck it (Meal)
+            
+    def TakeObj_SuckMeal(self, select):     # Take object and suck it (Meal)
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.45, -0.3006, -0.60]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_SuckMeal#[0.45, -0.3006, -0.60]
+        R_Euler = self.R_OriTakeObj_SuckMeal#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.45, 0.3506, -0.60]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_SuckMeal#[0.45, 0.3506, -0.60]
+        L_Euler = self.L_OriTakeObj_SuckMeal#[5.029, 82.029, 4.036]
         L_Redun = -60
         
         if(select == 'right'):
@@ -285,14 +353,14 @@ class CDualArmCommand(object):
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_SuckDrink(self, select):  # Take object and suck it (Drink)
+    def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.45, -0.3006, -0.60]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_SuckDrink#[0.45, -0.3006, -0.60]
+        R_Euler = self.R_OriTakeObj_SuckDrink#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.45, 0.3506, -0.60]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_SuckDrink#[0.45, 0.3506, -0.60]
+        L_Euler = self.L_OriTakeObj_SuckDrink#[5.029, 82.029, 4.036]
         L_Redun = -60
         
         if(select == 'right'):
@@ -311,14 +379,14 @@ class CDualArmCommand(object):
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def TakeObj_TakeOut(self, select):  # Leave object region and take it
+    def TakeObj_TakeOut(self, select):      # Leave object region and take it
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.15, -0.3006, -0.50]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosTakeObj_TakeOut#[0.15, -0.3006, -0.50]
+        R_Euler = self.R_OriTakeObj_TakeOut#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.15, 0.3506, -0.50]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosTakeObj_TakeOut#[0.15, 0.3506, -0.50]
+        L_Euler = self.L_OriTakeObj_TakeOut#[5.029, 82.029, 4.036]
         L_Redun = -60
 
         if(select == 'right'):
@@ -333,52 +401,96 @@ class CDualArmCommand(object):
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def GiveObj1(self, select):    # Give object to customer high
+    def GiveObj1(self, select):             # Give object to customer high
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.4, -0.3006, -0.40]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosGiveObj1#[0.4, -0.3006, -0.40]
+        R_Euler = self.R_OriGiveObj1#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.4, 0.3506, -0.40]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosGiveObj1#[0.4, 0.3506, -0.40]
+        L_Euler = self.L_OriGiveObj1#[5.029, 82.029, 4.036]
         L_Redun = -60
 
         if(select == 'right'):
-            self.right.SetSpeed(self.HighSpd)
+            self.right.SetSpeed(self.LowSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
-            self.left.SetSpeed(self.HighSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
-            self.right.SetSpeed(self.HighSpd)
-            self.left.SetSpeed(self.HighSpd)
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
-            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun) 
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
-    def GiveObj2(self, select):    # Give object to customer low
+    def GiveObj2_AboveDesk(self, select):   # Give object above desk
         # self.DualArmIsBusyFlag = True
-        R_Pos   = [0.4, -0.3006, -0.55]
-        R_Euler = [5.029, 82.029, 4.036]
+        R_Pos   = self.R_PosGiveObj2_AboveDesk#[0.4, -0.3006, -0.50]
+        R_Euler = self.R_OriGiveObj2_AboveDesk#[5.029, 82.029, 4.036]
         R_Redun = 60
         
-        L_Pos   = [0.4, 0.3506, -0.55]
-        L_Euler = [5.029, 82.029, 4.036]
+        L_Pos   = self.L_PosGiveObj2_AboveDesk#[0.4, 0.3506, -0.50]
+        L_Euler = self.L_OriGiveObj2_AboveDesk#[5.029, 82.029, 4.036]
         L_Redun = -60       
 
         if(select == 'right'):
-            self.right.SetSpeed(self.HighSpd)
+            self.right.SetSpeed(self.LowSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
         elif(select == 'left'):
-            self.left.SetSpeed(self.HighSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
         else:
-            self.right.SetSpeed(self.HighSpd)
-            self.left.SetSpeed(self.HighSpd)
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def GiveObj2_OnDesk(self, select):      # Give object to desk
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = self.R_PosGiveObj2_OnDesk#[0.4, -0.3006, -0.55]
+        R_Euler = self.R_OriGiveObj2_OnDesk#[5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = self.L_PosGiveObj2_OnDesk#[0.4, 0.3506, -0.55]
+        L_Euler = self.L_OriGiveObj2_OnDesk#[5.029, 82.029, 4.036]
+        L_Redun = -60       
+
+        if(select == 'right'):
+            self.right.SetSpeed(self.LowSpd)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.SetSpeed(self.LowSpd)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def GiveObj2_LeaveDesk(self, select):   # Leave desk
+        # self.DualArmIsBusyFlag = True
+        R_Pos   = self.R_PosGiveObj2_LeaveDesk#[0.25, -0.3006, -0.40]
+        R_Euler = self.R_OriGiveObj2_LeaveDesk#[5.029, 82.029, 4.036]
+        R_Redun = 60
+        
+        L_Pos   = self.L_PosGiveObj2_LeaveDesk#[0.25, 0.3506, -0.40]
+        L_Euler = self.L_OriGiveObj2_LeaveDesk#[5.029, 82.029, 4.036]
+        L_Redun = -60       
+
+        if(select == 'right'):
+            self.right.SetSpeed(self.LowSpd)
+            self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+        elif(select == 'left'):
+            self.left.SetSpeed(self.LowSpd)
+            self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+        else:
+            self.right.SetSpeed(self.LowSpd)
+            self.left.SetSpeed(self.LowSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
     def DelaySuctOffObj1(self, select):
-        time.sleep(5)   # Delay for customer take object        
+        time.sleep(self.GiveObj1_DelayTime)   # Delay for customer take object        
         if(select == 'right'):
             self.right.SuctionEnable(False)
         elif(select == 'left'):
@@ -388,7 +500,7 @@ class CDualArmCommand(object):
             self.left.SuctionEnable(False)
 
     def DelaySuctOffObj2(self, select):
-        time.sleep(2)   # Delay for customer take object
+        time.sleep(self.GiveObj2_DelayTime)   # Delay for customer take object
         if(select == 'right'):
             self.right.SuctionEnable(False)
         elif(select == 'left'):
@@ -503,9 +615,9 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
     elif(Key == nTakeObj_DrinkUp):
         print("TakeObj_DrinkUp")
         DualArmCommandSet.TakeObj_DrinkUp(SelectArm)
-    elif(Key == nTakeObj_BesideObj):
-        print("TakeObj_BesideObj")
-        DualArmCommandSet.TakeObj_BesideObj(SelectArm)
+    elif(Key == nTakeObj_BesideDrink):
+        print("TakeObj_BesideDrink")
+        DualArmCommandSet.TakeObj_BesideDrink(SelectArm)
     elif(Key == nTakeObj_SuckDrink):
         print("TakeObj_SuckDrink")
         DualArmCommandSet.TakeObj_SuckDrink(SelectArm)
@@ -519,9 +631,16 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
     elif(Key == nGiveObj1):
         print("GiveObj1")
         DualArmCommandSet.GiveObj1(SelectArm)
-    elif(Key == nGiveObj2):
-        print("nGiveObj2")
-        DualArmCommandSet.GiveObj2(SelectArm)
+    elif(Key == nGiveObj2_AboveDesk):
+        print("GiveObj2_AboveDesk")
+        DualArmCommandSet.GiveObj2_AboveDesk(SelectArm)
+    elif(Key == nGiveObj2_OnDesk):
+        print("GiveObj2_OnDesk")
+        DualArmCommandSet.GiveObj2_OnDesk(SelectArm)
+    elif(Key == nGiveObj2_LeaveDesk):
+        print("GiveObj2_LeaveDesk")
+        DualArmCommandSet.GiveObj2_LeaveDesk(SelectArm)
+
     elif(Key == nDelaySuctOffObj1):
         print("DelaySuctOffObj1")
         DualArmCommandSet.DelaySuctOffObj1(SelectArm)
