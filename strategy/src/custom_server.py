@@ -126,70 +126,70 @@ class CDualArmCommand(object):
         self.HighSpd= 60
 
         self.SuckDrinkDeg   = 0 
-        self.SuckMealDeg    = -90
+        self.SuckMealDeg    = -89
 
         self.GiveObj1_DelayTime = 3 # sec
         self.GiveObj2_DelayTime = 2 # sec
 
         self.R_PosTakeObj_Ori        = [0.3,  -0.3006, -0.46]
-        self.R_OriTakeObj_Ori        = [5.029, 82.029, 4.036]
+        self.R_OriTakeObj_Ori        = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
         self.L_PosTakeObj_Ori        = [0.3,   0.3506, -0.46]
-        self.L_OriTakeObj_Ori        = [5.029, 82.029, 4.036]
+        self.L_OriTakeObj_Ori        = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_MoveDown   = [0.3,  -0.3006, -0.56]
-        self.R_OriTakeObj_MoveDown   = [5.029, 82.029, 4.036]
+        self.R_OriTakeObj_MoveDown   = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
         self.L_PosTakeObj_MoveDown   = [0.3,   0.3506, -0.56]
-        self.L_OriTakeObj_MoveDown   = [5.029, 82.029, 4.036]
+        self.L_OriTakeObj_MoveDown   = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_AboveMeal  = [0.45, -0.3006, -0.56]
-        self.R_OriTakeObj_AboveMeal  = [5.029, 82.029, 4.036]
-        self.L_PosTakeObj_AboveMeal  = [0.45,  0.3506, -0.56]
-        self.L_OriTakeObj_AboveMeal  = [5.029, 82.029, 4.036]
+        self.R_PosTakeObj_AboveMeal  = [0.47, -0.2976, -0.56]
+        self.R_OriTakeObj_AboveMeal  = [5.029, 89.000, 4.036]
+        self.L_PosTakeObj_AboveMeal  = [0.47,  0.3536, -0.56]
+        self.L_OriTakeObj_AboveMeal  = [5.029, 89.000, 4.036]
 
         self.R_PosTakeObj_DrinkUp    = [0.45, -0.3006, -0.54]
-        self.R_OriTakeObj_DrinkUp    = [5.029, 82.029, 4.036]
+        self.R_OriTakeObj_DrinkUp    = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
         self.L_PosTakeObj_DrinkUp    = [0.45,  0.3506, -0.54]
-        self.L_OriTakeObj_DrinkUp    = [5.029, 82.029, 4.036]
+        self.L_OriTakeObj_DrinkUp    = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_BesideDrink= [0.40, -0.3006, -0.60]
-        self.R_OriTakeObj_BesideDrink= [5.029, 82.029, 4.036]
+        self.R_OriTakeObj_BesideDrink= [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
         self.L_PosTakeObj_BesideDrink= [0.40,  0.3506, -0.60]
-        self.L_OriTakeObj_BesideDrink= [5.029, 82.029, 4.036]
+        self.L_OriTakeObj_BesideDrink= [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_SuckMeal   = [0.45, -0.3006, -0.60]
-        self.R_OriTakeObj_SuckMeal   = [5.029, 82.029, 4.036]
-        self.L_PosTakeObj_SuckMeal   = [0.45,  0.3506, -0.60]
-        self.L_OriTakeObj_SuckMeal   = [5.029, 82.029, 4.036]
+        self.R_PosTakeObj_SuckMeal   = [0.47, -0.2976, -0.60]
+        self.R_OriTakeObj_SuckMeal   = [5.029, 89.000, 4.036]
+        self.L_PosTakeObj_SuckMeal   = [0.47,  0.3536, -0.60]
+        self.L_OriTakeObj_SuckMeal   = [5.029, 89.000, 4.036]
 
         self.R_PosTakeObj_SuckDrink  = [0.45, -0.3006, -0.60]
-        self.R_OriTakeObj_SuckDrink  = [5.029, 82.029, 4.036]
+        self.R_OriTakeObj_SuckDrink  = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036] 
         self.L_PosTakeObj_SuckDrink  = [0.45,  0.3506, -0.60]
-        self.L_OriTakeObj_SuckDrink  = [5.029, 82.029, 4.036]
+        self.L_OriTakeObj_SuckDrink  = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_TakeOut    = [0.15, -0.3006, -0.50]
-        self.R_OriTakeObj_TakeOut    = [5.029, 82.029, 4.036]
+        self.R_OriTakeObj_TakeOut    = [5.029, 89.000, 4.036]
         self.L_PosTakeObj_TakeOut    = [0.15,  0.3506, -0.50]
-        self.L_OriTakeObj_TakeOut    = [5.029, 82.029, 4.036]
+        self.L_OriTakeObj_TakeOut    = [5.029, 89.000, 4.036]
 
         self.R_PosGiveObj1           = [0.4,  -0.3006, -0.40]
-        self.R_OriGiveObj1           = [5.029, 82.029, 4.036]
+        self.R_OriGiveObj1           = [5.029, 89.000, 4.036]
         self.L_PosGiveObj1           = [0.4,   0.3506, -0.40]
-        self.L_OriGiveObj1           = [5.029, 82.029, 4.036]
+        self.L_OriGiveObj1           = [5.029, 89.000, 4.036]
 
         self.R_PosGiveObj2_AboveDesk = [0.45, -0.3006, -0.45]
-        self.R_OriGiveObj2_AboveDesk = [5.029, 82.029, 4.036]
+        self.R_OriGiveObj2_AboveDesk = [5.029, 89.000, 4.036]
         self.L_PosGiveObj2_AboveDesk = [0.45,  0.3506, -0.45]
-        self.L_OriGiveObj2_AboveDesk = [5.029, 82.029, 4.036]
+        self.L_OriGiveObj2_AboveDesk = [5.029, 89.000, 4.036]
 
         self.R_PosGiveObj2_OnDesk    = [0.45, -0.3006, -0.50]
-        self.R_OriGiveObj2_OnDesk    = [5.029, 82.029, 4.036]
+        self.R_OriGiveObj2_OnDesk    = [5.029, 89.000, 4.036]
         self.L_PosGiveObj2_OnDesk    = [0.45,  0.3506, -0.50]
-        self.L_OriGiveObj2_OnDesk    = [5.029, 82.029, 4.036]
+        self.L_OriGiveObj2_OnDesk    = [5.029, 89.000, 4.036]
    
         self.R_PosGiveObj2_LeaveDesk = [0.25, -0.3006, -0.45]
-        self.R_OriGiveObj2_LeaveDesk = [5.029, 82.029, 4.036]
+        self.R_OriGiveObj2_LeaveDesk = [5.029, 89.000, 4.036]
         self.L_PosGiveObj2_LeaveDesk = [0.25,  0.3506, -0.45]
-        self.L_OriGiveObj2_LeaveDesk = [5.029, 82.029, 4.036]
+        self.L_OriGiveObj2_LeaveDesk = [5.029, 89.000, 4.036]
 
     def InitArmPos(self, select):                
         if(select == 'right'):
