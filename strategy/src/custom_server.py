@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+
 from mobile_platform.srv import *
 from strategy.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
+from std_msgs.msg import String
 from arm_control import ArmTask, SuctionTask
 
 import os
@@ -48,6 +50,7 @@ SerialKey_TakeObjToCustom_Type2 = \
      nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
      nSTOP]
+SerialKey_PaymentState = [nIDEL, nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
 RobotIdel  = 0
@@ -63,7 +66,7 @@ class CDualArmTask:
         if len(sys.argv) >= 2:
             rospy.set_param('en_sim', sys.argv[1])
             en_sim = rospy.get_param('en_sim')
-       
+
         self.name  = _name
         self.arm   = ArmTask(self.name + '_arm')
         self.pick_list = 2
@@ -201,7 +204,7 @@ class CDualArmCommand(object):
             self.right.InitialPos()     # Initial robot arm pose
             self.left.InitialPos()      # Initial robot arm pose
 
-    def IdelArmPos(self, select):                
+    def IdelArmPos(self, select):    
         if(select == 'right'):
             self.right.IdelPos()     # Robot arm idel pose
         elif(select == 'left'):
@@ -574,6 +577,20 @@ class CMobileCommand(object):
         # self.MobileIsBusyFlag = False # Force set flag for testing
         return self.MobileIsBusyFlag
 
+class CSubscribeConsume(object):
+    def __init__(self):
+        self.consume_msg = None
+        rospy.Subscriber("/consume", String, self.Sub_ConsumeString)
+
+    def Sub_ConsumeString(self, msg):
+        # Subcriber of Consume Callback funciton
+        self.__ConsumeString = msg.data
+        self.consume_msg = self.__ConsumeString
+
+    def Return_SubString(self):
+        return self.consume_msg
+    
+
 def GetMissionSerialKey(MissionReq):
     if(MissionReq == RobotIdel or MissionReq == None):
         return SerialKey_RobotIdel
@@ -583,6 +600,8 @@ def GetMissionSerialKey(MissionReq):
         return SerialKey_TakeObjToCustom_Type1
     elif(MissionReq == TakeObjToCustom_Type2):
         return SerialKey_TakeObjToCustom_Type2
+    elif(MissionReq == PaymentState):
+        return SerialKey_PaymentState
     else:
         return SerialKey_RobotIdel
 
@@ -653,7 +672,7 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
         DualArmCommandSet.InitArmPos(SelectArm)
     elif(Key == nIdelArmPos):
         print("IdelArmPos")
-        DualArmCommandSet.IdelArmPos(SelectArm)        
+        DualArmCommandSet.IdelArmPos(SelectArm)
     elif(Key == nSTOP):
         print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
@@ -678,6 +697,7 @@ def handle_state(req):
 
         MobileCommandSet = CMobileCommand()
         DualArmCommandSet= CDualArmCommand()
+
         SerialKeyIndex   = 0
         MissionExecuteFlag = True
         MotionSerialKey = GetMissionSerialKey(Get_Req)
@@ -688,18 +708,18 @@ def handle_state(req):
         elif(Get_Req == TakeObjToCustom_Type2):
             SelectArm = 'right' # Use left arm to take object 2
 
-        # while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
-        #     if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
-        #         MotionKey = MotionSerialKey[SerialKeyIndex]
-        #         MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
-        #         if(MotionKey != nSTOP):
-        #             if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
-        #                 # Check the data send to service or not.
-        #                 # if there were not, it would keep execute the motion (MoveToP1).
-        #                 SerialKeyIndex += 1
-        #         else:
-        #             SerialKeyIndex = 0
-        #             MissionExecuteFlag = False
+        while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
+            if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
+                MotionKey = MotionSerialKey[SerialKeyIndex]
+                MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
+                if(MotionKey != nSTOP):
+                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                        # Check the data send to service or not.
+                        # if there were not, it would keep execute the motion (MoveToP1).
+                        SerialKeyIndex += 1
+                else:
+                    SerialKeyIndex = 0
+                    MissionExecuteFlag = False
 
     except Exception, exception:
         ResponseFlag = False
@@ -726,24 +746,23 @@ def handle_state(req):
             ResponseFlag = True
             ResponseInfo = "Here are your meals"
         elif(Get_Req == PaymentState):
-            # while (consume_data != "consumeA") {
-            #     # Subscribe /consume, msg is std_msgs/String
-            #     # When payment success, rfid node will publish string "consumeA"
-            #     pass; # Wait
-            # }
-            time.sleep(10)
+            SubConsumeString = CSubscribeConsume()
+            print("State: Wait for pay")
+            while(SubConsumeString.Return_SubString() != "consumeA"):
+                # Wait
+                pass
+            print("State: Pay finish")
             ResponseFlag = True
             ResponseInfo = "Payment process complete"
         else:
             ResponseFlag = False
             ResponseInfo = "????????"
-  
 
     ### Response the result of Strategy
     res = AssistantStateResponse()
     res.success = ResponseFlag    # Bool  : An flag for Watson speaking or not.
     res.info    = ResponseInfo    # String: It's Watson contents of speaking when flag is true.
-                                  # String: It's Watson mission commit when flag is false.
+                                  # String: It's Watson mission commit when flag is false.>>>>>>> 95ab65846a43e08502ec6b3c4c43480b599a06cd
     return res
 
 def assistant_server():
@@ -755,5 +774,3 @@ def assistant_server():
 if __name__ == "__main__":
     assistant_server()
     # Execute in the handle_state callback function
-            
-    
