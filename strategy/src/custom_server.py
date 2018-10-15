@@ -4,6 +4,7 @@ from mobile_platform.srv import *
 from strategy.srv import *
 from std_msgs.msg import Int32
 from std_msgs.msg import Bool
+from std_msgs.msg import String
 from arm_control import ArmTask, SuctionTask
 
 import os
@@ -49,6 +50,7 @@ SerialKey_TakeObjToCustom_Type2 = \
      nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
      nSTOP]
+SerialKey_PaymentState = [nIDEL, nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
 RobotIdel  = 0
@@ -107,9 +109,9 @@ class CDualArmTask:
 
     def SuctionEnable(self, On_Off):
         if(On_Off == True):
-            pass#self.suction.gripper_vaccum_on()
+            self.suction.gripper_vaccum_on()
         elif(On_Off == False):
-            pass#self.suction.gripper_vaccum_off()
+            self.suction.gripper_vaccum_off()
 
     def SetSuctionDeg(self, Deg):
         self.suction.gripper_suction_deg(Deg)
@@ -202,7 +204,7 @@ class CDualArmCommand(object):
             self.right.InitialPos()     # Initial robot arm pose
             self.left.InitialPos()      # Initial robot arm pose
 
-    def IdelArmPos(self, select):                
+    def IdelArmPos(self, select):    
         if(select == 'right'):
             self.right.IdelPos()     # Robot arm idel pose
         elif(select == 'left'):
@@ -575,6 +577,20 @@ class CMobileCommand(object):
         # self.MobileIsBusyFlag = False # Force set flag for testing
         return self.MobileIsBusyFlag
 
+class CSubscribeConsume(object):
+    def __init__(self):
+        self.consume_msg = None
+        rospy.Subscriber("/consume", String, self.Sub_ConsumeString)
+
+    def Sub_ConsumeString(self, msg):
+        # Subcriber of Consume Callback funciton
+        self.__ConsumeString = msg.data
+        self.consume_msg = self.__ConsumeString
+
+    def Return_SubString(self):
+        return self.consume_msg
+    
+
 def GetMissionSerialKey(MissionReq):
     if(MissionReq == RobotIdel or MissionReq == None):
         return SerialKey_RobotIdel
@@ -584,6 +600,8 @@ def GetMissionSerialKey(MissionReq):
         return SerialKey_TakeObjToCustom_Type1
     elif(MissionReq == TakeObjToCustom_Type2):
         return SerialKey_TakeObjToCustom_Type2
+    elif(MissionReq == PaymentState):
+        return SerialKey_PaymentState
     else:
         return SerialKey_RobotIdel
 
@@ -654,7 +672,7 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
         DualArmCommandSet.InitArmPos(SelectArm)
     elif(Key == nIdelArmPos):
         print("IdelArmPos")
-        DualArmCommandSet.IdelArmPos(SelectArm)        
+        DualArmCommandSet.IdelArmPos(SelectArm)
     elif(Key == nSTOP):
         print("STOP")
         # Key in DualArm & Mobile Robot STOP function here.
@@ -679,6 +697,7 @@ def handle_state(req):
 
         MobileCommandSet = CMobileCommand()
         DualArmCommandSet= CDualArmCommand()
+
         SerialKeyIndex   = 0
         MissionExecuteFlag = True
         MotionSerialKey = GetMissionSerialKey(Get_Req)
@@ -727,17 +746,17 @@ def handle_state(req):
             ResponseFlag = True
             ResponseInfo = "Here are your meals"
         elif(Get_Req == PaymentState):
-            while (consume_data != "consumeA") {
-                # Subscribe /consume, msg is std_msgs/String
-                # When payment success, rfid node will publish string "consumeA"
-                pass; # Wait
-            }
+            SubConsumeString = CSubscribeConsume()
+            print("State: Wait for pay")
+            while(SubConsumeString.Return_SubString() != "consumeA"):
+                # Wait
+                pass
+            print("State: Pay finish")
             ResponseFlag = True
             ResponseInfo = "Payment process complete"
         else:
             ResponseFlag = False
             ResponseInfo = "????????"
-  
 
     ### Response the result of Strategy
     res = AssistantStateResponse()
