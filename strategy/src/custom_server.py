@@ -54,6 +54,7 @@ RobotIdel  = 0
 LeadCustom = 1
 TakeObjToCustom_Type1 = 2
 TakeObjToCustom_Type2 = 3
+PaymentState = 4
 
 class CDualArmTask:
     def __init__(self, _name = '/robotis'):
@@ -687,18 +688,18 @@ def handle_state(req):
         elif(Get_Req == TakeObjToCustom_Type2):
             SelectArm = 'right' # Use left arm to take object 2
 
-        while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
-            if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
-                MotionKey = MotionSerialKey[SerialKeyIndex]
-                MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
-                if(MotionKey != nSTOP):
-                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
-                        # Check the data send to service or not.
-                        # if there were not, it would keep execute the motion (MoveToP1).
-                        SerialKeyIndex += 1
-                else:
-                    SerialKeyIndex = 0
-                    MissionExecuteFlag = False
+        # while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
+        #     if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
+        #         MotionKey = MotionSerialKey[SerialKeyIndex]
+        #         MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
+        #         if(MotionKey != nSTOP):
+        #             if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+        #                 # Check the data send to service or not.
+        #                 # if there were not, it would keep execute the motion (MoveToP1).
+        #                 SerialKeyIndex += 1
+        #         else:
+        #             SerialKeyIndex = 0
+        #             MissionExecuteFlag = False
 
     except Exception, exception:
         ResponseFlag = False
@@ -722,9 +723,16 @@ def handle_state(req):
             # ResponseInfo = "Mission: Take object to customer type1 finish."
             ResponseInfo = "Here you are, do you need anything else?"
         elif(Get_Req == TakeObjToCustom_Type2):
-            ResponseFlag = False
-            # ResponseInfo = "Mission: Take object to customer type2 finish."
-            ResponseInfo = "Mission: Take object to customer type2 finish."
+            ResponseFlag = True
+            ResponseInfo = "Here are your meals"
+        elif(Get_Req == PaymentState):
+            while (consume_data != "consumeA") {
+                # Subscribe /consume, msg is std_msgs/String
+                # When payment success, rfid node will publish string "consumeA"
+                pass; # Wait
+            }
+            ResponseFlag = True
+            ResponseInfo = "Payment process complete"
         else:
             ResponseFlag = False
             ResponseInfo = "????????"

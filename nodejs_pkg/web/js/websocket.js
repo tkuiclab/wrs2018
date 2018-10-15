@@ -10,7 +10,17 @@ socket.on('news', function(m) {
   if (IsJsonString(m)) {
     let j = JSON.parse(m);
     if (j.success) {
-      Sayit(j.info);
+      if (j.info.toLowerCase() == "here are your meals") {
+        output.src = "sounds/here_are_your_meals.wav"
+        output.play();
+        __log('Payment state 4 to socket server');
+        socket.emit('message', 4);
+      }else if (j.info.toLowerCase() == "payment process complete") {
+        output.src = "sounds/payment_process_complete.wav"
+        output.play();
+      }else {
+        Sayit(j.info);
+      }
     }
   }else {
     console.log('Socket.IO Connected: '+m);

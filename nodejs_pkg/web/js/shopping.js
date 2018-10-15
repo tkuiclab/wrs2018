@@ -18,6 +18,10 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+order.onclick = function() {
+  SendOrder();
+  modal.style.display = "none";
+}
 // order.onclick = function() {
 //   console.log("Send Order");
 //   var request = new ROSLIB.ServiceRequest({
