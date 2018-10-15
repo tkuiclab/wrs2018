@@ -71,7 +71,7 @@ io.on('connect', (socket) => {
     console.log('Call service with: '+data);
     const request = new AssistantState.Request();
     request.state = data;
-    // Need to and Timeout ?
+
     serviceClient.call(request).then((resp) => {
       console.log('Service response ' + JSON.stringify(resp));
       io.emit("news", JSON.stringify(resp));

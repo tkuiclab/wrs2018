@@ -4,6 +4,11 @@ var output = document.getElementById('output');
 function __log(e, data) {
   log.innerHTML += "\n" + e + " " + (data || '');
 }
+function __mlog(e, data) {
+  // mlog.innerHTML += "\n" + e + " " + (data || '');
+  let tmp = mlog.innerHTML;
+  mlog.innerHTML = e + " " + (data || '') + "\n" + tmp;
+}
 
 var socket = io.connect('https://'+location.host, {secure: true});
 socket.on('news', function(m) {
@@ -13,7 +18,8 @@ socket.on('news', function(m) {
       if (j.info.toLowerCase() == "here are your meals") {
         output.src = "sounds/here_are_your_meals.wav"
         output.play();
-        __log('Payment state 4 to socket server');
+        __log('Pass payment 4 to socket server');
+        __mlog('Strategy Requesting...');
         socket.emit('message', 4);
       }else if (j.info.toLowerCase() == "payment process complete") {
         output.src = "sounds/payment_process_complete.wav"
@@ -23,8 +29,9 @@ socket.on('news', function(m) {
       }
     }
   }else {
-    console.log('Socket.IO Connected: '+m);
-    __log('Socket.IO Connected');
+    console.log('[Socket.IO Connected]: '+m);
+    __log('[Socket.IO Connected]');
+    __mlog('[Socket.IO Connected]');
   }
 });
 socket.on('say', function(m) {
@@ -35,8 +42,8 @@ socket.on('say', function(m) {
 });
 
 ws.onopen = function(){
-  console.log("Connected websocket");
-  __log('[Chat Connected]');
+  __log('[Assistant Connected]');
+  __mlog('[Assistant Connected]');
   /* Ping/Pong signal for keeping websocket alive */
   if (heartbeat_interval === null) {
     missed_heartbeats = 0;
@@ -57,10 +64,12 @@ ws.onopen = function(){
 };
 ws.onerror = function(){ 
   console.log("Websocket error");
-  __log('[Chat Connected Error]');
+  __log('[Assistant Connected Error]');
+  __mlog('[Assistant Connected Error]');
 };
 ws.onclose = function () {
-  __log('[Chat Disconnected]');
+  __log('[Assistant Disconnected]');
+  __mlog('[Assistant Disconnected]');
 }
 var state, record;
 ws.onmessage = function(evt){
@@ -91,7 +100,9 @@ ws.onmessage = function(evt){
         document.getElementById('recordBtn').click();
       }else {
         __log('Pass '+state+' to socket server');
+        __mlog('Strategy Requesting...');
         socket.emit('message', state);
+        state = 0;
       }
     }
   }
@@ -111,9 +122,11 @@ function Sayit (string) {
   ws.send(string);
   console.log("Let robot says: "+string);
   __log("Let robot says: "+string);
+  __mlog('TTS Requesting...');
 }
 
 function SendOrder() {
+  __mlog('Strategy Requesting...');
   __log('Pass 3 to socket server');
   socket.emit('message', 3);
 }

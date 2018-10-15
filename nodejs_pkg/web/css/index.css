@@ -7,6 +7,16 @@ html {
 h1, h2 {
   color: #033860;
 }
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 5%;
+  width: 100%;
+  height: 10em;
+  color: gray;
+  text-align: center;
+  overflow: auto;
+}
 .recording {
   background-color: #4885B3;
 }
