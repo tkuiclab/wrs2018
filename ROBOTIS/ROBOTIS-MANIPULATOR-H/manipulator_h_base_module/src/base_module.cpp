@@ -31,6 +31,7 @@ BaseModule::BaseModule()
   : control_cycle_msec_(0)
 {
   stop_flag     = false;
+  wait_flag     = false;
   enable_       = false;
   module_name_  = "base_module";
   control_mode_ = robotis_framework::PositionControl;
@@ -124,7 +125,10 @@ void BaseModule::queueThread()
   /* subscribe topics */
   ros::Subscriber stop_sub = ros_node.subscribe("/robot/is_stop", 5,
                                                 &BaseModule::stopMsgCallback, this);
-
+  ros::Subscriber wait_sub = ros_node.subscribe("/robot/wait", 5,
+                                                &BaseModule::waitMsgCallback, this);
+  ros::Subscriber clear_cmd_sub = ros_node.subscribe("/robot/clear_cmd",5,
+                                                     &BaseModule::clearCmdCallback, this);
   ros::Subscriber ini_pose_msg_sub = ros_node.subscribe("/robotis/base/ini_pose_msg", 5,
                                                         &BaseModule::initPoseMsgCallback, this);
   ros::Subscriber set_mode_msg_sub = ros_node.subscribe("/robotis/base/set_mode_msg", 5,
@@ -151,10 +155,25 @@ void BaseModule::queueThread()
 }
 void BaseModule::stopMsgCallback(const std_msgs::Bool::ConstPtr& msg)
 {
-  if (msg->data)
+  if(msg->data)
     stop();
   else
     stop_flag = false;
+}
+void BaseModule::waitMsgCallback(const std_msgs::Bool::ConstPtr& msg)
+{
+  wait_flag = msg->data;
+}
+void BaseModule::clearCmdCallback(const std_msgs::Bool::ConstPtr& msg)
+{
+  if(msg->data)
+  {
+    robotis_->is_moving_ = false;
+    robotis_->ik_solve_ = false;
+    robotis_->cnt_ = 0;
+    ROS_INFO("[end] send trajectory");
+    publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");
+  }
 }
 void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -311,7 +330,7 @@ void BaseModule::p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPos
 
   // std::cout<<"<<<<<<<<<<<<<<<<<<<slide_->goal_slide_pos<<<<<<<<<<<<<<<<<"<<std::endl<<slide_->goal_slide_pos<<std::endl;
   bool    ik_success = manipulator_->inverseKinematics(robotis_->ik_id_end_,
-                                                            p2p_positoin, p2p_rotation, p2p_phi, slide_->goal_slide_pos, max_iter, ik_tol);
+                                                            p2p_positoin, p2p_rotation, p2p_phi, slide_->goal_slide_pos, true);
 
   if (ik_success == true && slide_success == true)
   {
@@ -479,6 +498,8 @@ void BaseModule::generateTaskTrajProcess()
   double mov_time = 1.5;
   double slide_diff;
 
+  manipulator_->manipulator_link_data_[0]->mov_speed_ = mov_speed;
+
   Eigen::Vector3d goal_positoin;
   goal_positoin << robotis_->kinematics_pose_msg_.pose.position.x, 
                    robotis_->kinematics_pose_msg_.pose.position.y, 
@@ -561,7 +582,7 @@ void BaseModule::generateTaskTrajProcess()
 void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> dxls,
                          std::map<std::string, double> sensors)
 {
-  if (enable_ == false)
+  if (enable_ == false || wait_flag == true)
     return;
 
   /*----- write curr position -----*/
@@ -599,7 +620,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
   /* ----- send trajectory ----- */
 
 //    ros::Time time = ros::Time::now();
-  if (robotis_->is_moving_ == true)
+  if (robotis_->is_moving_ == true && robotis_->cnt_ < robotis_->all_time_steps_)
   {
     if (robotis_->cnt_ == 0)
     {
@@ -617,7 +638,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
       robotis_->is_ik = true;
       
       bool    ik_success  = manipulator_->inverseKinematics(robotis_->ik_id_end_,robotis_->ik_target_position_, 
-                                                              robotis_->ik_target_rotation_, robotis_->ik_target_phi_, tar_slide_pos, max_iter, ik_tol);
+                                                              robotis_->ik_target_rotation_, robotis_->ik_target_phi_, tar_slide_pos, false);
     
       if (ik_success == true)
       {
@@ -625,6 +646,13 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
           joint_state_->goal_joint_state_[id].position_ = manipulator_->manipulator_link_data_[id]->joint_angle_;
         slide_->goal_slide_pos = robotis_->calc_slide_tra_(robotis_->cnt_, 0);
         slide_->result_slide_pos = robotis_->calc_slide_tra_(robotis_->cnt_, 0);
+        if(manipulator_->manipulator_link_data_[0]->singularity_ && robotis_->cnt_ > 1)
+        {
+          std::cout<<"====robotis_->cnt_====="<<robotis_->cnt_<<" ";
+          robotis_->cnt_--;
+          // robotis_->cnt_ = (robotis_->cnt_ > 1) ? (robotis_->cnt_-1) : robotis_->cnt_;
+          std::cout<<robotis_->cnt_<<std::endl;
+        }
           // std::cout<<"==========================process after ik"<<std::endl;
           // manipulator_->forwardKinematics(7);
           // assert(false);
@@ -662,7 +690,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
   slide_->slide_pub();
   /*---------- initialize count number ----------*/
 
-  if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true)
+  if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true && !slide_->is_busy)
   {
     ROS_INFO("[end] send trajectory");
     publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");
