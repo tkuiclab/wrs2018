@@ -12,7 +12,7 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 4
+PICKORDER = 0
 SPEED     = 30
 LUNCHBOX_H = 0.05
 # The lesser one
@@ -77,8 +77,8 @@ topRight    = [0.365, -0.1, -0.21]
 topLeft     = [0.365,  0.1, -0.21]
 middleRight = [0.445, -0.1, -0.555]
 middleLeft  = [0.445,  0.1, -0.555]
-bottomRight = [0.53, -0.2, -0.98]
-bottomLeft  = [0.53,  0.2, -0.98]
+bottomRight = [0.53, -0.2, -1]
+bottomLeft  = [0.53,  0.2, -1]
 
 topRightEu    = [-175, 35, 25]
 topLeftEu     = [-150, 55, 45]
@@ -270,7 +270,7 @@ class stockingTask:
             if self.arm.is_busy:
                 if (self.nowState == leaveBin or self.nowState == frontSafetyPos or self.nowState == move2Shelf) and not self.suction.is_grip:
                     self.state = missObj
-                    print 'aaa'
+                    # print 'aaa'
                 return
             else:
                 self.state = self.nextState
@@ -353,8 +353,10 @@ class stockingTask:
                 self.nextState = moveIn2Shelf
                 self.euler[0] = 0
             self.pos[0] = 0.42
-            self.pos[2] += 0.1
-            
+            if 'lunchbox' in objectName[self.pickList]:
+                self.pos[2] += 0.05
+            else:
+                self.pos[2] += 0.1
             self.arm.set_speed(SPEED)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
             self.suction.gripper_calibration()
@@ -374,7 +376,10 @@ class stockingTask:
             self.state = busy
             self.nextState = move2PlacedPos
             self.getPlacePos()
-            self.pos[2] += 0.1
+            if 'lunchbox' in objectName[self.pickList]:
+                self.pos[2] += 0.05
+            else:
+                self.pos[2] += 0.1
             self.arm.set_speed(SPEED)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
             if 'riceball' not in objectName[self.pickList]:
@@ -450,7 +455,7 @@ class stockingTask:
             self.suction.gripper_vaccum_off()
 
         elif self.state == grasping:
-            if self.suction.is_grip :#or self.en_sim:
+            if self.suction.is_grip:# or self.en_sim:
                 self.arm.clear_cmd()
                 # rospy.sleep(.1)
                 self.state = busy
