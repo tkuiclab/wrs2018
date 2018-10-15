@@ -301,6 +301,7 @@ class Strategy(object):
 
                     print('CORRECTION',self.rotateAng,self._param.errorRotate0)
                     if(self.dualArm == 1):
+                    # if(self.dualArm == 1 or self.dualArm == 2):
                         if(self.rotateAng == self._param.errorRotate0):
                             self._param.behavior = ROTATE
                             self.rotateAng = self._param.errorRotate90
