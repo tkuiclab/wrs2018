@@ -102,6 +102,7 @@ ws.onmessage = function(evt){
         __log('Pass '+state+' to socket server');
         __mlog('Strategy Requesting...');
         socket.emit('message', state);
+        state = 0;
       }
     }
   }
