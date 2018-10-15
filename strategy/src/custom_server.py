@@ -726,11 +726,12 @@ def handle_state(req):
             ResponseFlag = True
             ResponseInfo = "Here are your meals"
         elif(Get_Req == PaymentState):
-            while (consume_data != "consumeA") {
-                # Subscribe /consume, msg is std_msgs/String
-                # When payment success, rfid node will publish string "consumeA"
-                pass; # Wait
-            }
+            # while (consume_data != "consumeA") {
+            #     # Subscribe /consume, msg is std_msgs/String
+            #     # When payment success, rfid node will publish string "consumeA"
+            #     pass; # Wait
+            # }
+            time.sleep(10)
             ResponseFlag = True
             ResponseInfo = "Payment process complete"
         else:
