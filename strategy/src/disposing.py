@@ -5,13 +5,16 @@
 import os
 import sys
 import rospy
+import math
+import numpy as np
 from arm_control import ArmTask, SuctionTask
 from std_msgs.msg import String, Float64, Bool, Int32
+from disposing_vision.msg import coordinate_normal 
 
 idle            = 0
 busy            = 1
 initPose        = 2
-frontSafetyPos  = 3
+SafetyPos       = 3
 rearSafetyPos   = 4
 move2Bin        = 5
 move2Shelf      = 6
@@ -22,14 +25,22 @@ move2Object     = 10
 move2PlacedPos  = 11
 pickObject      = 12
 placeObject     = 13
+tracking        = 14
 
+def disposing_vision_callback(msg):
+    rospy.loginfo(rospy.get_caller_id() + "I heard %s", msg.y)
+
+def listener():
+    #rospy.init_node('disposing', anonymous=True)
+    rospy.Subscriber("/object/normal", coordinate_normal, disposing_vision_callback)
+    rospy.spin()    
 
 def start_callback(msg):
     global is_start
     if not is_start:
         is_start = msg.data
 
-def next_pub(msg):
+def Home_pub(msg):
     pub = rospy.Publisher(
         'scan_black/strategy_behavior',
         Int32,
@@ -42,12 +53,11 @@ def next_pub(msg):
 def start_sub():
     global is_start
     rospy.Subscriber(
-        'scan_black/dualarm_start',
-        Bool,
+        'scan_black/dualarm_start_1',
+        Int32,
         start_callback,
         queue_size=1
     )
-      
 
 class Task:
     def __init__(self, _name = '/robotis'):
@@ -78,6 +88,16 @@ class Task:
     def finish(self):
         return self.pick_list == 0
 
+    def getObjectPos(self):
+        lunchboxPos = [[-0.4, -0.15, -0.63],
+                       [-0.4, -0.15, -0.68]]
+        drinkPos = [[-0.4, 0.15, -0.63],
+                    [-0.4, 0.15, -0.68]]
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
+
     def getRearSafetyPos(self):
         if self.name == 'right':
             self.pos, self.euler, self.phi = (-0.1, -0.45, -0.45), (90, 0, 0), -30
@@ -90,27 +110,57 @@ class Task:
         elif self.name == 'left':
             self.pos, self.euler, self.phi = (0.1, 0.45, -0.45), (0, 20, 0), -45
 
-    def getObjectPos(self):
+    def getPlacePos(self):
         lunchboxPos = [[-0.4, -0.15, -0.63],
                        [-0.4, -0.15, -0.68]]
         drinkPos = [[-0.4, 0.15, -0.63],
                     [-0.4, 0.15, -0.68]]
+        #-0.3,0.1,-0.4,0,0,0,0 binpos
         if self.name == 'right':
             self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
         elif self.name == 'left':
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
 
-    def getPlacePos(self):
-        lunchboxPos = [[0.5, -0.25, -0.54],
-                       [0.5, -0.25, -0.49]]
-        drinkPos = [[0.5, 0.25, -0.5],
-                    [0.42, 0.25, -0.5]]
-        if self.name == 'right':
-            self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (0, 90, 0), 45
-        elif self.name == 'left':
-            self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (0, 90, 0), -45
+    def convertRPYToRotation(roll,pitch,yaw)
+        origin = np.matrix([1 0 0; 0 -1 0; 0 0 -1])
+        rotation = origin*getRotationY(pitch)*getRotationX(yaw)*getRotationZ(roll)
+        return
 
+    def ImgtoArmCmd(x,y,z,normal_x,normal_y,normal_z):
+        coor_A = [x,y,z]
+        coor_norA=[normal_x,normal_y,normal_z]
+        VecA = -(coor_A[0]*coor_norA[0]+coor_A[1]*coor_norA[1]+coor_A[2]*coor_norA[2])
+        
+        powA = math.pow(coor_A[0],2)+ math.pow(coor_A[1],2)+math.pow(coor_A[2],2)
+        disA = math.sqrt(powA)
 
+        coor_B = [self.arm.get_fb().pos.x,self.arm.get_fb().pos.y,self.arm.get_fb().pos.z]
+        coor_norB=[self.arm.get_fb().euler[0],self.arm.get_fb().euler[1],self.arm.get_fb().euler[2]]
+        VecB = coor_B[0]*coor_norB[0]+coor_B[1]*coor_norB[1]+coor_B[2]*coor_norB[2]
+
+        powB =  math.pow(coor_B[0],2)+ math.pow(coor_B[1],2)+math.pow(coor_B[2],2) 
+        disB =  math.sqrt(powB)
+
+        AXRot = math.acos((powA*powB)/(disA*disB))
+
+        # Projection vector
+        coor_C = [self.arm.get_fb().pos.x,self.arm.get_fb().pos.y,self.arm.get_fb().pos.z]
+        coor_norC=[0,self.arm.get_fb().euler[1],self.arm.get_fb().euler[2]]
+        VecC = coor_C[0]*coor_norC[0]+coor_C[1]*coor_norC[1]+coor_C[2]*coor_norC[2]
+
+        powC =  math.pow(coor_C[0],2)+ math.pow(coor_C[1],2)+math.pow(coor_C[2],2) 
+        disC =  math.sqrt(powC)
+
+        ArmRoll= math.acos((powB*powC)/(disB*disC))
+
+        ArmX = coor_B[0]-x
+
+        ArmY = coor_B[1]-y
+
+        ArmZ = coor_B[2]-z
+
+        return (ArmX,ArmY,ArmZ,ArmRoll,AXRot)
+    
     def proces(self):
         if self.arm.is_stop:                                       # must be include in your strategy
             self.finish = True                                     # must be include in your strategy
@@ -121,96 +171,89 @@ class Task:
             if self.finish:
                 return
             else:
-                self.state = moveIn2Shelf
+                self.state = move2Shelf
                 #print "self.pick_list = " + str(self.pick_list)
 
         elif self.state == initPose:
             self.state = busy
             self.nextState = idle
-            self.arm.set_speed(30)
-            self.arm.jointMove(0, (-1.57, 0, 1.57,-0.79, 0, 0.79, 0))
+            self.arm.set_speed(100)
+            self.arm.jointMove(0, (0, 0, 0, 0, 0, 0, 0))
             self.suction.gripper_suction_deg(0)
 
         elif self.state == move2Shelf:
             self.state = busy
             self.nextState = move2Object
-            self.arm.set_speed(30)
-            self.arm.jointMove(0, (-1.57, -1.05, 1.57,-0.79, 0, 0.79, 0))
-            self.suction.gripper_suction_deg(0)
+            self.arm.set_speed(90)
+            self.arm.jointMove(0, (0, -2.44, 0, 2.62, 0, -0.17, 0))
+            #self.arm.jointMove(0, (-3.14, -2.79, 0, 2.62, 0, 0.17, 0))
 
         elif self.state == move2Object:
             self.state = busy
+            self.arm.jointMove(0, (0, -2.44, 0, 2.62, 0, -1.74, 0))
+            self.nextState = moveIn2Shelf
+
+        elif self.state == moveIn2Shelf:
+            self.state = busy
+            self.arm.relative_move_pose('line', [0, 0.1, -0.1])
+            self.nextState = tracking
+
+        elif self.state == tracking:
+            self.state = busy 
+            # move pos
+            self.arm.relative_move_pose('line', [0, -0.1, 0.1])
+            #self.arm.singleJointMove(6,-1.57)  
+            self.nextState = SafetyPos
+
+        elif self.state == SafetyPos:
+            self.state = busy
+            self.arm.jointMove(0, (0, -2.44, 0, 2.62, 0, -0.17, 0))
             self.nextState = pickObject
-            self.arm.relative_move_pose('line', [0, 0, -0.2])
 
         elif self.state == pickObject:
+            #gripper_deg
             self.state = busy
-            self.nextState = leaveShelf
+            self.arm.relative_move_pose('line', [0, 0.1, -0.1])
+            self.nextState = move2Bin 
+            self.suction.gripper_suction_deg(0)
             self.suction.gripper_vaccum_on()
-            
+
         elif self.state == leaveShelf:
             self.state = busy
-            self.nextState = idle
-            self.arm.relative_move_pose('line', [-0.3, 0, 0.1])
-            self.pick_list -= 1
+            self.arm.relative_move_pose('line', [0, -0.1, 0.1])
+            self.nextState = move2Bin
+            #self.pick_list -= 1
             self.suction.gripper_suction_deg(0)
 
         elif self.state == move2Bin:
             self.state = busy
-            self.nextState = move2Object
-            self.getObjectPos()
-            self.pos[2] += 0.2
-            self.arm.ikMove('line', self.pos, self.euler, self.phi)
-        elif self.state == frontSafetyPos:
-            self.state = busy
-            self.nextState = move2Shelf
-            self.getFrontSafetyPos()
-            self.arm.set_speed(30)
-            self.arm.ikMove('line', self.pos, self.euler, self.phi)           
-            self.suction.gripper_suction_deg(-20)
-        elif self.state == rearSafetyPos:
-            self.state = busy
-            self.nextState = move2Bin
-            self.getRearSafetyPos()
-            self.arm.ikMove('line', self.pos, self.euler, self.phi)
-  
-        elif self.state == moveIn2Shelf:
-            self.state = busy
             self.nextState = move2PlacedPos
             self.getPlacePos()
-            self.pos[2] += 0.1
+            self.pos[2] += 0.2
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
-
-        elif self.state == leaveBin:
-            self.state = busy
-            self.nextState = frontSafetyPos
-            self.arm.set_speed(20)
-            self.arm.relative_move_pose('line', [0, 0, 0.2])
-
-
-
-        elif self.state == move2Object:
-            self.state = busy
-            self.nextState = pickObject
-            self.arm.relative_move_pose('line', [0, 0, -0.2])
 
         elif self.state == move2PlacedPos:
             self.state = busy
             self.nextState = placeObject
             self.arm.relative_move_pose('line', [0, 0, -0.1])
-
-
-            
+        
         elif self.state == placeObject:
             self.state = busy
-            self.nextState = leaveShelf
+            self.nextState = leaveBin
             self.suction.gripper_vaccum_off()
+
+        elif self.state == leaveBin:
+            self.state = busy
+            self.nextState = move2Shelf
+            self.arm.set_speed(20)
+            self.arm.relative_move_pose('line', [0, 0, 0.2])
 
         elif self.state == busy:
             if self.arm.is_busy:
                 return
             else:
                 self.state = self.nextState
+
 if __name__ == '__main__':
     rospy.init_node('disposing')        #enable this node
     right = Task('right')      #Set up right arm controller
@@ -221,9 +264,9 @@ if __name__ == '__main__':
     is_stop = False
     
     print 'is_start',is_start
-
+ #   listener()
     start_sub()
-    next_pub(0)
+    Home_pub(0)
     print 'next pub'
     rate = rospy.Rate(30)  # 30hz
 
@@ -236,7 +279,7 @@ if __name__ == '__main__':
                 rate.sleep()
             is_start = False
             is_stop = True
-            next_pub(3)
+            Home_pub(4)
             rospy.sleep(3)
         rate.sleep()
         # rospy.spin()
