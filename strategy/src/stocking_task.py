@@ -12,11 +12,11 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 8
-SPEED     = 3000
+PICKORDER = 0
+SPEED     = 30
 LUNCHBOX_H = 0.05
 # The lesser one
-lunchQuan = 1              
+lunchQuan = 2              
 drinkQuan = 2
 riceQuan  = 2
 
