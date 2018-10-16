@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <boost/thread.hpp>
+#include <math.h>
 
 #include "ros/ros.h"
 #include "std_msgs/Int32.h"
