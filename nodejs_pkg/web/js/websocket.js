@@ -24,6 +24,12 @@ socket.on('news', function(m) {
       }else if (j.info.toLowerCase() == "payment process complete") {
         output.src = "sounds/payment_process_complete.wav"
         output.play();
+      }else if (j.info.toLowerCase() == "payment failed") {
+        output.src = "sounds/payment_failed_please_try_again.wav"
+        output.play();
+        __log('Pass payment 4 to socket server');
+        __mlog('Strategy Requesting...');
+        socket.emit('message', 4);
       }else {
         Sayit(j.info);
       }
@@ -96,7 +102,7 @@ ws.onmessage = function(evt){
     __log('play audio');
     output.onended = function() {
       if (record) {
-        PlayBeepSound(2);
+        PlayBeepSound(1, 2);
         document.getElementById('recordBtn').click();
       }else {
         __log('Pass '+state+' to socket server');

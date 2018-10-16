@@ -759,7 +759,7 @@ def handle_state(req):
                 TickTime_Now = time.clock()
                 TotalTime = TickTime_Now - TickTime_Begin
                 if(TotalTime >= 10):
-                    PaymentInfo = "Payment failed. Please try again."
+                    PaymentInfo = "Payment failed"
                     break
             print("State 4: End wait for pay")
             ResponseFlag = True
