@@ -12,11 +12,11 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
-PICKORDER = 0
-SPEED     = 30
+PICKORDER = 8
+SPEED     = 3000
 LUNCHBOX_H = 0.05
 # The lesser one
-lunchQuan = 2              
+lunchQuan = 1              
 drinkQuan = 2
 riceQuan  = 2
 
@@ -42,6 +42,7 @@ rearSafetyPos2  = 18
 leavePlacePos   = 19
 grasping        = 20
 missObj         = 21
+safePose4       = 22
 
 objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
@@ -66,8 +67,8 @@ lunchboxEu = [150, 0, 0]
 
 drinkEu =    [0, 0, 0]
             
-riceballXXEu = [45, 0, 0]
-riceballEu   = [10, 0, 0]
+riceballXXEu = [35, 0, 0]
+riceballEu   = [0, 0, 0]
 
                
 objectPos = [lunchboxPos, drinkPos, riceballPos]
@@ -268,9 +269,8 @@ class stockingTask:
         
         elif self.state == busy:
             if self.arm.is_busy:
-                if (self.nowState == leaveBin or self.nowState == frontSafetyPos or self.nowState == move2Shelf) and not self.suction.is_grip:
+                if (self.nowState == leaveBin or self.nowState == frontSafetyPos or self.nowState == move2Shelf) and not self.suction.is_grip and not self.en_sim:
                     self.state = missObj
-                    # print 'aaa'
                 return
             else:
                 self.state = self.nextState
@@ -283,18 +283,27 @@ class stockingTask:
             self.pickList += 1
             self.euler[2] = 90
             self.euler[0] = -10
-            self.arm.relative_move('line', self.euler, [0, -0.1, -0.25], self.phi)
+            self.arm.relative_move('line', self.euler, [0, -0.1, -0.3], self.phi)
 
         elif self.state == leavePlacePos:
             self.state = busy
             self.nextState = leaveShelf
-            self.arm.noa_move_suction('line', suction_angle=self.sucAngle, n=0, o=0, a=-0.04)
+            if 'riceball' in objectName[self.pickList]:
+                self.arm.relative_move('line', self.euler, [-0.04, 0, 0.02], self.phi)
+            else:
+                self.arm.noa_move_suction('line', suction_angle=self.sucAngle, n=0, o=0, a=-0.04)
 
         elif self.state == safePose3:
             self.state = busy
             self.nextState = rearSafetyPos
             self.arm.set_speed(SPEED)
-            self.arm.jointMove(0, (0, -1.2, 0, 2.4, 0, -0.9, 0))
+            self.arm.jointMove(0, (0, -1.2, 0, 2.4, 0, -1.2, 0))
+
+        elif self.state == safePose4:
+            self.state = busy
+            self.nextState = rearSafetyPos
+            self.arm.set_speed(SPEED)
+            self.arm.jointMove(0, (0, -1.2, 0, 2.4, 0, -1.2, 0))
 
         elif self.state == initPose:
             self.state = busy
@@ -455,7 +464,7 @@ class stockingTask:
             self.suction.gripper_vaccum_off()
 
         elif self.state == grasping:
-            if self.suction.is_grip:# or self.en_sim:
+            if self.suction.is_grip or self.en_sim:
                 self.arm.clear_cmd()
                 # rospy.sleep(.1)
                 self.state = busy
