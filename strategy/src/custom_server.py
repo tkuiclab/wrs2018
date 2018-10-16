@@ -734,30 +734,41 @@ def handle_state(req):
             ResponseFlag = False
             # ResponseInfo = "Mission: Robot idel finish."
             ResponseInfo = "Mission: Robot idel finish."
+
         elif(Get_Req == LeadCustom):
             ResponseFlag = True
             # ResponseInfo = "Mission: Lead customer finish."
             ResponseInfo = "We have arrived at Sprite's shelves, do you need anything else?"
+        
         elif(Get_Req == TakeObjToCustom_Type1):
             ResponseFlag = True
             # ResponseInfo = "Mission: Take object to customer type1 finish."
             ResponseInfo = "Here you are, do you need anything else?"
+        
         elif(Get_Req == TakeObjToCustom_Type2):
             ResponseFlag = True
             ResponseInfo = "Here are your meals"
+        
         elif(Get_Req == PaymentState):
             SubConsumeString = CSubscribeConsume()
-            print("State: Wait for pay")
+            PaymentInfo = "Payment process complete"
+            TickTime_Begin = time.clock()
+            print("State 4: Wait for pay")
+            
             while(SubConsumeString.Return_SubString() != "consumeA"):
-                # Wait
-                pass
-            print("State: Pay finish")
+                # Wait 10 sec for payment
+                TickTime_Now = time.clock()
+                TotalTime = TickTime_Now - TickTime_Begin
+                if(TotalTime >= 10):
+                    PaymentInfo = "Payment failed. Please try again."
+                    break
+            print("State 4: End wait for pay")
             ResponseFlag = True
-            ResponseInfo = "Payment process complete"
+            ResponseInfo = PaymentInfo
+
         else:
             ResponseFlag = False
             ResponseInfo = "????????"
-
     ### Response the result of Strategy
     res = AssistantStateResponse()
     res.success = ResponseFlag    # Bool  : An flag for Watson speaking or not.
