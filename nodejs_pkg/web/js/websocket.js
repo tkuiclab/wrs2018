@@ -96,7 +96,7 @@ ws.onmessage = function(evt){
     __log('play audio');
     output.onended = function() {
       if (record) {
-        PlayBeepSound(2);
+        PlayBeepSound(1, 2);
         document.getElementById('recordBtn').click();
       }else {
         __log('Pass '+state+' to socket server');
