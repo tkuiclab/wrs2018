@@ -69,8 +69,9 @@ void send_cmd()
             // speed = (speed_tmp < speed) ? speed : speed_tmp;
             // cmd_arr[6] = speed>>16;
             cmd_arr[7]  = speed;
-            cmd_arr[9]  = speed*2;
+            cmd_arr[9]  = exp((speed / MAX_SPEED)*4 - 2) * 5410;
             cmd_arr[11] = speed*2;
+            // cmd_arr[9] = speed*2;
 
             std::cout << "speed = " << (cmd_arr[7] | cmd_arr[6]<<16) <<std::endl;
             write_command();
