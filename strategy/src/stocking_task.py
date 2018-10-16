@@ -47,20 +47,20 @@ objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
               'riceball', 'riceball', 'riceball', 'riceball']
 
-lunchboxPos = [[-0.42,  0.16, -0.67],
-               [-0.42,  0.16, -0.67],
-               [-0.42,  0.16, -0.67],
-               [-0.42,  0.16, -0.67]]
+lunchboxPos = [[-0.42,  0.15, -0.67],
+               [-0.42,  0.15, -0.67],
+               [-0.42,  0.15, -0.67],
+               [-0.42,  0.15, -0.67]]
 
-drinkPos =    [[-0.183, 0.11, -0.6],
-               [-0.288, 0.11, -0.6],                   
-               [-0.183, 0.21, -0.6],                              
-               [-0.288, 0.21, -0.6]]
+drinkPos =    [[-0.19, 0.09, -0.6],
+               [-0.295, 0.09, -0.6],                   
+               [-0.19, 0.19, -0.6],                              
+               [-0.295, 0.19, -0.6]]
 
-riceballPos = [[-0.172, -0.2, -0.68],
-               [-0.267, -0.2, -0.68],
-               [-0.172, -0.1, -0.68],                             
-               [-0.267, -0.1, -0.68]]
+riceballPos = [[-0.172, -0.22, -0.68],
+               [-0.267, -0.22, -0.68],
+               [-0.172, -0.12, -0.68],                             
+               [-0.267, -0.12, -0.68]]
 
 lunchboxEu = [150, 0, 0]
 
@@ -283,7 +283,7 @@ class stockingTask:
             self.pickList += 1
             self.euler[2] = 90
             self.euler[0] = -10
-            self.arm.relative_move('line', self.euler, [0, -0.1, -0.15], self.phi)
+            self.arm.relative_move('line', self.euler, [0, -0.1, -0.25], self.phi)
 
         elif self.state == leavePlacePos:
             self.state = busy
