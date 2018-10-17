@@ -124,7 +124,7 @@ class CDualArmTask:
         self.suction.gripper_suction_deg(Deg)
 
     def SuckSuccess(self):
-        return self.suction.is_grip()
+        return self.suction.is_grip
 
     def StopRobot_and_ClearCmd(self):
         # Force stop robot
@@ -394,12 +394,12 @@ class CDualArmCommand(object):
             Limit_z = self.L_PosTakeObj_SuckMeal[2] # z
         else:
             TakeObj_SuckMeal(select)
-        
+
         while((select == 'right') or (select == 'left')):
             if((SelectArm.SuckSuccess()) or (SelectArm.GetArmPos().z <= Limit_z)):
                 SelectArm.StopRobot_and_ClearCmd()
                 break
-            SelectArm.MoveRelPos('line',SuckMealKeepDownDirection)
+            SelectArm.MoveRelPos('line',self.SuckMealKeepDownDirection)
 
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
@@ -575,7 +575,7 @@ class CMobileCommand(object):
         rospy.Subscriber("scan_black/dualarm_start", Bool, self.Sub_DualArm_Start)
 
         self.MobileIsBusyFlag = False
-        self.SendToSrvSucessFlag = False
+        self.SendToSrvSuccessFlag = False
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
@@ -583,8 +583,8 @@ class CMobileCommand(object):
         srvData = strategy_start()
         srvData.data = True
         #self.pub_start.publish(start)
-        self.SendToSrvSucessFlag = self.srv_start(srvData.data)
-        print(self.SendToSrvSucessFlag)
+        self.SendToSrvSuccessFlag = self.srv_start(srvData.data)
+        print(self.SendToSrvSuccessFlag)
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
@@ -760,7 +760,7 @@ def handle_state(req):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
-                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSuccessFlag == False)):
                         # Check the data send to service or not.
                         # if there were not, it would keep execute the motion (MoveToP1).
                         SerialKeyIndex += 1
