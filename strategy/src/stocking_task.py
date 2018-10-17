@@ -16,8 +16,8 @@ PICKORDER = 0
 SPEED     = 30
 LUNCHBOX_H = 0.05
 # The lesser one
-lunchQuan = 2              
-drinkQuan = 2
+lunchQuan = 1              
+drinkQuan = 1
 riceQuan  = 2
 
 idle            = 0
@@ -58,10 +58,10 @@ drinkPos =    [[-0.19, 0.09, -0.6],
                [-0.19, 0.19, -0.6],                              
                [-0.295, 0.19, -0.6]]
 
-riceballPos = [[-0.172, -0.215, -0.675],
-               [-0.267, -0.215, -0.675],
-               [-0.172, -0.095, -0.675],                             
-               [-0.267, -0.095, -0.675]]
+riceballPos = [[-0.162, -0.22, -0.675],
+               [-0.257, -0.22, -0.675],
+               [-0.162, -0.1, -0.675],                             
+               [-0.257, -0.1, -0.675]]
 
 lunchboxEu = [150, 0, 0]
 
@@ -346,7 +346,8 @@ class stockingTask:
             self.nextState = move2Object
             self.getObjectPos()
             self.pos[2] = -0.5
-            self.euler[1] = -16
+            if 'riceball' not in objectName[self.pickList]:
+                self.euler[1] = -16
             self.arm.set_speed(SPEED)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
  
