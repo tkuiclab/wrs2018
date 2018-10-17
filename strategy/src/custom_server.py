@@ -583,12 +583,11 @@ class CDualArmCommand(object):
             self.right.SuctionEnable(False)
             self.left.SuctionEnable(False)
 
-    def ChangeMode(self, select, ModeFlag)
+    def ChangeMode(self, select, ModeFlag):
         if(select == 'right'):
-            SelectArm = self.right
+            self.right.ChangeModeToGetSuckState(ModeFlag)
         elif(select == 'left'):
-            SelectArm = self.left
-        SelectArm.ChangeModeToGetSuckState(ModeFlag)
+            self.left.ChangeModeToGetSuckState(ModeFlag)
 
     def IDEL(self):
         # self.DualArmIsBusyFlag = False
@@ -795,14 +794,16 @@ def handle_state(req):
             if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
 
-                # if( (MotionKey == nMoveToP1)  or
-                #     (MotionKey == nMoveToP2)  or
-                #     (MotionKey == nRotToDeg90)or
-                #     (MotionKey == nRotToDeg0) or
-                #     (MotionKey == nSTOP)    ):
-                #     DualArmCommandSet.ChangeMode(False)
-                # else:
-                #     DualArmCommandSet.ChangeMode(True)
+                if( (MotionKey == nMoveToP1)  or
+                    (MotionKey == nMoveToP2)  or
+                    (MotionKey == nRotToDeg90)or
+                    (MotionKey == nRotToDeg0) or
+                    (MotionKey == nSTOP)    ):
+                    print("Set False Mode")
+                    DualArmCommandSet.ChangeMode(SelectArm, False)
+                else:
+                    print("Set True Mode")
+                    DualArmCommandSet.ChangeMode(SelectArm, True)
 
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
