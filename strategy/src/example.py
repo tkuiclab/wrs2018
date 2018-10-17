@@ -91,6 +91,7 @@ class exampleTask:
         elif self.name == 'left':
             self.pos, self.euler, self.phi = (0.1, 0.45, -0.45), (0, 20, 0), -45
 
+
     def getObjectPos(self):
         lunchboxPos = [[-0.4, -0.15, -0.63],
                        [-0.4, -0.15, -0.68]]
@@ -102,6 +103,7 @@ class exampleTask:
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
 
     def getPlacePos(self):
+        
         lunchboxPos = [[0.5, -0.25, -0.54],
                        [0.5, -0.25, -0.49]]
         drinkPos = [[0.5, 0.25, -0.5],
@@ -110,7 +112,7 @@ class exampleTask:
             self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (0, 90, 0), 45
         elif self.name == 'left':
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (0, 90, 0), -45
-
+        #print("pos type = ",type(self.pos))
 
     def proces(self):
         if self.arm.is_stop:                                       # must be include in your strategy
@@ -149,13 +151,16 @@ class exampleTask:
         elif self.state == move2Bin:
             self.state = busy
             self.nextState = move2Object
+            print("pos[2] type = ",type(self.pos))
             self.getObjectPos()
             self.pos[2] += 0.2
+            print("pos[2] type = ",type(self.pos))
             self.arm.ikMove('line', self.pos, self.euler, self.phi) 
 
         elif self.state == move2Shelf:
             self.state = busy
             self.nextState = moveIn2Shelf
+            #print("pos[2] type = ",type(self.pos))
             self.getPlacePos()
             self.pos[0] += -0.3
             self.pos[2] += 0.1
@@ -166,6 +171,7 @@ class exampleTask:
             self.state = busy
             self.nextState = move2PlacedPos
             self.getPlacePos()
+            #print("pos[2] type = ",type(self.pos[2]))
             self.pos[2] += 0.1
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
