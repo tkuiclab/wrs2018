@@ -42,6 +42,7 @@ class ArmTask:
         self.__is_busy = False
         self.__ik_fail = False
         self.__is_stop = False
+        self.__is_wait = False
         self.__speed = 50
 
     def __set_pubSub(self):
@@ -49,6 +50,18 @@ class ArmTask:
         self.__set_mode_pub = rospy.Publisher(
             str(self.name) + '/set_mode_msg',
             String,
+            # latch=True,
+            queue_size=1
+        )
+        self.__wait_pub = rospy.Publisher(
+            str(self.name) + '/wait',
+            Bool,
+            # latch=True,
+            queue_size=1
+        )
+        self.__clear_pub = rospy.Publisher(
+            str(self.name) + '/clear_cmd',
+            Bool,
             # latch=True,
             queue_size=1
         )
@@ -92,6 +105,7 @@ class ArmTask:
 
         elif 'End Trajectory' in msg.status_msg:
             self.__is_busy = False
+            print('Arm task receive End Trajectory')
 
     def __stop_callback(self, msg):
         if msg.data:
@@ -99,12 +113,28 @@ class ArmTask:
         
     def back_home(self):
         self.jointMove(0,(0, 0, 0, 0, 0, 0, 0))
+
     @property
     def is_busy(self):
         return self.__is_busy
+
+    @property
+    def wait(self):
+        return self.__is_wait
+
+    @wait.setter
+    def wait(self, state):
+        if type(state) is bool:
+            self.__is_wait = state
+        else:
+            err_msg = 'Type Error'
+            print(err_msg)
+            raise Exception(err_msg)
+
     @property
     def is_ikfail(self):
         return self.__ik_fail
+
     @property
     def is_stop(self):
         return self.__is_stop
@@ -309,6 +339,20 @@ class ArmTask:
             degrees(phi)
         )
 
+    def relative_move(self, mode='p2p', euler=_ORI, pos = _POS, phi=_PHI):
+        fb = self.get_fb()
+        curr_pos = fb.group_pose.position
+        pos[0] += curr_pos.x
+        pos[1] += curr_pos.y
+        pos[2] += curr_pos.z
+
+        self.ikMove(
+            mode,
+            (pos[0], pos[1], pos[2]),
+            (euler[0], euler[1], euler[2]),
+            phi
+        )
+
     def move_euler(self, mode='p2p', euler=_ORI):
         fb = self.get_fb()
         pos = fb.group_pose.position
@@ -324,6 +368,12 @@ class ArmTask:
         """This is blocking method."""
         while self.is_busy:
             rospy.sleep(0.1)
+
+    def freeze(self,  enable):
+        self.__wait_pub.publish(enable)
+
+    def clear_cmd(self):
+        self.__clear_pub.publish(True)
 
 # if __name__ == '__main__':
 #     rospy.init_node('test_arm_task')
