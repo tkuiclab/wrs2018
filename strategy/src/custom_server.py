@@ -409,14 +409,14 @@ class CDualArmCommand(object):
         else:
             TakeObj_SuckMeal(select)
 
-        SelectArm.ChangeModeToGetSuckState(True)
+        # SelectArm.ChangeModeToGetSuckState(True)
         SelectArm.MoveRelPos('line', self.SuckMealKeepDownDirection)
         while((select == 'right') or (select == 'left')):
             if(SelectArm.SuckSuccess()):
                 SelectArm.StopRobot_and_ClearCmd()
                 time.sleep(0.1)
                 break
-        SelectArm.ChangeModeToGetSuckState(False)    
+        # SelectArm.ChangeModeToGetSuckState(False) 
 
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
@@ -582,6 +582,13 @@ class CDualArmCommand(object):
         else:
             self.right.SuctionEnable(False)
             self.left.SuctionEnable(False)
+
+    def ChangeMode(self, select, ModeFlag)
+        if(select == 'right'):
+            SelectArm = self.right
+        elif(select == 'left'):
+            SelectArm = self.left
+        SelectArm.ChangeModeToGetSuckState(ModeFlag)
 
     def IDEL(self):
         # self.DualArmIsBusyFlag = False
@@ -787,6 +794,16 @@ def handle_state(req):
         while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
             if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
+
+                # if( (MotionKey == nMoveToP1)  or
+                #     (MotionKey == nMoveToP2)  or
+                #     (MotionKey == nRotToDeg90)or
+                #     (MotionKey == nRotToDeg0) or
+                #     (MotionKey == nSTOP)    ):
+                #     DualArmCommandSet.ChangeMode(False)
+                # else:
+                #     DualArmCommandSet.ChangeMode(True)
+
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
                     if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSuccessFlag == False)):
