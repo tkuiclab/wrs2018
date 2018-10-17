@@ -12,8 +12,15 @@
       <uri>model://sun</uri>
     </include>
 
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>0.1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+
     <model name="shelf">
-      <pose>0.3 -0.4625 0  0 0 0</pose>
+      <pose>0.3 -0.4625 -0.05  0 0 0</pose>
       <static>true</static>
       <link name="shelf">
         <visual name="visual">
@@ -29,7 +36,42 @@
           <geometry>
             <mesh>
                <scale>0.001 0.001 0.001</scale>
+               <uri>model://mobile_dual_arm/scene/meshes/shelfForColison.STL</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>0.5</mu2>
+              </ode>
+            </friction>
+            <contact>
+            	<elastic_modulus>0.01</elastic_modulus>
+            </contact>
+          </surface>
+        </collision>
+      </link>
+    </model>
+
+    <model name="shelf1">
+      <pose>0.47 0.66 -0.05  0 0 1.5708</pose>
+      <static>true</static>
+      <link name="shelf1">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+               <scale>0.001 0.001 0.001</scale>
                <uri>model://mobile_dual_arm/scene/meshes/shelf.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+               <scale>0.001 0.001 0.001</scale>
+               <uri>model://mobile_dual_arm/scene/meshes/shelfForColison.STL</uri>
             </mesh>
           </geometry>
           <surface>

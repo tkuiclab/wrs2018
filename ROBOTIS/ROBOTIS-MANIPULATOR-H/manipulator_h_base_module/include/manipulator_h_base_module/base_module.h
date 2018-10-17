@@ -89,6 +89,7 @@ class BaseModule
 {
 private:
   bool stop_flag;
+  bool wait_flag;
   int             control_cycle_msec_;
   boost::thread   queue_thread_;
   boost::thread  *tra_gene_thread_;
@@ -110,7 +111,9 @@ public:
   /* ROS Topic Callback Functions */
   void initPoseMsgCallback(const std_msgs::String::ConstPtr& msg);
   void setModeMsgCallback(const std_msgs::String::ConstPtr& msg);
+  void waitMsgCallback(const std_msgs::Bool::ConstPtr& msg);
   void stopMsgCallback(const std_msgs::Bool::ConstPtr& msg);
+  void clearCmdCallback(const std_msgs::Bool::ConstPtr& msg);
   void jointPoseMsgCallback(const manipulator_h_base_module_msgs::JointPose::ConstPtr& msg);
   void kinematicsPoseMsgCallback(const manipulator_h_base_module_msgs::KinematicsPose::ConstPtr& msg);
   void p2pPoseMsgCallback(const manipulator_h_base_module_msgs::P2PPose::ConstPtr& msg);   //new

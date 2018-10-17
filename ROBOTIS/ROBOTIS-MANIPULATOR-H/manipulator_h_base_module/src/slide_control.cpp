@@ -15,7 +15,7 @@ slide_control::slide_control()
     }
     else
     {
-        slide_cmd_pub = n.advertise<manipulator_h_base_module_msgs::SlideCommand>("/slide_command_msg", 10);
+        slide_cmd_pub = n.advertise<manipulator_h_base_module_msgs::SlideCommand>("/slide_command_msg", 1);
     }
     slide_pos = 0;
     goal_slide_pos = 0;
@@ -42,5 +42,6 @@ void slide_control::slide_pub()
 
 void slide_control::slideFeedback(const linear_motion::Slide_Feedback::ConstPtr& msg)
 {
+    is_busy = msg->is_busy;
     slide_pos = -(double)msg->curr_pos / 100000.0;
 }
