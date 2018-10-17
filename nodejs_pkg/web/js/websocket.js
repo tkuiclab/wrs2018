@@ -1,20 +1,21 @@
 ws = new WebSocket("wss://shengruchatbot1.mybluemix.net/ws/sound");
 var heartbeat_msg = '--heartbeat--', heartbeat_interval = null, missed_heartbeats = 0;
 var output = document.getElementById('output');
+
 function __log(e, data) {
   log.innerHTML += "\n" + e + " " + (data || '');
 }
 function __mlog(e, data) {
-  // mlog.innerHTML += "\n" + e + " " + (data || '');
   let tmp = mlog.innerHTML;
   mlog.innerHTML = e + " " + (data || '') + "\n" + tmp;
 }
-
+/** Socket.io pass robot state to socket server */
 var socket = io.connect('https://'+location.host, {secure: true});
 socket.on('news', function(m) {
   if (IsJsonString(m)) {
     let j = JSON.parse(m);
     if (j.success) {
+      /** Robot Speaking State Machine */
       if (j.info.toLowerCase() == "here are your meals") {
         output.src = "sounds/here_are_your_meals.wav"
         output.play();
@@ -50,7 +51,7 @@ socket.on('say', function(m) {
 ws.onopen = function(){
   __log('[Assistant Connected]');
   __mlog('[Assistant Connected]');
-  /* Ping/Pong signal for keeping websocket alive */
+  /** Ping/Pong signal for keeping websocket alive */
   if (heartbeat_interval === null) {
     missed_heartbeats = 0;
     heartbeat_interval = setInterval(function() {
