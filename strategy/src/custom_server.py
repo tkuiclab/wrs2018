@@ -163,7 +163,7 @@ class CDualArmCommand(object):
         self.GiveObj1_DelayTime = 3 # sec
         self.GiveObj2_DelayTime = 2 # sec
 
-        self.SuckMealKeepDownDirection = [0, 0, -0.03] # -0.03 m = -3 cm
+        self.SuckMealKeepDownDirection = [0, 0, -0.06] # -0.06 m = -6 cm
 
         self.R_PosTakeObj_Ori        = [0.3,  -0.3006, -0.46]
         self.R_OriTakeObj_Ori        = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
@@ -402,14 +402,15 @@ class CDualArmCommand(object):
         else:
             TakeObj_SuckMeal(select)
 
+        SelectArm.MoveRelPos('line', self.SuckMealKeepDownDirection)
         print('before while')
         while((select == 'right') or (select == 'left')):
             print('while')
-            if((SelectArm.SuckSuccess()) or (SelectArm.GetArmPos().z <= Limit_z)):
+            if(SelectArm.SuckSuccess()):
+                print('if success')
                 SelectArm.StopRobot_and_ClearCmd()
-                break
-            if not (self.DualArmIsBusy()):
-                SelectArm.MoveRelPos('line',self.SuckMealKeepDownDirection)
+                time.sleep(0.1)
+                break            
 
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
