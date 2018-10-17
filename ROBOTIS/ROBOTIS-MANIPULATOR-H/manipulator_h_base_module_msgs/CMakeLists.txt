@@ -26,6 +26,8 @@ add_message_files(
   KinematicsPose.msg
   P2PPose.msg
   SlideCommand.msg
+  vector.msg
+
 )
 
 add_service_files(
@@ -57,7 +59,6 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
-
 ################################################################################
 # Install
 ################################################################################

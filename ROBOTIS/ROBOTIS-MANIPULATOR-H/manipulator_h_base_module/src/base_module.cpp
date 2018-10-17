@@ -171,6 +171,8 @@ void BaseModule::clearCmdCallback(const std_msgs::Bool::ConstPtr& msg)
     robotis_->is_moving_ = false;
     robotis_->ik_solve_ = false;
     robotis_->cnt_ = 0;
+    ROS_INFO("[end] send trajectory");
+    publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");
   }
 }
 void BaseModule::initPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
@@ -246,6 +248,13 @@ bool BaseModule::getKinematicsPoseCallback(manipulator_h_base_module_msgs::GetKi
   res.group_pose.position.y = manipulator_->manipulator_link_data_[END_LINK]->position_.coeff(1, 0);
   res.group_pose.position.z = manipulator_->manipulator_link_data_[END_LINK]->position_.coeff(2, 0);
   res.phi =  manipulator_->manipulator_link_data_[END_LINK]->phi_;
+  for(int i=0; i<=3; i++)
+  {
+    for(int j=0; j<=3; j++)
+    {
+      res.orientation[i].row[j] = manipulator_->manipulator_link_data_[END_LINK]->transformation_(i,j);
+    }
+  }
   Eigen::Quaterniond quaternion = robotis_framework::convertRotationToQuaternion(manipulator_->manipulator_link_data_[END_LINK]->orientation_);
   // for (int id = 1; id <= MAX_JOINT_ID; id++)
     // std::cout<<"manipulator_->manipulator_link_data_[END_LINK]->angle"<<std::endl<<manipulator_->manipulator_link_data_[id]->joint_angle_<<std::endl;
@@ -618,7 +627,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
   /* ----- send trajectory ----- */
 
 //    ros::Time time = ros::Time::now();
-  if (robotis_->is_moving_ == true)
+  if (robotis_->is_moving_ == true && robotis_->cnt_ < robotis_->all_time_steps_)
   {
     if (robotis_->cnt_ == 0)
     {
@@ -688,7 +697,7 @@ void BaseModule::process(std::map<std::string, robotis_framework::Dynamixel *> d
   slide_->slide_pub();
   /*---------- initialize count number ----------*/
 
-  if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true)
+  if (robotis_->cnt_ >= robotis_->all_time_steps_ && robotis_->is_moving_ == true && !slide_->is_busy)
   {
     ROS_INFO("[end] send trajectory");
     publishStatusMsg(robotis_controller_msgs::StatusMsg::STATUS_INFO, "End Trajectory");
