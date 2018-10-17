@@ -248,11 +248,12 @@ bool BaseModule::getKinematicsPoseCallback(manipulator_h_base_module_msgs::GetKi
   res.group_pose.position.y = manipulator_->manipulator_link_data_[END_LINK]->position_.coeff(1, 0);
   res.group_pose.position.z = manipulator_->manipulator_link_data_[END_LINK]->position_.coeff(2, 0);
   res.phi =  manipulator_->manipulator_link_data_[END_LINK]->phi_;
+  res.orientation.resize(16);
   for(int i=0; i<=3; i++)
   {
     for(int j=0; j<=3; j++)
     {
-      res.orientation[i].row[j] = manipulator_->manipulator_link_data_[END_LINK]->transformation_(i,j);
+      res.orientation[i*4 + j] = manipulator_->manipulator_link_data_[END_LINK]->transformation_(i,j);
     }
   }
   Eigen::Quaterniond quaternion = robotis_framework::convertRotationToQuaternion(manipulator_->manipulator_link_data_[END_LINK]->orientation_);
