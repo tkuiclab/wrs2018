@@ -25,16 +25,17 @@ nTakeObj_AboveMeal  = 8
 nTakeObj_DrinkUp    = 9
 nTakeObj_SuckDrink  = 10
 nTakeObj_SuckMeal   = 11
-nTakeObj_TakeOut    = 12
-nGiveObj1           = 13
-nGiveObj2_AboveDesk = 14
-nGiveObj2_OnDesk    = 15
-nGiveObj2_LeaveDesk = 16
-nDelaySuctOffObj1   = 17
-nDelaySuctOffObj2   = 18
-nInitArmPos         = 19
-nIdelArmPos         = 20
-nSTOP               = 21
+nTakeObj_SuckMealKeepDown = 12
+nTakeObj_TakeOut    = 13
+nGiveObj1           = 14
+nGiveObj2_AboveDesk = 15
+nGiveObj2_OnDesk    = 16
+nGiveObj2_LeaveDesk = 17
+nDelaySuctOffObj1   = 18
+nDelaySuctOffObj2   = 19
+nInitArmPos         = 20
+nIdelArmPos         = 21
+nSTOP               = 22
 
 # SerialKey motion command set
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
@@ -44,11 +45,17 @@ SerialKey_TakeObjToCustom_Type1 = \
      nTakeObj_BesideDrink,  nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_TakeOut,
      nRotToDeg0,            nGiveObj1,          nDelaySuctOffObj1,  nIdelArmPos,
      nInitArmPos,           nSTOP]
+# SerialKey_TakeObjToCustom_Type2 = \
+#     [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
+#      nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+#      nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+#      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
+#      nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
-    [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
-     nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
-     nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
+    [nRotToDeg90,           nIdelArmPos,                nTakeObj_Ori,       nTakeObj_MoveDown,
+     nTakeObj_AboveMeal,    nTakeObj_SuckMealKeepDown,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+     nRotToDeg0,            nMoveToP2,                  nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+     nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,        nIdelArmPos,        nInitArmPos,
      nSTOP]
 SerialKey_PaymentState = [nIDEL, nSTOP]
 
@@ -105,7 +112,9 @@ class CDualArmTask:
             Line_PtP = 'line'
         else:
             Line_PtP = 'p2p'
+        print('RelMove1')
         self.arm.relative_move_pose(Line_PtP, Pos)
+        print('RelMove1')
 
     def SuctionEnable(self, On_Off):
         if(On_Off == True):
@@ -117,8 +126,27 @@ class CDualArmTask:
         self.suction.gripper_suction_deg(Deg)
 
     def SuckSuccess(self):
-        return self.suction.is_grip()
-        
+        print('suckflag')
+        return self.suction.is_grip
+
+    def StopRobot_and_ClearCmd(self):
+        # Force stop robot
+        print('StopRobot')
+        self.arm.clear_cmd()
+
+    def PauseRobot(self, PauseFlag):
+        # True : Pause
+        # False: Continue
+        self.arm.freeze(PauseFlag)
+    
+    def GetArmPos(self):
+        print('Pos1')
+        GetArmInfo = self.arm.get_fb()
+        print('Pos2')
+        ArmPos = GetArmInfo.group_pose.position
+        print('Pos3')
+        return ArmPos # .x .y .z
+
 class CDualArmCommand(object):
     def __init__(self):
         self.right = CDualArmTask('right') # Set up right arm controller
@@ -134,6 +162,8 @@ class CDualArmCommand(object):
 
         self.GiveObj1_DelayTime = 3 # sec
         self.GiveObj2_DelayTime = 2 # sec
+
+        self.SuckMealKeepDownDirection = [0, 0, -0.03] # -0.03 m = -3 cm
 
         self.R_PosTakeObj_Ori        = [0.3,  -0.3006, -0.46]
         self.R_OriTakeObj_Ori        = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
@@ -160,9 +190,9 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_BesideDrink= [0.40,  0.3506, -0.60]
         self.L_OriTakeObj_BesideDrink= [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_SuckMeal   = [0.52, -0.2476, -0.64]
+        self.R_PosTakeObj_SuckMeal   = [0.52, -0.2476,-0.613] #[0.52, -0.2476, -0.64]
         self.R_OriTakeObj_SuckMeal   = [5.029, 89.000, 4.036]
-        self.L_PosTakeObj_SuckMeal   = [0.52,  0.3036, -0.64]
+        self.L_PosTakeObj_SuckMeal   = [0.52,  0.3036,-0.613] #[0.52,  0.3036, -0.64]
         self.L_OriTakeObj_SuckMeal   = [5.029, 89.000, 4.036]
 
         self.R_PosTakeObj_SuckDrink  = [0.45, -0.3006, -0.60]
@@ -204,7 +234,7 @@ class CDualArmCommand(object):
             self.right.InitialPos()     # Initial robot arm pose
             self.left.InitialPos()      # Initial robot arm pose
 
-    def IdelArmPos(self, select):    
+    def IdelArmPos(self, select):
         if(select == 'right'):
             self.right.IdelPos()     # Robot arm idel pose
         elif(select == 'left'):
@@ -356,6 +386,30 @@ class CDualArmCommand(object):
             self.left.SuctionEnable(True)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def TakeObj_SuckMealKeepDown(self, select):
+        # Keep move down to suck object until succsee or lower than limit_z
+        if(select == 'right'):
+            SelectArm = self.right
+            SelectArm.SetSpeed(self.LowSpd)
+            SelectArm.SuctionEnable(True)
+            Limit_z = self.R_PosTakeObj_SuckMeal[2] # z
+        elif(select == 'left'):
+            SelectArm = self.left
+            SelectArm.SetSpeed(self.LowSpd)
+            SelectArm.SuctionEnable(True)
+            Limit_z = self.L_PosTakeObj_SuckMeal[2] # z
+        else:
+            TakeObj_SuckMeal(select)
+
+        print('before while')
+        while((select == 'right') or (select == 'left')):
+            print('while')
+            if((SelectArm.SuckSuccess()) or (SelectArm.GetArmPos().z <= Limit_z)):
+                SelectArm.StopRobot_and_ClearCmd()
+                break
+            if not (self.DualArmIsBusy()):
+                SelectArm.MoveRelPos('line',self.SuckMealKeepDownDirection)
 
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
@@ -531,7 +585,7 @@ class CMobileCommand(object):
         rospy.Subscriber("scan_black/dualarm_start", Bool, self.Sub_DualArm_Start)
 
         self.MobileIsBusyFlag = False
-        self.SendToSrvSucessFlag = False
+        self.SendToSrvSuccessFlag = False
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
@@ -539,8 +593,8 @@ class CMobileCommand(object):
         srvData = strategy_start()
         srvData.data = True
         #self.pub_start.publish(start)
-        self.SendToSrvSucessFlag = self.srv_start(srvData.data)
-        print(self.SendToSrvSucessFlag)
+        self.SendToSrvSuccessFlag = self.srv_start(srvData.data)
+        print(self.SendToSrvSuccessFlag)
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
@@ -644,6 +698,9 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
     elif(Key == nTakeObj_SuckMeal):
         print("TakeObj_SuckMeal")
         DualArmCommandSet.TakeObj_SuckMeal(SelectArm)
+    elif(Key == nTakeObj_SuckMealKeepDown):
+        print("TakeObj_SuckMealKeepDown")
+        DualArmCommandSet.TakeObj_SuckMealKeepDown(SelectArm)
     elif(Key == nTakeObj_TakeOut):
         print("TakeObj_TakeOut")
         DualArmCommandSet.TakeObj_TakeOut(SelectArm)  
@@ -713,7 +770,7 @@ def handle_state(req):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
-                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSuccessFlag == False)):
                         # Check the data send to service or not.
                         # if there were not, it would keep execute the motion (MoveToP1).
                         SerialKeyIndex += 1
