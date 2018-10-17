@@ -95,6 +95,7 @@ class Strategy(object):
         
         ''' rotate  '''
         self.rotateAng = self._param.errorRotate0
+        self.pre_rotateYaw = 0
 
         ''' cross '''
         self.timer = TimeCounter(time = self._param.crossTime)
@@ -381,6 +382,7 @@ class Strategy(object):
                     # x = 0
                     # y = 0
                     yaw = self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = self._param.velYaw*0.8
                     # yaw = 0
                     # yaw = self._param.rotateYaw
@@ -388,6 +390,7 @@ class Strategy(object):
                     # x = 0
                     # y = 0
                     yaw = self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = -self._param.velYaw*0.8
                     # yaw = 0
                     # yaw = -self._param.rotateYaw
@@ -399,6 +402,7 @@ class Strategy(object):
                     # x = 0
                     # y = 0
                     yaw = self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = self._param.velYaw*0.8
                     # yaw = 0
                     # yaw = self._param.rotateYaw*0.8
@@ -406,6 +410,7 @@ class Strategy(object):
                     # x = 0
                     # y = 0
                     yaw = -self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = self._param.velYaw*0.8
                     # yaw = 0
                     # yaw = -self._param.rotateYaw*0.8
@@ -427,6 +432,9 @@ class Strategy(object):
             print('ROTATE not find')
             if(self.not_find < 100):
                 self.not_find += 1
+                x = 0
+                y = 0
+                self.Robot_Vel([x,y,self.pre_rotateYaw])
                 # self.Robot_Stop()
             else:
                 self.not_find = 0
