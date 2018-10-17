@@ -6,7 +6,7 @@ import numpy as np
 
 
 # lib
-from lib.nodehandle import NodeHandle
+from lib.nodehandle2 import NodeHandle
 from lib.pidcontrol import PIDControl,PIDControl_Y,PIDControl_Yaw,PIDControl_Qr
 from lib.fuzzycontrol import FUZZYControl
 from lib.counter import TimeCounter
@@ -81,8 +81,10 @@ class Strategy(object):
             self.controlY = PIDControl_Y()
             self.controlYaw = PIDControl_Yaw()
 
-            self.controlQRX = PIDControl_Qr(20.0,0.05,10.0)
-            self.controlQRY = PIDControl_Qr(20.0,0.05,10.0)
+            # self.controlQRX = PIDControl_Qr(20.0,0.05,10.0)
+            # self.controlQRY = PIDControl_Qr(20.0,0.05,10.0)
+            self.controlQRX = PIDControl_Qr(15,0.05,14.0)
+            self.controlQRY = PIDControl_Qr(30.0,0.05,15.0)
         elif(CONTROL == 'FUZZYCONTROL'):
             self.control = FUZZYControl()
         
@@ -107,6 +109,7 @@ class Strategy(object):
         ''' rotate  '''
         self.rotateAng = self._param.errorRotate0
         self.rotateFlag = 0
+        self.pre_rotateYaw = 0
 
         ''' cross '''
         self.timer = TimeCounter(time = self._param.crossTime)
@@ -365,11 +368,13 @@ class Strategy(object):
                     # x = 0
                     # y = 0
                     yaw = self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = self._param.rotateYaw
                 else:
                     # x = 0
                     # y = 0
                     yaw = -self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = -self._param.rotateYaw
                 self.Robot_Vel([x,y,yaw])
                 print('ROTATE','angle',self._param.qrTheta)
@@ -378,11 +383,13 @@ class Strategy(object):
                     # x = 0
                     # y = 0
                     yaw = self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = self._param.rotateYaw*0.8
                 else:
                     # x = 0
                     # y = 0
                     yaw = -self._param.velYaw
+                    self.pre_rotateYaw = yaw
                     # yaw = -self._param.rotateYaw*0.8
                 self.Robot_Vel([x,y,yaw])
                 print('ROTATE','angle',self._param.qrTheta)
@@ -401,6 +408,9 @@ class Strategy(object):
             print('ROTATE not find')
             if(self.not_find < 100):
                 self.not_find += 1
+                x = 0
+                y = 0
+                self.Robot_Vel([x,y,self.pre_rotateYaw])
                 # self.Robot_Stop()
             else:
                 self.not_find = 0

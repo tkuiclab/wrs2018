@@ -25,31 +25,39 @@ nTakeObj_AboveMeal  = 8
 nTakeObj_DrinkUp    = 9
 nTakeObj_SuckDrink  = 10
 nTakeObj_SuckMeal   = 11
-nTakeObj_TakeOut    = 12
-nGiveObj1           = 13
-nGiveObj2_AboveDesk = 14
-nGiveObj2_OnDesk    = 15
-nGiveObj2_LeaveDesk = 16
-nDelaySuctOffObj1   = 17
-nDelaySuctOffObj2   = 18
-nInitArmPos         = 19
-nIdelArmPos         = 20
-nSTOP               = 21
+nTakeObj_SuckMealKeepDown = 12
+nTakeObj_SetSuckDrinkDeg  = 13
+nTakeObj_TakeOut    = 14
+nGiveObj1           = 15
+nGiveObj2_AboveDesk = 16
+nGiveObj2_OnDesk    = 17
+nGiveObj2_LeaveDesk = 18
+nDelaySuctOffObj1   = 19
+nDelaySuctOffObj2   = 20
+nInitArmPos         = 21
+nIdelArmPos         = 22
+nSTOP               = 23
 
 # SerialKey motion command set
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
 SerialKey_LeadCustom = [nMoveToP1,  nSTOP]
 SerialKey_TakeObjToCustom_Type1 = \
     [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_BesideDrink,  nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_TakeOut,
-     nRotToDeg0,            nGiveObj1,          nDelaySuctOffObj1,  nIdelArmPos,
-     nInitArmPos,           nSTOP]
+     nTakeObj_BesideDrink,  nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_SetSuckDrinkDeg,
+     nTakeObj_TakeOut,      nRotToDeg0,         nGiveObj1,          nDelaySuctOffObj1,
+     nIdelArmPos,           nInitArmPos,        nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
     [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
      nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
      nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
      nSTOP]
+# SerialKey_TakeObjToCustom_Type2 = \
+#     [nRotToDeg90,           nIdelArmPos,                nTakeObj_Ori,       nTakeObj_MoveDown,
+#      nTakeObj_AboveMeal,    nTakeObj_SuckMealKeepDown,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+#      nRotToDeg0,            nMoveToP2,                  nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+#      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,        nIdelArmPos,        nInitArmPos,
+#      nSTOP]
 SerialKey_PaymentState = [nIDEL, nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
@@ -105,7 +113,9 @@ class CDualArmTask:
             Line_PtP = 'line'
         else:
             Line_PtP = 'p2p'
+        print('RelMove1')
         self.arm.relative_move_pose(Line_PtP, Pos)
+        print('RelMove1')
 
     def SuctionEnable(self, On_Off):
         if(On_Off == True):
@@ -117,8 +127,27 @@ class CDualArmTask:
         self.suction.gripper_suction_deg(Deg)
 
     def SuckSuccess(self):
-        return self.suction.is_grip()
-        
+        print('suckflag')
+        return self.suction.is_grip
+
+    def StopRobot_and_ClearCmd(self):
+        # Force stop robot
+        print('StopRobot')
+        self.arm.clear_cmd()
+
+    def PauseRobot(self, PauseFlag):
+        # True : Pause
+        # False: Continue
+        self.arm.freeze(PauseFlag)
+    
+    def GetArmPos(self):
+        print('Pos1')
+        GetArmInfo = self.arm.get_fb()
+        print('Pos2')
+        ArmPos = GetArmInfo.group_pose.position
+        print('Pos3')
+        return ArmPos # .x .y .z
+
 class CDualArmCommand(object):
     def __init__(self):
         self.right = CDualArmTask('right') # Set up right arm controller
@@ -129,71 +158,74 @@ class CDualArmCommand(object):
         self.LowSpd = 40
         self.HighSpd= 60
 
-        self.SuckDrinkDeg   = 0 
+        self.SuckDrinkDeg   = 0
+        self.SuckDrinkUpDeg = -45
         self.SuckMealDeg    = -89
 
         self.GiveObj1_DelayTime = 3 # sec
         self.GiveObj2_DelayTime = 2 # sec
 
-        self.R_PosTakeObj_Ori        = [0.3,  -0.3006, -0.46]
-        self.R_OriTakeObj_Ori        = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_Ori        = [0.3,   0.3506, -0.46]
-        self.L_OriTakeObj_Ori        = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
+        self.SuckMealKeepDownDirection = [0, 0, -0.06] # -0.06 m = -6 cm
 
-        self.R_PosTakeObj_MoveDown   = [0.3,  -0.3006, -0.56]
-        self.R_OriTakeObj_MoveDown   = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_MoveDown   = [0.3,   0.3506, -0.56]
-        self.L_OriTakeObj_MoveDown   = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
+        self.R_PosTakeObj_Ori        = [0.30,-0.3006, -0.46]
+        self.R_OriTakeObj_Ori        = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
+        self.L_PosTakeObj_Ori        = [0.30, 0.3506, -0.46]
+        self.L_OriTakeObj_Ori        = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_AboveMeal  = [0.52, -0.2476, -0.56]
-        self.R_OriTakeObj_AboveMeal  = [5.029, 89.000, 4.036]
-        self.L_PosTakeObj_AboveMeal  = [0.52,  0.3036, -0.56]
-        self.L_OriTakeObj_AboveMeal  = [5.029, 89.000, 4.036]
+        self.R_PosTakeObj_MoveDown   = [0.30,-0.3006, -0.56]
+        self.R_OriTakeObj_MoveDown   = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
+        self.L_PosTakeObj_MoveDown   = [0.30, 0.3506, -0.56]
+        self.L_OriTakeObj_MoveDown   = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_DrinkUp    = [0.45, -0.3006, -0.54]
-        self.R_OriTakeObj_DrinkUp    = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_DrinkUp    = [0.45,  0.3506, -0.54]
-        self.L_OriTakeObj_DrinkUp    = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
+        self.R_PosTakeObj_AboveMeal  = [0.52,-0.2476, -0.56]
+        self.R_OriTakeObj_AboveMeal  = [0.00, 89.000,  0.00]
+        self.L_PosTakeObj_AboveMeal  = [0.52, 0.3036, -0.56]
+        self.L_OriTakeObj_AboveMeal  = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_BesideDrink= [0.40, -0.3006, -0.60]
-        self.R_OriTakeObj_BesideDrink= [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_BesideDrink= [0.40,  0.3506, -0.60]
-        self.L_OriTakeObj_BesideDrink= [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
+        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.51]
+        self.R_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
+        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.51]
+        self.L_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_SuckMeal   = [0.52, -0.2476, -0.64]
-        self.R_OriTakeObj_SuckMeal   = [5.029, 89.000, 4.036]
-        self.L_PosTakeObj_SuckMeal   = [0.52,  0.3036, -0.64]
-        self.L_OriTakeObj_SuckMeal   = [5.029, 89.000, 4.036]
+        self.R_PosTakeObj_BesideDrink= [0.40,-0.3006, -0.60]
+        self.R_OriTakeObj_BesideDrink= [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
+        self.L_PosTakeObj_BesideDrink= [0.40, 0.3506, -0.60]
+        self.L_OriTakeObj_BesideDrink= [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_SuckDrink  = [0.45, -0.3006, -0.60]
-        self.R_OriTakeObj_SuckDrink  = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036] 
-        self.L_PosTakeObj_SuckDrink  = [0.45,  0.3506, -0.60]
-        self.L_OriTakeObj_SuckDrink  = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
+        self.R_PosTakeObj_SuckMeal   = [0.52,-0.2476,-0.623] #[0.52, -0.2476, -0.64]
+        self.R_OriTakeObj_SuckMeal   = [0.00, 89.000,  0.00]
+        self.L_PosTakeObj_SuckMeal   = [0.52, 0.3036,-0.623] #[0.52,  0.3036, -0.64]
+        self.L_OriTakeObj_SuckMeal   = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_TakeOut    = [0.15, -0.3006, -0.47]
-        self.R_OriTakeObj_TakeOut    = [5.029, 89.000, 4.036]
-        self.L_PosTakeObj_TakeOut    = [0.15,  0.3506, -0.47]
-        self.L_OriTakeObj_TakeOut    = [5.029, 89.000, 4.036]
+        self.R_PosTakeObj_SuckDrink  = [0.45,-0.3006, -0.60]
+        self.R_OriTakeObj_SuckDrink  = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036] 
+        self.L_PosTakeObj_SuckDrink  = [0.45, 0.3506, -0.60]
+        self.L_OriTakeObj_SuckDrink  = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosGiveObj1           = [0.4,  -0.3006, -0.40]
-        self.R_OriGiveObj1           = [5.029, 89.000, 4.036]
-        self.L_PosGiveObj1           = [0.4,   0.3506, -0.40]
-        self.L_OriGiveObj1           = [5.029, 89.000, 4.036]
+        self.R_PosTakeObj_TakeOut    = [0.15,-0.3006, -0.46]
+        self.R_OriTakeObj_TakeOut    = [0.00, 89.000,  0.00]
+        self.L_PosTakeObj_TakeOut    = [0.15, 0.3506, -0.46]
+        self.L_OriTakeObj_TakeOut    = [0.00, 89.000,  0.00]
 
-        self.R_PosGiveObj2_AboveDesk = [0.50, -0.3006, -0.45]
-        self.R_OriGiveObj2_AboveDesk = [5.029, 89.000, 4.036]
-        self.L_PosGiveObj2_AboveDesk = [0.50,  0.3506, -0.45]
-        self.L_OriGiveObj2_AboveDesk = [5.029, 89.000, 4.036]
+        self.R_PosGiveObj1           = [0.40,-0.3006, -0.40]
+        self.R_OriGiveObj1           = [0.00, 89.000,  0.00]
+        self.L_PosGiveObj1           = [0.40, 0.3506, -0.40]
+        self.L_OriGiveObj1           = [0.00, 89.000,  0.00]
 
-        self.R_PosGiveObj2_OnDesk    = [0.50, -0.3006, -0.50]
-        self.R_OriGiveObj2_OnDesk    = [5.029, 89.000, 4.036]
-        self.L_PosGiveObj2_OnDesk    = [0.50,  0.3506, -0.50]
-        self.L_OriGiveObj2_OnDesk    = [5.029, 89.000, 4.036]
+        self.R_PosGiveObj2_AboveDesk = [0.55,-0.3006, -0.45]
+        self.R_OriGiveObj2_AboveDesk = [0.00, 89.000,  0.00]
+        self.L_PosGiveObj2_AboveDesk = [0.55, 0.3506, -0.45]
+        self.L_OriGiveObj2_AboveDesk = [0.00, 89.000,  0.00]
+
+        self.R_PosGiveObj2_OnDesk    = [0.55,-0.3006, -0.50]
+        self.R_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
+        self.L_PosGiveObj2_OnDesk    = [0.55, 0.3506, -0.50]
+        self.L_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
    
-        self.R_PosGiveObj2_LeaveDesk = [0.25, -0.3006, -0.45]
-        self.R_OriGiveObj2_LeaveDesk = [5.029, 89.000, 4.036]
-        self.L_PosGiveObj2_LeaveDesk = [0.25,  0.3506, -0.45]
-        self.L_OriGiveObj2_LeaveDesk = [5.029, 89.000, 4.036]
+        self.R_PosGiveObj2_LeaveDesk = [0.25,-0.3006, -0.45]
+        self.R_OriGiveObj2_LeaveDesk = [0.00, 89.000,  0.00]
+        self.L_PosGiveObj2_LeaveDesk = [0.25, 0.3506, -0.45]
+        self.L_OriGiveObj2_LeaveDesk = [0.00, 89.000,  0.00]
 
     def InitArmPos(self, select):                
         if(select == 'right'):
@@ -204,7 +236,7 @@ class CDualArmCommand(object):
             self.right.InitialPos()     # Initial robot arm pose
             self.left.InitialPos()      # Initial robot arm pose
 
-    def IdelArmPos(self, select):    
+    def IdelArmPos(self, select):
         if(select == 'right'):
             self.right.IdelPos()     # Robot arm idel pose
         elif(select == 'left'):
@@ -357,6 +389,31 @@ class CDualArmCommand(object):
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
+    def TakeObj_SuckMealKeepDown(self, select):
+        # Keep move down to suck object until succsee or lower than limit_z
+        if(select == 'right'):
+            SelectArm = self.right
+            SelectArm.SetSpeed(self.LowSpd)
+            SelectArm.SuctionEnable(True)
+            Limit_z = self.R_PosTakeObj_SuckMeal[2] # height of z
+        elif(select == 'left'):
+            SelectArm = self.left
+            SelectArm.SetSpeed(self.LowSpd)
+            SelectArm.SuctionEnable(True)
+            Limit_z = self.L_PosTakeObj_SuckMeal[2] # height of z
+        else:
+            TakeObj_SuckMeal(select)
+
+        SelectArm.MoveRelPos('line', self.SuckMealKeepDownDirection)
+        print('before while')
+        while((select == 'right') or (select == 'left')):
+            print('while')
+            if(SelectArm.SuckSuccess()):
+                print('if success')
+                SelectArm.StopRobot_and_ClearCmd()
+                time.sleep(0.1)
+                break            
+
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
         R_Pos   = self.R_PosTakeObj_SuckDrink#[0.45, -0.3006, -0.60]
@@ -382,6 +439,15 @@ class CDualArmCommand(object):
             self.left.SuctionEnable(True)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+
+    def TakeObj_SetSuckDrinkDeg(self, select):            
+        if(select == 'right'):
+            self.right.SetSuctionDeg(self.SuckDrinkUpDeg)
+        elif(select == 'left'):
+            self.left.SetSuctionDeg(self.SuckDrinkUpDeg)
+        else:
+            self.right.SetSuctionDeg(self.SuckDrinkUpDeg)
+            self.left.SetSuctionDeg(self.SuckDrinkUpDeg)
 
     def TakeObj_TakeOut(self, select):      # Leave object region and take it
         # self.DualArmIsBusyFlag = True
@@ -531,7 +597,7 @@ class CMobileCommand(object):
         rospy.Subscriber("scan_black/dualarm_start", Bool, self.Sub_DualArm_Start)
 
         self.MobileIsBusyFlag = False
-        self.SendToSrvSucessFlag = False
+        self.SendToSrvSuccessFlag = False
 
     def Mobile_START(self):
         # Move to point 1 (0 deg)
@@ -539,8 +605,8 @@ class CMobileCommand(object):
         srvData = strategy_start()
         srvData.data = True
         #self.pub_start.publish(start)
-        self.SendToSrvSucessFlag = self.srv_start(srvData.data)
-        print(self.SendToSrvSucessFlag)
+        self.SendToSrvSuccessFlag = self.srv_start(srvData.data)
+        print(self.SendToSrvSuccessFlag)
 
     def Mobile_AID(self):
         # Turn to abs 0 deg
@@ -644,9 +710,15 @@ def MotionKeyDetector(Key, MobileCommandSet, DualArmCommandSet, SelectArm):
     elif(Key == nTakeObj_SuckMeal):
         print("TakeObj_SuckMeal")
         DualArmCommandSet.TakeObj_SuckMeal(SelectArm)
+    elif(Key == nTakeObj_SuckMealKeepDown):
+        print("TakeObj_SuckMealKeepDown")
+        DualArmCommandSet.TakeObj_SuckMealKeepDown(SelectArm)
     elif(Key == nTakeObj_TakeOut):
         print("TakeObj_TakeOut")
-        DualArmCommandSet.TakeObj_TakeOut(SelectArm)  
+        DualArmCommandSet.TakeObj_TakeOut(SelectArm)
+    elif(Key == nTakeObj_SetSuckDrinkDeg):
+        print("TakeObj_SetSuckDrinkDeg")
+        DualArmCommandSet.TakeObj_SetSuckDrinkDeg(SelectArm) 
 
     elif(Key == nGiveObj1):
         print("GiveObj1")
@@ -713,7 +785,7 @@ def handle_state(req):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
-                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSucessFlag == False)):
+                    if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSuccessFlag == False)):
                         # Check the data send to service or not.
                         # if there were not, it would keep execute the motion (MoveToP1).
                         SerialKeyIndex += 1
