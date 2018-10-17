@@ -14,6 +14,7 @@
 </head>
 <body>
   <h1>Hello, TIMDA Assistant &nbsp;&nbsp;<i class="fas fa-shopping-cart" id="myBtn"></i></h1>
+  <!-- fab fa-cc-mastercard fab fa-cc-visa -->
   <!-- The Shopping Modal -->
   <div id="myModal" class="modal">
     <!-- Modal content -->
@@ -41,7 +42,7 @@
   <div class = "centered">
     <button id = "recordBtn" class = "btn" type="button" value="Record" onclick="Recording(this)">Record</button>
   </div>
-  
+
   <div class = "full-view">
     <h2>Recordings</h2>
     <ul id="recordingslist"></ul>
@@ -55,6 +56,7 @@
   <h1 class = "full-view">Signal</h1>
   <div class = "full-view" id="d"></div>
 
+<script src="js/jquery.min.js"></script>
 <script src="js/eventemitter2.min.js"></script>
 <script src="js/roslib.min.js"></script>
 <script src="../dist/recorder.js"></script>
@@ -62,7 +64,6 @@
 <script src="js/socket.io.js"></script>
 <script src="js/websocket.js"></script>
 <script src="js/shopping.js"></script>
-<script src="js/jquery.min.js"></script>
 <script>
 window.onload = function(){
 
