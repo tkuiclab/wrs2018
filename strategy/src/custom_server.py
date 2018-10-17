@@ -45,18 +45,18 @@ SerialKey_TakeObjToCustom_Type1 = \
      nTakeObj_BesideDrink,  nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_TakeOut,
      nRotToDeg0,            nGiveObj1,          nDelaySuctOffObj1,  nIdelArmPos,
      nInitArmPos,           nSTOP]
-# SerialKey_TakeObjToCustom_Type2 = \
-#     [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-#      nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
-#      nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
-#      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
-#      nSTOP]
 SerialKey_TakeObjToCustom_Type2 = \
-    [nRotToDeg90,           nIdelArmPos,                nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_AboveMeal,    nTakeObj_SuckMealKeepDown,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
-     nRotToDeg0,            nMoveToP2,                  nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
-     nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,        nIdelArmPos,        nInitArmPos,
+    [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
+     nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+     nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+     nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
      nSTOP]
+# SerialKey_TakeObjToCustom_Type2 = \
+#     [nRotToDeg90,           nIdelArmPos,                nTakeObj_Ori,       nTakeObj_MoveDown,
+#      nTakeObj_AboveMeal,    nTakeObj_SuckMealKeepDown,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+#      nRotToDeg0,            nMoveToP2,                  nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+#      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,        nIdelArmPos,        nInitArmPos,
+#      nSTOP]
 SerialKey_PaymentState = [nIDEL, nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
@@ -157,13 +157,14 @@ class CDualArmCommand(object):
         self.LowSpd = 40
         self.HighSpd= 60
 
-        self.SuckDrinkDeg   = 0 
+        self.SuckDrinkDeg   = 0
+        self.SuckDrinkUpDeg = -45
         self.SuckMealDeg    = -89
 
         self.GiveObj1_DelayTime = 3 # sec
         self.GiveObj2_DelayTime = 2 # sec
 
-        self.SuckMealKeepDownDirection = [0, 0, -0.03] # -0.03 m = -3 cm
+        self.SuckMealKeepDownDirection = [0, 0, -0.06] # -0.06 m = -6 cm
 
         self.R_PosTakeObj_Ori        = [0.3,  -0.3006, -0.46]
         self.R_OriTakeObj_Ori        = [5.029, 89.000, 4.036] #[5.029, 82.029, 4.036]
@@ -326,14 +327,18 @@ class CDualArmCommand(object):
         if(select == 'right'):
             self.right.SetSpeed(self.LowSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
+            self.right.SetSuctionDeg(self.SuckDrinkUpDeg)
         elif(select == 'left'):
             self.left.SetSpeed(self.LowSpd)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+            self.left.SetSuctionDeg(self.SuckDrinkUpDeg)
         else:
             self.right.SetSpeed(self.LowSpd)
             self.left.SetSpeed(self.LowSpd)
             self.right.MoveAbs('line',R_Pos, R_Euler, R_Redun)
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
+            self.right.SetSuctionDeg(self.SuckDrinkUpDeg)
+            self.left.SetSuctionDeg(self.SuckDrinkUpDeg)
 
     def TakeObj_BesideDrink(self, select):    # Beside object (drink)
         # self.DualArmIsBusyFlag = True
@@ -402,14 +407,15 @@ class CDualArmCommand(object):
         else:
             TakeObj_SuckMeal(select)
 
+        SelectArm.MoveRelPos('line', self.SuckMealKeepDownDirection)
         print('before while')
         while((select == 'right') or (select == 'left')):
             print('while')
-            if((SelectArm.SuckSuccess()) or (SelectArm.GetArmPos().z <= Limit_z)):
+            if(SelectArm.SuckSuccess()):
+                print('if success')
                 SelectArm.StopRobot_and_ClearCmd()
-                break
-            if not (self.DualArmIsBusy()):
-                SelectArm.MoveRelPos('line',self.SuckMealKeepDownDirection)
+                time.sleep(0.1)
+                break            
 
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
