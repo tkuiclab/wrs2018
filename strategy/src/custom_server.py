@@ -381,6 +381,7 @@ class CDualArmCommand(object):
             self.left.MoveAbs('line',L_Pos, L_Euler, L_Redun)
 
     def TakeObj_SuckMealKeepDown(self, select):
+        # Keep move down to suck object until succsee or lower than limit_z
         if(select == 'right'):
             SelectArm = self.right
             SelectArm.SetSpeed(self.LowSpd)
