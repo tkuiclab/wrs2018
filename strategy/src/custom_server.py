@@ -112,7 +112,9 @@ class CDualArmTask:
             Line_PtP = 'line'
         else:
             Line_PtP = 'p2p'
+        print('RelMove1')
         self.arm.relative_move_pose(Line_PtP, Pos)
+        print('RelMove1')
 
     def SuctionEnable(self, On_Off):
         if(On_Off == True):
@@ -124,10 +126,12 @@ class CDualArmTask:
         self.suction.gripper_suction_deg(Deg)
 
     def SuckSuccess(self):
+        print('suckflag')
         return self.suction.is_grip
 
     def StopRobot_and_ClearCmd(self):
         # Force stop robot
+        print('StopRobot')
         self.arm.clear_cmd()
 
     def PauseRobot(self, PauseFlag):
@@ -136,8 +140,11 @@ class CDualArmTask:
         self.arm.freeze(PauseFlag)
     
     def GetArmPos(self):
+        print('Pos1')
         GetArmInfo = self.arm.get_fb()
+        print('Pos2')
         ArmPos = GetArmInfo.group_pose.position
+        print('Pos3')
         return ArmPos # .x .y .z
 
 class CDualArmCommand(object):
@@ -395,11 +402,14 @@ class CDualArmCommand(object):
         else:
             TakeObj_SuckMeal(select)
 
+        print('before while')
         while((select == 'right') or (select == 'left')):
+            print('while')
             if((SelectArm.SuckSuccess()) or (SelectArm.GetArmPos().z <= Limit_z)):
                 SelectArm.StopRobot_and_ClearCmd()
                 break
-            SelectArm.MoveRelPos('line',self.SuckMealKeepDownDirection)
+            if not (self.DualArmIsBusy()):
+                SelectArm.MoveRelPos('line',self.SuckMealKeepDownDirection)
 
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
