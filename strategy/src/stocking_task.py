@@ -58,16 +58,16 @@ drinkPos =    [[-0.2, 0.09, -0.6],
                [-0.2, 0.19, -0.6],                              
                [-0.295, 0.19, -0.6]]
 
-riceballPos = [[-0.162, -0.22, -0.675],
-               [-0.257, -0.22, -0.675],
-               [-0.162, -0.1, -0.675],                             
-               [-0.257, -0.1, -0.675]]
+riceballPos = [[-0.17,  -0.22, -0.675],
+               [-0.265, -0.22, -0.675],
+               [-0.17,  -0.096, -0.675],                             
+               [-0.265, -0.096, -0.675]]
 
 lunchboxEu = [150, 0, 0]
 
 drinkEu =    [0, 0, 0]
             
-riceballXXEu = [35, 0, 0]
+riceballXXEu = [15, 0, 0]
 riceballEu   = [0, 0, 0]
 
                
@@ -408,6 +408,9 @@ class stockingTask:
                 self.pos[2] = -0.42
                 self.euler[1] = -30
                 self.euler[2] = 40*self.is_right
+            if objectName[self.pickList] == 10
+                self.euler[1] = -6
+                self.euler[2] = 10*self.is_right
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == leaveShelf:
