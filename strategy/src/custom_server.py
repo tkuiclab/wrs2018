@@ -35,8 +35,8 @@ nGiveObj2_LeaveDesk = 18
 nDelaySuctOffObj1   = 19
 nDelaySuctOffObj2   = 20
 nInitArmPos         = 21
-nIdelArmPos         = 23
-nSTOP               = 24
+nIdelArmPos         = 22
+nSTOP               = 23
 
 # SerialKey motion command set
 SerialKey_RobotIdel  = [nIDEL,      nSTOP]
@@ -212,14 +212,14 @@ class CDualArmCommand(object):
         self.L_PosGiveObj1           = [0.40, 0.3506, -0.40]
         self.L_OriGiveObj1           = [0.00, 89.000,  0.00]
 
-        self.R_PosGiveObj2_AboveDesk = [0.50,-0.3006, -0.45]
+        self.R_PosGiveObj2_AboveDesk = [0.55,-0.3006, -0.45]
         self.R_OriGiveObj2_AboveDesk = [0.00, 89.000,  0.00]
-        self.L_PosGiveObj2_AboveDesk = [0.50, 0.3506, -0.45]
+        self.L_PosGiveObj2_AboveDesk = [0.55, 0.3506, -0.45]
         self.L_OriGiveObj2_AboveDesk = [0.00, 89.000,  0.00]
 
-        self.R_PosGiveObj2_OnDesk    = [0.50,-0.3006, -0.50]
+        self.R_PosGiveObj2_OnDesk    = [0.55,-0.3006, -0.50]
         self.R_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
-        self.L_PosGiveObj2_OnDesk    = [0.50, 0.3506, -0.50]
+        self.L_PosGiveObj2_OnDesk    = [0.55, 0.3506, -0.50]
         self.L_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
    
         self.R_PosGiveObj2_LeaveDesk = [0.25,-0.3006, -0.45]
