@@ -8,6 +8,8 @@ from PIL import Image
 import os
 from timeit import default_timer as timer
 import numpy as np
+from yolov3_sandwich.msg import ROI
+from yolov3_sandwich.msg import ROI_array
 
 # sys.path.insert(1,'/home/iclab/.local/lib/python3.5/site-packages')
 
@@ -50,9 +52,25 @@ def clone_detect_video(yolo, video_path, output_path=""):
     while not rospy.is_shutdown():
         return_value, frame = vid.read()
         image = Image.fromarray(frame)
-        image = yolo.detect_image(image)
+        image,ROI_recive = yolo.detect_image(image)
+        if ROI_recive != None:
+            ROI_msg = ROI()
+            print("class_name type = " + str(ROI_recive[0]))
+            print("score type = "      + str(ROI_recive[1]))
+            print("x_min type = "      + str(ROI_recive[2]))
+            print("x_Max type = "      + str(ROI_recive[3]))
+            print("y_min type = "      + str(ROI_recive[4]))
+            print("y_Max type = "      + str(ROI_recive[5]))
 
-        string_pub.publish("hello")
+            ROI_msg.class_name = str(ROI_recive[0])
+            ROI_msg.score      = float(ROI_recive[1])
+            ROI_msg.x_min      = int(ROI_recive[2])
+            ROI_msg.x_Max      = int(ROI_recive[3])
+            ROI_msg.y_min      = int(ROI_recive[4])
+            ROI_msg.y_Max      = int(ROI_recive[5])
+            roi_pub.publish(ROI_msg)
+        else:
+            print("no object now")
         result = np.asarray(image)
         curr_time = timer()
         exec_time = curr_time - prev_time
@@ -74,7 +92,7 @@ def clone_detect_video(yolo, video_path, output_path=""):
 
 FLAGS = None
 rospy.init_node('image_converter', anonymous=True)
-string_pub = rospy.Publisher("image_topic_2",String)
+roi_pub = rospy.Publisher("/object/ROI",ROI,queue_size=10)
 
 if __name__ == '__main__':
 
