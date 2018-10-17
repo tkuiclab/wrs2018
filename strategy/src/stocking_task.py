@@ -49,13 +49,13 @@ objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'riceball', 'riceball', 'riceball', 'riceball']
 
 lunchboxPos = [[-0.42,  0.15, -0.67],
-               [-0.42,  0.15, -0.67],
-               [-0.42,  0.15, -0.67],
-               [-0.42,  0.15, -0.67]]
+               [-0.42,  0.16, -0.67],
+               [-0.42,  0.16, -0.67],
+               [-0.42,  0.16, -0.67]]
 
-drinkPos =    [[-0.19, 0.09, -0.6],
+drinkPos =    [[-0.2, 0.09, -0.6],
                [-0.295, 0.09, -0.6],                   
-               [-0.19, 0.19, -0.6],                              
+               [-0.2, 0.19, -0.6],                              
                [-0.295, 0.19, -0.6]]
 
 riceballPos = [[-0.162, -0.22, -0.675],
@@ -74,12 +74,12 @@ riceballEu   = [0, 0, 0]
 objectPos = [lunchboxPos, drinkPos, riceballPos]
 objectEu  = [lunchboxEu,  drinkEu,  riceballEu]
 
-topRight    = [0.365, -0.1, -0.21]
-topLeft     = [0.365,  0.1, -0.21]
+topRight    = [0.365, -0.1, -0.22]
+topLeft     = [0.365,  0.1, -0.22]
 middleRight = [0.445, -0.1, -0.545]
 middleLeft  = [0.445,  0.1, -0.545]
-bottomRight = [0.53, -0.2, -1]
-bottomLeft  = [0.53,  0.2, -1]
+bottomRight = [0.53, -0.2, -1.02]
+bottomLeft  = [0.53,  0.2, -1.02]
 
 topRightEu    = [-175, 35, 25]
 topLeftEu     = [-150, 55, 45]
@@ -348,6 +348,8 @@ class stockingTask:
             self.pos[2] = -0.5
             if 'riceball' not in objectName[self.pickList]:
                 self.euler[1] = -16
+            else:
+                self.euler[1] = -10
             self.arm.set_speed(SPEED)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
  
