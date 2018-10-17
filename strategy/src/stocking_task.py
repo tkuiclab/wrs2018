@@ -371,6 +371,9 @@ class stockingTask:
                 self.pos[2] += 0.1
             self.arm.set_speed(SPEED)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
+            if 'riceball' not in objectName[self.pickList]:
+                self.suction.gripper_suction_deg(-60)
+                rospy.sleep(.1)
             self.suction.gripper_calibration()
 
 
@@ -447,6 +450,8 @@ class stockingTask:
             self.state = busy
             self.nextState = placeObject
             self.getPlacePos()
+            if self.pickList == 8 or self.pickList == 10:
+                self.pos[2] -= 0.02
             self.arm.set_speed(SPEED)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
@@ -455,7 +460,7 @@ class stockingTask:
             self.suction.gripper_vaccum_on()
             # rospy.sleep(1)
             if 'lunchbox' in objectName[self.pickList]:
-                self.arm.set_speed(20)
+                self.arm.set_speed(30)
             else:
                 self.arm.set_speed(3)
             self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.03)
@@ -466,6 +471,9 @@ class stockingTask:
             self.nextState = leavePlacePos
             if 'lunchbox' in objectName[self.pickList]:
                 self.nextState = leaveShelf
+            if 'riceball' in objectName[self.pickList]:
+                self.arm.set_speed(60)
+                self.arm.relative_move_pose('line', [-0.005, 0, 0])
             rospy.sleep(.3)
             self.suction.gripper_vaccum_off()
 
