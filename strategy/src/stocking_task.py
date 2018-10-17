@@ -48,27 +48,27 @@ objectName = ['lunchbox', 'lunchbox', 'lunchbox', 'lunchbox',
               'drink',    'drink',    'drink',    'drink',
               'riceball', 'riceball', 'riceball', 'riceball']
 
-lunchboxPos = [[-0.42,  0.15, -0.67],
-               [-0.42,  0.16, -0.67],
-               [-0.42,  0.16, -0.67],
-               [-0.42,  0.16, -0.67]]
+lunchboxPos = [[-0.42,  0.15, -0.69],
+               [-0.42,  0.15, -0.69],
+               [-0.42,  0.15, -0.69],
+               [-0.42,  0.15, -0.69]]
 
-drinkPos =    [[-0.2, 0.09, -0.6],
-               [-0.295, 0.09, -0.6],                   
-               [-0.2, 0.19, -0.6],                              
-               [-0.295, 0.19, -0.6]]
+drinkPos =    [[-0.2, 0.09, -0.61],
+               [-0.295, 0.09, -0.61],                   
+               [-0.2, 0.19, -0.61],                              
+               [-0.295, 0.19, -0.61]]
 
-riceballPos = [[-0.17,  -0.22, -0.675],
-               [-0.265, -0.22, -0.675],
-               [-0.17,  -0.096, -0.675],                             
-               [-0.265, -0.096, -0.675]]
+riceballPos = [[-0.17,  -0.22, -0.68],
+               [-0.265, -0.22, -0.68],
+               [-0.17,  -0.096, -0.68],                             
+               [-0.265, -0.096, -0.68]]
 
 lunchboxEu = [150, 0, 0]
 
 drinkEu =    [0, 0, 0]
             
-riceballXXEu = [15, 0, 0]
-riceballEu   = [0, 0, 0]
+riceballXXEu = [45, 0, 0]
+riceballEu   = [30, 0, 0]
 
                
 objectPos = [lunchboxPos, drinkPos, riceballPos]
@@ -458,7 +458,7 @@ class stockingTask:
                 self.arm.set_speed(20)
             else:
                 self.arm.set_speed(3)
-            self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.05)
+            self.arm.noa_move_suction('line', suction_angle=0, n=0, o=0, a=0.03)
             rospy.sleep(.1)
                         
         elif self.state == placeObject:
