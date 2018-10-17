@@ -408,7 +408,7 @@ class stockingTask:
                 self.pos[2] = -0.42
                 self.euler[1] = -30
                 self.euler[2] = 40*self.is_right
-            if objectName[self.pickList] == 10
+            if self.pickList == 10:
                 self.euler[1] = -6
                 self.euler[2] = 10*self.is_right
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
