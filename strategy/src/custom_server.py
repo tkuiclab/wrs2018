@@ -396,7 +396,7 @@ class CDualArmCommand(object):
             TakeObj_SuckMeal(select)
         
         while((select == 'right') or (select == 'left')):
-            if((SelectArm.SuckSuccess) or (SelectArm.GetArmPos().z <= Limit_z)):
+            if((SelectArm.SuckSuccess()) or (SelectArm.GetArmPos().z <= Limit_z)):
                 SelectArm.StopRobot_and_ClearCmd()
                 break
             SelectArm.MoveRelPos('line',SuckMealKeepDownDirection)
