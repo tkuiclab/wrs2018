@@ -120,7 +120,11 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
   tf::Quaternion q(right_vector, -1.0*acos(axis_vector.dot(up_vector)));
   q.normalize();
   tf::quaternionTFToMsg(q, msg);
+
   object_pose.pose.orientation = msg;
+  object_pose.pose.position.x = object_normal.x;
+  object_pose.pose.position.y = object_normal.y;
+  object_pose.pose.position.z = object_normal.z;
     
   std::cout << "\tTotal Point:" << object_pose.pose.position.x << " "
 			                          << object_pose.pose.position.y << " "
