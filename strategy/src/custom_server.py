@@ -182,9 +182,9 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_AboveMeal  = [0.52, 0.3036, -0.56]
         self.L_OriTakeObj_AboveMeal  = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.51]
+        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.48]
         self.R_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.51]
+        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.48]
         self.L_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_BesideDrink= [0.40,-0.3006, -0.60]
@@ -217,9 +217,9 @@ class CDualArmCommand(object):
         self.L_PosGiveObj2_AboveDesk = [0.55, 0.3506, -0.45]
         self.L_OriGiveObj2_AboveDesk = [0.00, 89.000,  0.00]
 
-        self.R_PosGiveObj2_OnDesk    = [0.55,-0.3006, -0.50]
+        self.R_PosGiveObj2_OnDesk    = [0.55,-0.3006, -0.52]
         self.R_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
-        self.L_PosGiveObj2_OnDesk    = [0.55, 0.3506, -0.50]
+        self.L_PosGiveObj2_OnDesk    = [0.55, 0.3506, -0.52]
         self.L_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
    
         self.R_PosGiveObj2_LeaveDesk = [0.25,-0.3006, -0.45]
