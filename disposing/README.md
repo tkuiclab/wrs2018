@@ -1,5 +1,5 @@
 # wrs2018/disposing
-##Realsense 
+## Realsense 
 follow by website:
 https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md
 
@@ -11,10 +11,11 @@ sudo rm -f /etc/apt/sources.list.d/realsense-public.list.
 sudo apt-get update
 sudo apt-get install librealsense2-dkms librealsense2-utils librealsense2-dev librealsense2-dbg -y
 sudo apt-get install ros-kinetic-rgbd-launch libusb-1.0-0-dev libglfw3-dev libgtk-3-dev -y
-modinfo uvcvideo | grep "version:"  #this command is check the kernel is updated! it should show something "realsense" string
+modinfo uvcvideo | grep "version:"  
+#this command is check the kernel is updated! it should show something "realsense" string
 ```
 
-##YoloV3 package setup
+## YoloV3 package setup
 Cuda install
 Download cuda from this website
 https://developer.nvidia.com/cuda-90-download-archive
@@ -49,7 +50,8 @@ pip install keras
 pip3 install opencv-python
 pip3 install tensorflow-gpu
 pip3 install keras
-pip3 install rospkg  #let ros can run python3 code
+pip3 install rospkg  
+#let ros can run python3 code
 ```
 try this command test tensorflow install sucessful
 ```bash
