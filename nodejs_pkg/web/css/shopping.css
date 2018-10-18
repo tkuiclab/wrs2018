@@ -27,8 +27,11 @@
     width: 60%;
 }
 .modal-content img {
+    width : 20%;
+    /*height: 20%;*/
+}
+#customPic {
     width : 100%;
-    /*height: 10%;*/
 }
 
 /* The Close Button */
