@@ -32,7 +32,7 @@ socket.on('news', function(m) {
             PlasticPay('img/1.jpg', 'NEET', 'Sprite', 200);
             break;
           case 1:
-            PlasticPay('img/2.jpg', 'Shengru', 'Lunch Box', 600);
+            PlasticPay('img/2.jpg', 'Shengru', 'Lunch Box', 2000);
             paySW = 0;
             break;
         }

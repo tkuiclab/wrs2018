@@ -32,3 +32,4 @@ function PlasticPay(pic, name, product, price) {
   modal1.style.display = "block";
   setTimeout(function () { modal1.style.display = "none"; }, 2000);
 }
+PlasticPay('img/1.jpg', 'NEET', 'Sprite', 200);
