@@ -187,14 +187,14 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_AboveMeal  = [0.52, 0.3036, -0.56]
         self.L_OriTakeObj_AboveMeal  = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.48]
+        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.44]
         self.R_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.48]
+        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.44]
         self.L_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_BesideDrink= [0.40,-0.3006, -0.60]
+        self.R_PosTakeObj_BesideDrink= [0.40,-0.3006,-0.585]
         self.R_OriTakeObj_BesideDrink= [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_BesideDrink= [0.40, 0.3506, -0.60]
+        self.L_PosTakeObj_BesideDrink= [0.40, 0.3506,-0.585]
         self.L_OriTakeObj_BesideDrink= [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_SuckMeal   = [0.52,-0.2476,-0.623] #[0.52, -0.2476, -0.64]
@@ -202,9 +202,9 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_SuckMeal   = [0.52, 0.3036,-0.623] #[0.52,  0.3036, -0.64]
         self.L_OriTakeObj_SuckMeal   = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_SuckDrink  = [0.45,-0.3006, -0.60]
+        self.R_PosTakeObj_SuckDrink  = [0.45,-0.3006,-0.585]
         self.R_OriTakeObj_SuckDrink  = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036] 
-        self.L_PosTakeObj_SuckDrink  = [0.45, 0.3506, -0.60]
+        self.L_PosTakeObj_SuckDrink  = [0.45, 0.3506,-0.585]
         self.L_OriTakeObj_SuckDrink  = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_TakeOut    = [0.15,-0.3006, -0.44]
@@ -583,12 +583,11 @@ class CDualArmCommand(object):
             self.right.SuctionEnable(False)
             self.left.SuctionEnable(False)
 
-    def ChangeMode(self, select, ModeFlag)
+    def ChangeMode(self, select, ModeFlag):
         if(select == 'right'):
-            SelectArm = self.right
+            self.right.ChangeModeToGetSuckState(ModeFlag)
         elif(select == 'left'):
-            SelectArm = self.left
-        SelectArm.ChangeModeToGetSuckState(ModeFlag)
+            self.left.ChangeModeToGetSuckState(ModeFlag)
 
     def IDEL(self):
         # self.DualArmIsBusyFlag = False
@@ -795,14 +794,16 @@ def handle_state(req):
             if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
 
-                # if( (MotionKey == nMoveToP1)  or
-                #     (MotionKey == nMoveToP2)  or
-                #     (MotionKey == nRotToDeg90)or
-                #     (MotionKey == nRotToDeg0) or
-                #     (MotionKey == nSTOP)    ):
-                #     DualArmCommandSet.ChangeMode(False)
-                # else:
-                #     DualArmCommandSet.ChangeMode(True)
+                if( (MotionKey == nMoveToP1)  or
+                    (MotionKey == nMoveToP2)  or
+                    (MotionKey == nRotToDeg90)or
+                    (MotionKey == nRotToDeg0) or
+                    (MotionKey == nSTOP)    ):
+                    print("Set False Mode")
+                    DualArmCommandSet.ChangeMode(SelectArm, False)
+                else:
+                    print("Set True Mode")
+                    DualArmCommandSet.ChangeMode(SelectArm, True)
 
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
