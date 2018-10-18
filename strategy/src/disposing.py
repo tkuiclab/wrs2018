@@ -29,12 +29,28 @@ tracking        = 14
 Action1         = 15
 
 
-
 def disposing_vision_callback(msg):
     global x
-    rospy.loginfo(rospy.get_caller_id() + "I heard %s", msg.x)
+    global y
+    global z
+    global nx
+    global ny
+    global nz
+    global Vision_pos
+
     x = msg.x
-    print(x)
+    y = msg.y
+    z = msg.z
+    nx = msg.normal_x
+    ny = msg.normal_y
+    nz = msg.normal_z
+
+
+    Vision_pos = [x,y,z,nx,ny,nz]
+    VisiontoArm(Vision_pos)
+    # print(Vision_pos[0])
+    # print(Vision_pos[1])
+    # print(Vision_pos[2])
 
 def listener():
     #rospy.init_node('disposing', anonymous=True)
@@ -65,6 +81,58 @@ def start_sub():
         queue_size=1
     )
 
+def VisiontoArm(Vision_pos):
+
+    T = np.mat([[-1,0,0],[0,0,-1],[0,-1,0]])
+    VisionPos = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]]])
+    Vec_n = T * VisionPos
+    
+    print VisionPos
+    print Vec_n
+
+    dx = 0
+    dy = -12
+    dz = -5.5
+
+    VisionPos_1 = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]],[1]])
+    A = np.mat([[-1,0,0,dx],[0,0,-1,dy],[0,-1,0,dz],[0,0,0,1]])  
+    trans_pos = A * VisionPos_1
+
+    print VisionPos_1
+    #print A
+    print trans_pos
+
+    ori = left.arm.get_fb().orientation
+    #print ori
+    
+    ori_arr = np.identity(4)
+    #print ori_arr
+
+    for i in range(0,4):
+        for j in range(0,4):
+            ori_arr[i][j] = ori[i*4+j]
+
+    #print ori_arr
+
+    T_Earth = ori_arr * trans_pos  
+
+    print T_Earth 
+
+    cur_pos_x = left.arm.get_fb().group_pose.position.x
+    #print cur_pos_x
+    cur_pos_y = left.arm.get_fb().group_pose.position.y  
+    #print cur_pos_y
+    cur_pos_z = left.arm.get_fb().group_pose.position.z
+    #print cur_pos_z
+
+    curpos = [cur_pos_x,cur_pos_y,cur_pos_z]
+    print curpos
+
+            
+
+
+
+
 class Task:
     def __init__(self, _name = '/robotis'):
         """Initial object."""
@@ -83,6 +151,7 @@ class Task:
         self.pos   = (0, 0, 0)
         self.euler = (0, 0, 0)
         self.phi   = 0
+       
         if en_sim:
             self.suction = SuctionTask(self.name + '_gazebo')
             print "enable gazebo"
@@ -94,7 +163,6 @@ class Task:
         
     @property
     
-            
     def finish(self):
         return self.pick_list == 0
 
@@ -249,9 +317,12 @@ class Task:
             else:
                 self.state = self.nextState
 
+   # def trans_ZerotoSeven():
+        #Ori = self.arm.get_fb().oriontation[]
+
 if __name__ == '__main__':
+    global Vision_pos    
     rospy.init_node('disposing')        #enable this node
-    right = Task('right')               #Set up right arm controller
     left  = Task('left')                #Set up left arm controller
     rospy.sleep(0.3)
     is_start = False
@@ -263,11 +334,9 @@ if __name__ == '__main__':
     print 'next pub'
     rate = rospy.Rate(30)  # 30hz
     while not rospy.is_shutdown()  and not is_stop:
-        global is_start
-        global x 
+        global is_start 
         if is_start:
-            print x
-            while not rospy.is_shutdown() and (not right.finish or not left.finish):
+            while not rospy.is_shutdown() and ( not left.finish):
                 left.proces()
                 #right.proces()
                 rate.sleep()
