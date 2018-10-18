@@ -29,13 +29,17 @@ tracking        = 14
 Action1         = 15
 
 
+
 def disposing_vision_callback(msg):
-    rospy.loginfo(rospy.get_caller_id() + "I heard %s", msg.y)
+    global x
+    rospy.loginfo(rospy.get_caller_id() + "I heard %s", msg.x)
+    x = msg.x
+    print(x)
 
 def listener():
     #rospy.init_node('disposing', anonymous=True)
     rospy.Subscriber("/object/normal", coordinate_normal, disposing_vision_callback)
-    rospy.spin()    
+    #rospy.spin()    
 
 def start_callback(msg):
     global is_start
@@ -87,8 +91,9 @@ class Task:
             print "0"
 
         self.flag = False
+        
     @property
-   
+    
             
     def finish(self):
         return self.pick_list == 0
@@ -252,15 +257,16 @@ if __name__ == '__main__':
     is_start = False
     is_stop = False
     print 'is_start',is_start
- #   listener()
+    listener()
     start_sub()
     Home_pub(0)
     print 'next pub'
     rate = rospy.Rate(30)  # 30hz
-
     while not rospy.is_shutdown()  and not is_stop:
         global is_start
+        global x 
         if is_start:
+            print x
             while not rospy.is_shutdown() and (not right.finish or not left.finish):
                 left.proces()
                 #right.proces()
@@ -270,6 +276,6 @@ if __name__ == '__main__':
             Home_pub(4)
             rospy.sleep(3)
         rate.sleep()
-        # rospy.spin()
+    rospy.spin()
     
    
