@@ -187,14 +187,14 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_AboveMeal  = [0.52, 0.3036, -0.56]
         self.L_OriTakeObj_AboveMeal  = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.48]
+        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.44]
         self.R_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.48]
+        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.44]
         self.L_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_BesideDrink= [0.40,-0.3006, -0.60]
+        self.R_PosTakeObj_BesideDrink= [0.40,-0.3006,-0.585]
         self.R_OriTakeObj_BesideDrink= [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_BesideDrink= [0.40, 0.3506, -0.60]
+        self.L_PosTakeObj_BesideDrink= [0.40, 0.3506,-0.585]
         self.L_OriTakeObj_BesideDrink= [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_SuckMeal   = [0.52,-0.2476,-0.623] #[0.52, -0.2476, -0.64]
@@ -202,9 +202,9 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_SuckMeal   = [0.52, 0.3036,-0.623] #[0.52,  0.3036, -0.64]
         self.L_OriTakeObj_SuckMeal   = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_SuckDrink  = [0.45,-0.3006, -0.60]
+        self.R_PosTakeObj_SuckDrink  = [0.45,-0.3006,-0.585]
         self.R_OriTakeObj_SuckDrink  = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036] 
-        self.L_PosTakeObj_SuckDrink  = [0.45, 0.3506, -0.60]
+        self.L_PosTakeObj_SuckDrink  = [0.45, 0.3506,-0.585]
         self.L_OriTakeObj_SuckDrink  = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_TakeOut    = [0.15,-0.3006, -0.44]
