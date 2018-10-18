@@ -28,6 +28,9 @@ GO_POINT = 7
 RETURN_POINT = 8
 CROSS = 9
 INIT = 10
+DELIVERY = 11
+ORDER = 12
+COUNTER_MOVE = 13
 
 # FLAG 
 CONTROL = 'PIDCONTROL'
@@ -165,6 +168,11 @@ class Strategy(object):
                 self.Change_Behavior()
             self.Init_Strategy()
             print('Init')
+        elif(self._param.behavior == COUNTER_MOVE):
+            if(self._param.loadParam):
+                self.Change_Behavior()
+            # self.Counter_Move_Strategy()
+            print('COUNTER_MOVE')
         else:
             print("Don't have Behavior")
             self.Robot_Stop()

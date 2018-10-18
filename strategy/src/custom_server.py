@@ -46,18 +46,18 @@ SerialKey_TakeObjToCustom_Type1 = \
      nTakeObj_BesideDrink,  nTakeObj_SuckDrink, nTakeObj_DrinkUp,   nTakeObj_SetSuckDrinkDeg,
      nTakeObj_TakeOut,      nRotToDeg0,         nGiveObj1,          nDelaySuctOffObj1,
      nIdelArmPos,           nInitArmPos,        nSTOP]
-SerialKey_TakeObjToCustom_Type2 = \
-    [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
-     nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
-     nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
-     nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
-     nSTOP]
 # SerialKey_TakeObjToCustom_Type2 = \
-#     [nRotToDeg90,           nIdelArmPos,                nTakeObj_Ori,       nTakeObj_MoveDown,
-#      nTakeObj_AboveMeal,    nTakeObj_SuckMealKeepDown,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
-#      nRotToDeg0,            nMoveToP2,                  nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
-#      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,        nIdelArmPos,        nInitArmPos,
+#     [nRotToDeg90,           nIdelArmPos,        nTakeObj_Ori,       nTakeObj_MoveDown,
+#      nTakeObj_AboveMeal,    nTakeObj_SuckMeal,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+#      nRotToDeg0,            nMoveToP2,          nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+#      nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,nIdelArmPos,        nInitArmPos,
 #      nSTOP]
+SerialKey_TakeObjToCustom_Type2 = \
+    [nRotToDeg90,           nIdelArmPos,                nTakeObj_Ori,       nTakeObj_MoveDown,
+     nTakeObj_AboveMeal,    nTakeObj_SuckMealKeepDown,  nTakeObj_AboveMeal, nTakeObj_TakeOut,
+     nRotToDeg0,            nMoveToP2,                  nGiveObj2_AboveDesk,nGiveObj2_OnDesk,
+     nDelaySuctOffObj2,     nGiveObj2_LeaveDesk,        nIdelArmPos,        nInitArmPos,
+     nSTOP]
 SerialKey_PaymentState = [nIDEL, nSTOP]
 
 # SerialKey Num for function GetMissionSerialKey
@@ -148,6 +148,11 @@ class CDualArmTask:
         print('Pos3')
         return ArmPos # .x .y .z
 
+    def ChangeModeToGetSuckState(self, Flag):
+        # True : Get suck success state
+        # False: Arduino for RFID
+        self.suction.switch_mode(Flag)
+
 class CDualArmCommand(object):
     def __init__(self):
         self.right = CDualArmTask('right') # Set up right arm controller
@@ -165,7 +170,7 @@ class CDualArmCommand(object):
         self.GiveObj1_DelayTime = 3 # sec
         self.GiveObj2_DelayTime = 2 # sec
 
-        self.SuckMealKeepDownDirection = [0, 0, -0.06] # -0.06 m = -6 cm
+        self.SuckMealKeepDownDirection = [0, 0, -0.08] # -0.06 m = -6 cm
 
         self.R_PosTakeObj_Ori        = [0.30,-0.3006, -0.46]
         self.R_OriTakeObj_Ori        = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
@@ -182,9 +187,9 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_AboveMeal  = [0.52, 0.3036, -0.56]
         self.L_OriTakeObj_AboveMeal  = [0.00, 89.000,  0.00]
 
-        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.51]
+        self.R_PosTakeObj_DrinkUp    = [0.45,-0.3006, -0.48]
         self.R_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
-        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.51]
+        self.L_PosTakeObj_DrinkUp    = [0.45, 0.3506, -0.48]
         self.L_OriTakeObj_DrinkUp    = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
         self.R_PosTakeObj_BesideDrink= [0.40,-0.3006, -0.60]
@@ -202,9 +207,9 @@ class CDualArmCommand(object):
         self.L_PosTakeObj_SuckDrink  = [0.45, 0.3506, -0.60]
         self.L_OriTakeObj_SuckDrink  = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
 
-        self.R_PosTakeObj_TakeOut    = [0.15,-0.3006, -0.46]
+        self.R_PosTakeObj_TakeOut    = [0.15,-0.3006, -0.44]
         self.R_OriTakeObj_TakeOut    = [0.00, 89.000,  0.00]
-        self.L_PosTakeObj_TakeOut    = [0.15, 0.3506, -0.46]
+        self.L_PosTakeObj_TakeOut    = [0.15, 0.3506, -0.44]
         self.L_OriTakeObj_TakeOut    = [0.00, 89.000,  0.00]
 
         self.R_PosGiveObj1           = [0.40,-0.3006, -0.40]
@@ -217,9 +222,9 @@ class CDualArmCommand(object):
         self.L_PosGiveObj2_AboveDesk = [0.55, 0.3506, -0.45]
         self.L_OriGiveObj2_AboveDesk = [0.00, 89.000,  0.00]
 
-        self.R_PosGiveObj2_OnDesk    = [0.55,-0.3006, -0.50]
+        self.R_PosGiveObj2_OnDesk    = [0.55,-0.3006, -0.52]
         self.R_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
-        self.L_PosGiveObj2_OnDesk    = [0.55, 0.3506, -0.50]
+        self.L_PosGiveObj2_OnDesk    = [0.55, 0.3506, -0.52]
         self.L_OriGiveObj2_OnDesk    = [0.00, 89.000,  0.00]
    
         self.R_PosGiveObj2_LeaveDesk = [0.25,-0.3006, -0.45]
@@ -404,15 +409,14 @@ class CDualArmCommand(object):
         else:
             TakeObj_SuckMeal(select)
 
+        # SelectArm.ChangeModeToGetSuckState(True)
         SelectArm.MoveRelPos('line', self.SuckMealKeepDownDirection)
-        print('before while')
         while((select == 'right') or (select == 'left')):
-            print('while')
             if(SelectArm.SuckSuccess()):
-                print('if success')
                 SelectArm.StopRobot_and_ClearCmd()
                 time.sleep(0.1)
-                break            
+                break
+        # SelectArm.ChangeModeToGetSuckState(False) 
 
     def TakeObj_SuckDrink(self, select):    # Take object and suck it (Drink)
         # self.DualArmIsBusyFlag = True
@@ -578,6 +582,12 @@ class CDualArmCommand(object):
         else:
             self.right.SuctionEnable(False)
             self.left.SuctionEnable(False)
+
+    def ChangeMode(self, select, ModeFlag):
+        if(select == 'right'):
+            self.right.ChangeModeToGetSuckState(ModeFlag)
+        elif(select == 'left'):
+            self.left.ChangeModeToGetSuckState(ModeFlag)
 
     def IDEL(self):
         # self.DualArmIsBusyFlag = False
@@ -783,6 +793,18 @@ def handle_state(req):
         while((MissionExecuteFlag == True) and (MotionSerialKey != None)):            
             if not(MobileCommandSet.MobileIsBusy() or DualArmCommandSet.DualArmIsBusy()):
                 MotionKey = MotionSerialKey[SerialKeyIndex]
+
+                if( (MotionKey == nMoveToP1)  or
+                    (MotionKey == nMoveToP2)  or
+                    (MotionKey == nRotToDeg90)or
+                    (MotionKey == nRotToDeg0) or
+                    (MotionKey == nSTOP)    ):
+                    print("Set False Mode")
+                    DualArmCommandSet.ChangeMode(SelectArm, False)
+                else:
+                    print("Set True Mode")
+                    DualArmCommandSet.ChangeMode(SelectArm, True)
+
                 MotionKeyDetector(MotionKey, MobileCommandSet, DualArmCommandSet, SelectArm)
                 if(MotionKey != nSTOP):
                     if not ((MotionKey == nMoveToP1) and (MobileCommandSet.SendToSrvSuccessFlag == False)):
