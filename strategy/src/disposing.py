@@ -10,6 +10,7 @@ import numpy as np
 from arm_control import ArmTask, SuctionTask
 from std_msgs.msg import String, Float64, Bool, Int32
 from disposing_vision.msg import coordinate_normal 
+from geometry_msgs.msg import Twist
 
 idle            = 0
 busy            = 1
@@ -62,7 +63,7 @@ def start_callback(msg):
     if not is_start:
         is_start = msg.data
 
-def Home_pub(msg):
+def Status_pub(msg):
     pub = rospy.Publisher(
         'scan_black/strategy_behavior',
         Int32,
@@ -81,57 +82,40 @@ def start_sub():
         queue_size=1
     )
 
+def wheel_pub():
+    wheelpub = rospy.Publisher(
+        'moyion/cmd_vel',
+        Twist,
+        queue_size=1)
+    if msg != 0:
+        wheelpub.publish(msg)
+
 def VisiontoArm(Vision_pos):
+    Img_Pos = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]],[1]])
+    Img_nVec = np.mat([[Vision_pos[3]],[Vision_pos[4]],[Vision_pos[5]],[0]])
 
-    T = np.mat([[-1,0,0],[0,0,-1],[0,-1,0]])
-    VisionPos = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]]])
-    Vec_n = T * VisionPos
+    Img_PosForMove = Img_Pos + 0.08 * Img_nVec # unit vector (n-vector): 8 cm (for object catch)
+
+    dx = 0      # unit:meter
+    dy = -0.055 # unit:meter
+    dz = -0.12  # unit:meter   
     
-    print VisionPos
-    print Vec_n
-
-    dx = 0
-    dy = -12
-    dz = -5.5
-
-    VisionPos_1 = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]],[1]])
-    A = np.mat([[-1,0,0,dx],[0,0,-1,dy],[0,-1,0,dz],[0,0,0,1]])  
-    trans_pos = A * VisionPos_1
-
-    print VisionPos_1
-    #print A
-    print trans_pos
-
+    TransMat_EndToImg = np.mat([[-1,0,0,dx],[0,0,-1,dy],[0,-1,0,dz],[0,0,0,1]])
+    
     ori = left.arm.get_fb().orientation
-    #print ori
-    
-    ori_arr = np.identity(4)
-    #print ori_arr
-
+    T0_7 = np.identity(4)
     for i in range(0,4):
         for j in range(0,4):
-            ori_arr[i][j] = ori[i*4+j]
+            T0_7[i][j] = ori[i*4+j]
 
-    #print ori_arr
-
-    T_Earth = ori_arr * trans_pos  
-
-    print T_Earth 
-
-    cur_pos_x = left.arm.get_fb().group_pose.position.x
-    #print cur_pos_x
-    cur_pos_y = left.arm.get_fb().group_pose.position.y  
-    #print cur_pos_y
-    cur_pos_z = left.arm.get_fb().group_pose.position.z
-    #print cur_pos_z
-
-    curpos = [cur_pos_x,cur_pos_y,cur_pos_z]
-    print curpos
-
-            
-
-
-
+    Mat_nVec_Pos = np.mat([ [Img_nVec[0,0], Img_PosForMove[0,0]],
+                            [Img_nVec[1,0], Img_PosForMove[1,0]],
+                            [Img_nVec[2,0], Img_PosForMove[2,0]],
+                            [      0      ,        1    ]])
+ 
+    Mat_VecPos_ImgToBase = T0_7 * TransMat_EndToImg * Mat_nVec_Pos
+    
+    print Mat_VecPos_ImgToBase
 
 class Task:
     def __init__(self, _name = '/robotis'):
@@ -330,19 +314,19 @@ if __name__ == '__main__':
     print 'is_start',is_start
     listener()
     start_sub()
-    Home_pub(0)
+    Status_pub(0)
     print 'next pub'
     rate = rospy.Rate(30)  # 30hz
     while not rospy.is_shutdown()  and not is_stop:
         global is_start 
         if is_start:
             while not rospy.is_shutdown() and ( not left.finish):
-                left.proces()
+                #left.proces()
                 #right.proces()
                 rate.sleep()
             is_start = False
             is_stop = True
-            Home_pub(4)
+            Status_pub(4)
             rospy.sleep(3)
         rate.sleep()
     rospy.spin()
