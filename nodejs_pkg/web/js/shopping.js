@@ -3,6 +3,7 @@ var btn = document.getElementById("myBtn");
 var order = document.getElementById("sendOrder");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+var modal1 = document.getElementById('myModal1');
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
@@ -21,4 +22,13 @@ window.onclick = function(event) {
 order.onclick = function() {
   SendOrder();
   modal.style.display = "none";
+}
+
+function PlasticPay(pic, name, product, price) {
+  document.getElementById('customPic').src      = pic;
+  document.getElementById('customName').value   = name;
+  document.getElementById('productName').value  = product;
+  document.getElementById('productPrice').value = price;
+  modal1.style.display = "block";
+  setTimeout(function () { modal1.style.display = "none"; }, 2000);
 }
