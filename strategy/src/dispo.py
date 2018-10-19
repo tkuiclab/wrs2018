@@ -7,10 +7,13 @@ import sys
 import copy
 import time
 from math import radians, degrees, sin, cos, pi, acos, asin
-
+import numpy as np
 import rospy
-from std_msgs.msg import Bool, Int32
+from std_msgs.msg import Bool, Int32, String
 from arm_control import ArmTask, SuctionTask
+from disposing_vision.msg import coordinate_normal
+from yolov3_sandwich.msg import ROI
+from geometry_msgs.msg import Twist
 
 SPEED = 1000
 
@@ -58,6 +61,7 @@ class disposingTask:
     def __init__(self, _name = '/robotis'):
         """Initial object."""
         self.en_sim = False
+        self.__set_pubsub()
         if len(sys.argv) >= 2:
             print(type(sys.argv[1]))
             if sys.argv[1] == 'True':
@@ -78,6 +82,12 @@ class disposingTask:
         self.sandwitchPos = [0, 0, 0]
         self.sandwitchEu  = [0, 0, 0]
         self.sandwitchSuc = 0
+        self.sandwitchVec = [0, 0, 0]
+        self.camMovePos = [0, 0]
+        self.Qrcode     = ''
+
+        self.ROI_Pos = [0, 0, 0, 0]
+        self.Vision_pos = [0, 0, 0, 0, 0, 0]
         if self.name == 'right':
             self.is_right = 1
         if self.name == 'left':
@@ -87,6 +97,133 @@ class disposingTask:
         else:
             self.suction = SuctionTask(self.name)
             rospy.on_shutdown(self.suction.gripper_vaccum_off)
+
+    def __set_pubsub(self):
+        self.__realsense_sub = rospy.Subscriber(
+            '/object/normal',
+            coordinate_normal,
+            self.disposing_vision_callback,
+            queue_size=2
+        )
+        self.__ROI_sub = rospy.Subscriber(
+            '/object/ROI',
+            ROI,
+            self.ROI_callback,
+            queue_size=2
+        )
+        self.__Qrcode_sub =  rospy.Subscriber(
+            '/barcode',
+            String,
+            self.Qrcode_callback,
+            queue_size=5
+        ) 
+        #pub 2
+        self.mobileStade_pub = rospy.Publisher(
+            '/scan_black/strategy_behavior',
+            Int32,
+            queue_size=2
+        )
+        self.moveWheel_pub = rospy.Publisher(
+            '/motion/cmd_vel',
+            Twist,
+            queue_size=1
+        )
+
+
+    def ROI_callback(self, msg):
+        self.ROI_Pos = [msg.x_min,msg.x_Max,msg.y_min,msg.y_Max]
+
+    def Qrcode_callback(self, msg):
+        self.Qrcode = msg.data
+
+    def ROI_regulate(self):
+        Img_Obj_x = (self.ROI_Pos[0]+self.ROI_Pos[1])/2
+        Img_Obj_y = (self.ROI_Pos[2]+self.ROI_Pos[3])/2
+        # Img_Obj_Center = (Img_Obj_x,Img_Obj_y) 
+
+        if Img_Obj_x < 310:
+            self.camMovePos[0] = -1
+        elif Img_Obj_x > 330:
+            self.camMovePos[0] = 1
+        else:
+            self.camMovePos[0] = 0
+
+        if Img_Obj_y < 230:
+            self.camMovePos[0] = 1
+        elif Img_Obj_y > 250:
+            self.camMovePos[0] = -1
+        else:
+            self.camMovePos[0] = 0
+            
+
+        
+        # if Img_Obj_Center[0]<320 and Img_Obj_Center[1]>240:
+        #     self.camMovePos[0]+=0.01
+        #     self.camMovePos[1]-=0.01
+        # elif Img_Obj_Center[0]>320 and Img_Obj_Center[1]<240:
+        #     self.camMovePos[0]-=0.01
+        #     self.camMovePos[1]-=0.01
+        # elif Img_Obj_Center[0]<320 and Img_Obj_Center[1]<240:
+        #     self.camMovePos[0]+=0.01
+        #     self.camMovePos[1]+=0.01
+        # elif Img_Obj_Center[0]>320 and Img_Obj_Center[1]>240:      
+        #     self.camMovePos[0]-=0.01
+        #     self.camMovePos[1]+=0.01
+
+    # def ROI_listener():
+    #     #rospy.init_node('disposing', anonymous=True)
+    #     rospy.Subscriber("/object/ROI", ROI, ROI_callback)
+
+    # def listener(self):
+    #     rospy.Subscriber("/object/normal", coordinate_normal, disposing_vision_callback)
+
+    def disposing_vision_callback(self, msg):
+        # global x
+        # global y
+        # global z
+        # global nx
+        # global ny
+        # global nz
+        # global Vision_pos
+
+        # x = msg.x
+        # y = msg.y
+        # z = msg.z
+        # nx = msg.normal_x
+        # ny = msg.normal_y
+        # nz = msg.normal_z
+
+        self.Vision_pos = [msg.x,msg.y,msg.z,msg.normal_x,msg.normal_y,msg.normal_z]
+        print 'Vision_pos',Vision_pos
+        # VisiontoArm(Vision_pos)
+
+    def VisiontoArm(self):
+        Img_Pos = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]],[1]])
+        Img_nVec = np.mat([[Vision_pos[3]],[Vision_pos[4]],[Vision_pos[5]],[0]])
+
+        Img_PosForMove = Img_Pos + 0.08 * Img_nVec # unit vector (n-vector): 8 cm (for object catch)
+
+        dx = 0      # unit:meter
+        dy = -0.055 # unit:meter
+        dz = -0.12  # unit:meter   
+        
+        TransMat_EndToImg = np.mat([[-1,0,0,dx],[0,0,-1,dy],[0,-1,0,dz],[0,0,0,1]])
+        
+        ori = left.arm.get_fb().orientation
+        T0_7 = np.identity(4)
+        for i in range(0,4):
+            for j in range(0,4):
+                T0_7[i][j] = ori[i*4+j]
+
+        Mat_nVec_Pos = np.mat([ [Img_nVec[0,0], Img_PosForMove[0,0]],
+                                [Img_nVec[1,0], Img_PosForMove[1,0]],
+                                [Img_nVec[2,0], Img_PosForMove[2,0]],
+                                [      0      ,        1          ]])
+    
+        Mat_VecPos_ImgToBase = T0_7 * TransMat_EndToImg * Mat_nVec_Pos
+        self.sandwitchPos = Mat_VecPos_ImgToBase[0:3, 3]
+        self.sandwitchVec = Mat_VecPos_ImgToBase[0:3, 2]
+
 
     @property
     def finish(self):
@@ -122,7 +259,7 @@ class disposingTask:
         euler[1] = 0
         euler[2] = 30
         self.sandwitchPos = pos
-        self.sandwitchEu = euler
+        self.sandwitchEu  = euler
         self.sandwitchSuc = degrees(suc_angle)
 
     @property
@@ -175,15 +312,36 @@ class disposingTask:
 
 
         elif self.state == moveCam:
-            self.state = watch
+            self.mobileStade_pub.publish(5)
+
+            self.ROI_regulate()
+            wheelCmd = Twist()
+            self.arm.set_speed(10)
+
+            if self.camMovePos[0] == 0 and self.camMovePos[1] == 0:
+                wheelCmd.linear.x = 0
+                wheelCmd.linear.y = 0
+                self.arm.clear_cmd()
+                self.moveWheel_pub.publish(wheelCmd)
+                rospy.sleep(.1)
+                self.state = watch
+                self.moveWheel_pub.publish(wheelCmd)
+                self.mobileStade_pub.publish(2)
+            else:
+                wheelCmd.linear.x = 12 * camMovePos[0]
+                wheelCmd.linear.y = 0
+                self.moveWheel_pub.publish(wheelCmd)
+                if not self.arm.is_busy and self.camMovePos[1] != 0:
+                    pos_y = 0.1 * self.camMovePos[1]
+                    self.arm.relative_move_pose('line', [0 ,pos_y , 0])
+                if self.camMovePos[1] == 0:
+                    self.arm.clear_cmd()
+                    rospy.sleep(.1)
 
         elif self.state == watch:
             self.state = move2Object1
-            self.sandwitchPos = [0, 0.7, -0.47]
-            self.sandwitchEu  = [0, 0, 30]
-            self.sandwitchSuc = 0
-            self.move_to_vector_point(self.sandwitchPos, [0, 0.866, 0.5])
-
+            self.VisiontoArm()
+            self.move_to_vector_point(self.sandwitchPos, self.sandwitchVec)
 
         elif self.state == move2Object1:
             self.state = busy
@@ -212,7 +370,7 @@ class disposingTask:
         elif self.state == grasping:
             if self.suction.is_grip:
                 self.arm.clear_cmd()
-                # rospy.sleep(.1)
+                rospy.sleep(.1)
                 self.state = busy
                 self.nextState = leaveShelfTop1
                 self.reGripCnt = 0
