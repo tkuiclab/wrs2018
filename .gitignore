@@ -2,5 +2,6 @@
 
 *.swp
 *.pyc
+*.pcd
 
 CATKIN_IGNORE
