@@ -15,7 +15,7 @@ from disposing_vision.msg import coordinate_normal
 from yolov3_sandwich.msg import ROI
 from geometry_msgs.msg import Twist
 
-SPEED = 1000
+SPEED = 20
 
 QRCODEPOS = (0.06, 0.4, -0.45)
 
@@ -194,12 +194,12 @@ class disposingTask:
         # nz = msg.normal_z
 
         self.Vision_pos = [msg.x,msg.y,msg.z,msg.normal_x,msg.normal_y,msg.normal_z]
-        print 'Vision_pos',Vision_pos
+        # print 'Vision_pos',Vision_pos
         # VisiontoArm(Vision_pos)
 
     def VisiontoArm(self):
-        Img_Pos = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]],[1]])
-        Img_nVec = np.mat([[Vision_pos[3]],[Vision_pos[4]],[Vision_pos[5]],[0]])
+        Img_Pos = np.mat([[self.Vision_pos[0]],[self.Vision_pos[1]],[self.Vision_pos[2]],[1]])
+        Img_nVec = np.mat([[self.Vision_pos[3]],[self.Vision_pos[4]],[self.Vision_pos[5]],[0]])
 
         Img_PosForMove = Img_Pos + 0.08 * Img_nVec # unit vector (n-vector): 8 cm (for object catch)
 
@@ -221,8 +221,8 @@ class disposingTask:
                                 [      0      ,        1          ]])
     
         Mat_VecPos_ImgToBase = T0_7 * TransMat_EndToImg * Mat_nVec_Pos
-        self.sandwitchPos = Mat_VecPos_ImgToBase[0:3, 3]
-        self.sandwitchVec = Mat_VecPos_ImgToBase[0:3, 2]
+        self.sandwitchPos = Mat_VecPos_ImgToBase[0:3, 1]
+        self.sandwitchVec = Mat_VecPos_ImgToBase[0:3, 0]
 
 
     @property
