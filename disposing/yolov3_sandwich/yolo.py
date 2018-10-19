@@ -2,7 +2,7 @@
 """
 Class definition of YOLO_v3 style detection model on image and video
 """
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import colorsys
 import os
 from timeit import default_timer as timer
@@ -103,6 +103,7 @@ class YOLO(object):
         return boxes, scores, classes
 
     def detect_image(self, image):
+        ROI = None
         start = timer()
 
         if self.model_image_size != (None, None):
@@ -164,16 +165,18 @@ class YOLO(object):
                 fill=self.colors[c])
             draw.text(text_origin, label, fill=(0, 0, 0), font=font)
             del draw
-
+            ROI = [predicted_class,score, left, right,bottom , top]
         end = timer()
         print(end - start)
-        return image
+        return image,ROI
 
     def close_session(self):
         self.sess.close()
 
 def detect_video(yolo, video_path, output_path=""):
+    print("yolo type = "+str(type(yolo)))
     import cv2
+    # video_path = "/home/iclab/Downloads/Humans_HD_Stock_Video.mp4"
     video_path = 0
     vid = cv2.VideoCapture(video_path)
 
