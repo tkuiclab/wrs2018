@@ -11,12 +11,14 @@ function __mlog(e, data) {
 }
 /** Socket.io pass robot state to socket server */
 var socket = io.connect('https://'+location.host, {secure: true});
+var paySW = 0;
 socket.on('news', function(m) {
   if (IsJsonString(m)) {
     let j = JSON.parse(m);
     if (j.success) {
       /** Robot Speaking State Machine */
       if (j.info.toLowerCase() == "here are your meals") {
+        paySW = 1;
         output.src = "sounds/here_are_your_meals.wav"
         output.play();
         __log('Pass payment 4 to socket server');
@@ -25,6 +27,15 @@ socket.on('news', function(m) {
       }else if (j.info.toLowerCase() == "payment process complete") {
         output.src = "sounds/payment_process_complete.wav"
         output.play();
+        switch (paySW) {
+          case 0:
+            PlasticPay('img/1.jpg', 'NEET', 'Sprite', 200);
+            break;
+          case 1:
+            PlasticPay('img/2.jpg', 'Shengru', 'Lunch Box', 2000);
+            paySW = 0;
+            break;
+        }
       }else if (j.info.toLowerCase() == "payment failed") {
         output.src = "sounds/payment_failed_please_try_again.wav"
         output.play();

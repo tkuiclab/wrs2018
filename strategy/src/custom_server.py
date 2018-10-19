@@ -170,7 +170,7 @@ class CDualArmCommand(object):
         self.GiveObj1_DelayTime = 3 # sec
         self.GiveObj2_DelayTime = 2 # sec
 
-        self.SuckMealKeepDownDirection = [0, 0, -0.08] # -0.06 m = -6 cm
+        self.SuckMealKeepDownDirection = [0, 0, -0.083] # -0.06 m = -6 cm
 
         self.R_PosTakeObj_Ori        = [0.30,-0.3006, -0.46]
         self.R_OriTakeObj_Ori        = [0.00, 89.000,  0.00] #[5.029, 82.029, 4.036]
