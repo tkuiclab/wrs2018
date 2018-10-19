@@ -210,14 +210,18 @@ class disposingTask:
             rospy.sleep(.1)
 
         elif self.state == grasping:
-            if self.suction.is_grip or self.en_sim:
+            if self.suction.is_grip:
                 self.arm.clear_cmd()
                 # rospy.sleep(.1)
                 self.state = busy
                 self.nextState = leaveShelfTop1
                 self.reGripCnt = 0
             elif not self.arm.is_busy:
-                self.state = missObj
+                if self.en_sim:
+                    self.state = busy
+                    self.nextState = leaveShelfTop1
+                else:
+                    self.state = missObj
 
         elif self.state == leaveShelfTop1:
             self.state = busy
