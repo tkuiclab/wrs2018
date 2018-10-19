@@ -30,29 +30,6 @@ tracking        = 14
 Action1         = 15
 
 
-def disposing_vision_callback(msg):
-    global x
-    global y
-    global z
-    global nx
-    global ny
-    global nz
-    global Vision_pos
-
-    x = msg.x
-    y = msg.y
-    z = msg.z
-    nx = msg.normal_x
-    ny = msg.normal_y
-    nz = msg.normal_z
-
-
-    Vision_pos = [x,y,z,nx,ny,nz]
-    VisiontoArm(Vision_pos)
-    # print(Vision_pos[0])
-    # print(Vision_pos[1])
-    # print(Vision_pos[2])
-
 def listener():
     #rospy.init_node('disposing', anonymous=True)
     rospy.Subscriber("/object/normal", coordinate_normal, disposing_vision_callback)
@@ -90,6 +67,29 @@ def wheel_pub():
     if msg != 0:
         wheelpub.publish(msg)
 
+def disposing_vision_callback(msg):
+    global x
+    global y
+    global z
+    global nx
+    global ny
+    global nz
+    global Vision_pos
+
+    x = msg.x
+    y = msg.y
+    z = msg.z
+    nx = msg.normal_x
+    ny = msg.normal_y
+    nz = msg.normal_z
+
+
+    Vision_pos = [x,y,z,nx,ny,nz]
+    VisiontoArm(Vision_pos)
+    # print(Vision_pos[0])
+    # print(Vision_pos[1])
+    # print(Vision_pos[2])
+
 def VisiontoArm(Vision_pos):
     Img_Pos = np.mat([[Vision_pos[0]],[Vision_pos[1]],[Vision_pos[2]],[1]])
     Img_nVec = np.mat([[Vision_pos[3]],[Vision_pos[4]],[Vision_pos[5]],[0]])
@@ -115,7 +115,7 @@ def VisiontoArm(Vision_pos):
  
     Mat_VecPos_ImgToBase = T0_7 * TransMat_EndToImg * Mat_nVec_Pos
     
-    print Mat_VecPos_ImgToBase
+    #print Mat_VecPos_ImgToBase
 
 class Task:
     def __init__(self, _name = '/robotis'):
@@ -142,9 +142,7 @@ class Task:
         else:
             self.suction = SuctionTask(self.name)
             print "0"
-
-        self.flag = False
-        
+ 
     @property
     
     def finish(self):
@@ -159,27 +157,7 @@ class Task:
             self.pos, self.euler, self.phi = lunchboxPos[2-self.pick_list], (90, 0, 0), -30
         elif self.name == 'left':
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
-
-    def getRearSafetyPos(self):
-        if self.name == 'right':
-            self.pos, self.euler, self.phi = (-0.1, -0.45, -0.45), (90, 0, 0), -30
-        elif self.name == 'left':
-            self.pos, self.euler, self.phi = (-0.1, 0.45, -0.45), (-90, 0, 0),  30
-
-    def getSafetyPos(self):
-        if self.name == 'right':
-            self.pos, self.euler, self.phi = (0, 0.49, -0.36), (0, 0, 0), 0
-        elif self.name == 'left':
-            self.pos, self.euler, self.phi = (0, 0.49, -0.36), (0, 0, 0), 0
-
-    def getShelfPos(self):
-        ShelfPos = ([0, 0.73, -0.12])
-
-        if self.name == 'right':
-            self.pos, self.euler, self.phi = ShelfPos, (0, 0, 90), 0
-        elif self.name == 'left':
-            self.pos, self.euler, self.phi = ShelfPos, (0, 0, 90), 0
-
+    
     def getPlacePos(self):
         lunchboxPos = [[-0.4, -0.15, -0.63],
                        [-0.4, -0.15, -0.68]]
@@ -191,109 +169,132 @@ class Task:
         elif self.name == 'left':
             self.pos, self.euler, self.phi = drinkPos[2-self.pick_list], (-90, 0, 0), 30
 
-    """def ImgtoArmCmd(object):
+    def InitLeftArm(self):
+        self.arm.set_speed(30)
+        self.arm.jointMove(0, (0, 0, 0, 0, 0, 0, 0))
+        self.suction.gripper_suction_deg(0)
+
+    def getSafetyPos(self):
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = (0, 0.49, -0.36), (0, 0, 0), 0
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = (0, 0.49, -0.36), (0, 0, 0), 0
+
+    def getShelfPos(self):
+        ShelfPos = ([0, 0.88, -0.48])
+        #ShelfPos = ([0, 0.7, -0.51])
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = ShelfPos, (180, 180, 90), 0
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = ShelfPos, (180, 180, 90), 0
+            #self.pos, self.euler, self.phi = ShelfPos, (0, 0, 90), 0
     
-        #DualArmCurrentPos
-        rotation = ArmTask.euler2rotation()
-        Arm_normal_x = rotation[0,0]
-        Arm_normal_y = rotation[1,0]
-        Arm_normal_z = rotation[2,0]
+    def getBinfPos(self):
+        ShelfPos = ([-0.4, 0.2, -0.36])
+        #ShelfPos = ([0, 0.7, -0.51])
+        if self.name == 'right':
+            self.pos, self.euler, self.phi = ShelfPos, (0, 0, 0), 0
+        elif self.name == 'left':
+            self.pos, self.euler, self.phi = ShelfPos, (0, 0, 0), 0
 
-        coor_A = [x,y,z]
-        coor_norA=[normal_x,normal_y,normal_z]
-        VecA = -(coor_A[0]*coor_norA[0]+coor_A[1]*coor_norA[1]+coor_A[2]*coor_norA[2])
-        
-        powA = math.pow(coor_A[0],2)+ math.pow(coor_A[1],2)+math.pow(coor_A[2],2)
-        disA = math.sqrt(powA)
-
-        coor_B = [self.arm.get_fb().pos.x,self.arm.get_fb().pos.y,self.arm.get_fb().pos.z]
-        coor_norB=[self.arm.get_fb().euler[0],self.arm.get_fb().euler[1],self.arm.get_fb().euler[2]]
-        VecB = coor_B[0]*coor_norB[0]+coor_B[1]*coor_norB[1]+coor_B[2]*coor_norB[2]
-
-        powB =  math.pow(coor_B[0],2)+ math.pow(coor_B[1],2)+math.pow(coor_B[2],2) 
-        disB =  math.sqrt(powB)
-
-        AXRot = math.acos((powA*powB)/(disA*disB))
-
-        # Projection vector
-        coor_C = [self.arm.get_fb().pos.x,self.arm.get_fb().pos.y,self.arm.get_fb().pos.z]
-        coor_norC=[0,self.arm.get_fb().euler[1],self.arm.get_fb().euler[2]]
-        VecC = coor_C[0]*coor_norC[0]+coor_C[1]*coor_norC[1]+coor_C[2]*coor_norC[2]
-
-        powC =  math.pow(coor_C[0],2)+ math.pow(coor_C[1],2)+math.pow(coor_C[2],2) 
-        disC =  math.sqrt(powC)
-
-        ArmRoll= math.acos((powB*powC)/(disB*disC))
-
-        ArmX = 0
-
-        ArmY = 0
-
-        ArmZ = 0
-
-        return (ArmX,ArmY,ArmZ,ArmRoll,AXRot)"""
-    
     def proces(self):
+        flag = False
         if self.arm.is_stop:                                       # must be include in your strategy
             self.finish = True                                     # must be include in your strategy
             print "!!! Robot is stop !!!"                          # must be include in your strategy
             return                                                 # must be include in your strategy
 
         if self.state == idle:
+            print 'Idle'
             if self.finish:
+                print 'finish'
                 return
             else:
                 self.state = SafetyPos
+                print 'next SafetyPos'
                 #print "self.pick_list = " + str(self.pick_list)
 
         elif self.state == initPose:
             self.state = busy
+            self.InitLeftArm()
             self.nextState = idle
-            self.arm.set_speed(30)
-            self.arm.jointMove(0, (0, 0, 0, 0, 0, 0, 0))
-            self.suction.gripper_suction_deg(0)
-
+        
         elif self.state == SafetyPos:
             self.state = busy
             self.getSafetyPos()
             self.arm.set_speed(90)
             #self.arm.jointMove(0, (0, -2.27, 0, 2.44, 0, 0, 0))
             self.arm.ikMove('p2p', self.pos, self.euler, self.phi)
-            if self.flag == False:
+            if flag == False:
+                print 'flag=',flag
                 self.nextState = move2Shelf
             else:
-                self.nextState = pickObject
+                print 'Next state = move2Bin'
+                print 'flag=',flag
+                self.nextState = move2Bin
 
         elif self.state == move2Shelf:
+            print 'Now State : Move2Shelf'
             self.state = busy
             self.nextState = moveIn2Shelf
             self.getShelfPos()
             self.arm.set_speed(90)
             self.arm.ikMove('p2p', self.pos, self.euler, self.phi)
-            
+
         elif self.state == moveIn2Shelf:
+            print 'Now State : moveIn2Shelf'
             self.state = busy
             self.nextState = move2Object
             self.getShelfPos()
             #print("pos[2] type = ",type(self.pos))
-            self.pos[1] += 0.13
-            self.pos[2] -= 0.33
+            self.pos[1] += 0.12
+            #self.pos[2] -= 0.33
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2Object:
+            print 'Now State : move2Object'
             self.state = busy
             self.arm.relative_move_pose('line', [0, 0, -0.05])
             self.nextState = pickObject
-            self.flag = True
             #record position
 
         elif self.state == pickObject:
             #gripper_deg
             self.state = busy
-            self.arm.relative_move_pose('line', [0, 0.1, -0.1])
-            self.nextState = move2Bin 
+            #self.arm.relative_move_pose('line', [0, 0.1, -0.1])
             self.suction.gripper_suction_deg(0)
             self.suction.gripper_vaccum_on()
+            self.nextState = move2Bin
+
+        elif self.state == leaveShelf:
+            self.state = busy
+            self.arm.relative_move_pose('line', [0, -0.1, +0.1])
+            self.nextState = SafetyPos
+            flag = True
+            print 'flag =',flag
+       
+        elif self.state == move2Bin:
+            print 'Now state = move2Bin'
+            self.state = busy
+            self.getBinfPos()
+            self.arm.ikMove('p2p', self.pos, self.euler, self.phi)
+            self.nextState = move2PlacedPos
+
+        elif self.state == move2PlacedPos:
+            self.state = busy
+            self.nextState = placeObject
+
+        elif self.state == placeObject:
+            self.state = busy
+            self.nextState = leaveBin
+            self.suction.gripper_vaccum_off()
+        
+        elif self.state == leaveBin:
+            self.state = busy
+            self.arm.set_speed(20)
+            self.arm.relative_move_pose('line', [0, 0, -0.24])
+            self.nextState = SafetyPos
+            flag = True 
 
         elif self.state == busy:
             if self.arm.is_busy:
@@ -301,28 +302,24 @@ class Task:
             else:
                 self.state = self.nextState
 
-   # def trans_ZerotoSeven():
-        #Ori = self.arm.get_fb().oriontation[]
-
 if __name__ == '__main__':
     global Vision_pos    
-    rospy.init_node('disposing')        #enable this node
-    left  = Task('left')                #Set up left arm controller
+    rospy.init_node('disposing')        # enable this node
+    left  = Task('left')                # Set up left arm controller
     rospy.sleep(0.3)
     is_start = False
     is_stop = False
     print 'is_start',is_start
-    listener()
+    listener()                          # Open vision
     start_sub()
     Status_pub(0)
     print 'next pub'
-    rate = rospy.Rate(30)  # 30hz
+    rate = rospy.Rate(30)               # 30hz
     while not rospy.is_shutdown()  and not is_stop:
         global is_start 
         if is_start:
             while not rospy.is_shutdown() and ( not left.finish):
-                #left.proces()
-                #right.proces()
+                left.proces()
                 rate.sleep()
             is_start = False
             is_stop = True
