@@ -2,5 +2,8 @@
 
 *.swp
 *.pyc
+*.pcd
+*weights
+*.h5
 
 CATKIN_IGNORE
