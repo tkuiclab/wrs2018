@@ -28,6 +28,9 @@ GO_POINT = 7
 RETURN_POINT = 8
 CROSS = 9
 INIT = 10
+DELIVERY = 11
+ORDER = 12
+COUNTER_MOVE = 13
 
 # FLAG 
 CONTROL = 'PIDCONTROL'
@@ -99,7 +102,8 @@ class Strategy(object):
 
         ''' cross '''
         self.timer = TimeCounter(time = self._param.crossTime)
-
+        self.timerQr = TimeCounter(time = 1.0)
+        self.timerQrFlag = False
         ''' home '''
         self.homeFlag = 0
         self.homeTimes = 0
@@ -165,6 +169,11 @@ class Strategy(object):
                 self.Change_Behavior()
             self.Init_Strategy()
             print('Init')
+        elif(self._param.behavior == COUNTER_MOVE):
+            if(self._param.loadParam):
+                self.Change_Behavior()
+            # self.Counter_Move_Strategy()
+            print('COUNTER_MOVE')
         else:
             print("Don't have Behavior")
             self.Robot_Stop()
@@ -237,11 +246,13 @@ class Strategy(object):
                         self._param.behavior = CORRECTION
                         print('state 2')
                         self.dualArm = 2
-                        self.Dual_Arm_Start_2()
+                        self.timerQrFlag = False
+                        # self.Dual_Arm_Start_2()
                     else:
                         self.dualArm = 1
                         self._param.behavior = CORRECTION
                         self.homeTimes += 1
+                        self.timerQrFlag = False
                 if(self.stopTimes >= 3):
                     self._param.stopPoint = 999
                     self.stopTimes = 0
@@ -279,75 +290,77 @@ class Strategy(object):
             # print('fuck!!!!!!!!!!!!!!!!',self._param.errorCorrectionDis)
             # dis = math.sqrt(math.pow(self._param.qrX,2.0)+math.pow(self._param.qrY,2.0))
             dis = self._param.qrY
-            
-        # if(self._param.dis < self._param.errorCorrectionDis):
-        if(abs(dis) < self._param.errorCorrectionDis):
-            if(self._param.qrTheta is not None and self._param.qrTheta != 999):
-                RPang = self.Norm_Angle(self.rotateAng - self._param.qrTheta)
-                if(abs(RPang) > self._param.errorAng):
-                    if(RPang > 0):
-                        x = 0
-                        y = 0
-                        yaw = self._param.velYaw
-                        # yaw = self._param.rotateYaw
+        if(self.timerQrFlag == False):
+            time,self.timerQrFlag = self.timerQr.Process()
+        else:    
+            # if(self._param.dis < self._param.errorCorrectionDis):
+            if(abs(dis) < self._param.errorCorrectionDis):
+                if(self._param.qrTheta is not None and self._param.qrTheta != 999):
+                    RPang = self.Norm_Angle(self.rotateAng - self._param.qrTheta)
+                    if(abs(RPang) > self._param.errorAng):
+                        if(RPang > 0):
+                            x = 0
+                            y = 0
+                            yaw = self._param.velYaw
+                            # yaw = self._param.rotateYaw
+                        else:
+                            x = 0
+                            y = 0
+                            yaw = -self._param.velYaw
+                            # yaw = -self._param.rotateYaw
+
+                        self.Robot_Vel([x,y,yaw])
+                        print('CORRECTION','FRONT',self._param.qrTheta)
                     else:
-                        x = 0
-                        y = 0
-                        yaw = -self._param.velYaw
-                        # yaw = -self._param.rotateYaw
+                        self.Robot_Stop()
+                        self.Robot_Stop()
+                        self.Robot_Stop()
 
-                    self.Robot_Vel([x,y,yaw])
-                    print('CORRECTION','FRONT',self._param.qrTheta)
-                else:
-                    self.Robot_Stop()
-                    self.Robot_Stop()
-                    self.Robot_Stop()
-
-                    print('CORRECTION',self.rotateAng,self._param.errorRotate0)
-                    if(self.dualArm == 1):
-                    # if(self.dualArm == 1 or self.dualArm == 2):
-                        if(self.rotateAng == self._param.errorRotate0):
-                            self._param.behavior = ROTATE
-                            self.rotateAng = self._param.errorRotate90
-                        else:
-                            self._param.behavior = PLATFORM
-                            self.rotateAng = self._param.errorRotate0
-                            self.initPID = 1
-                    elif(self.dualArm == 2):
-                        if(self.rotateAng == self._param.errorRotate0):
-                            self._param.behavior = PLATFORM
-        
-                    
-                self.not_find = 0
-            else:
-                print('CORRECTION not find')
-                if(self.not_find < 100):
-                    self.not_find += 1
-                    self.Robot_Stop()
-                else:
+                        print('CORRECTION',self.rotateAng,self._param.errorRotate0)
+                        if(self.dualArm == 1):
+                        # if(self.dualArm == 1 or self.dualArm == 2):
+                            if(self.rotateAng == self._param.errorRotate0):
+                                self._param.behavior = ROTATE
+                                self.rotateAng = self._param.errorRotate90
+                            else:
+                                self._param.behavior = PLATFORM
+                                self.rotateAng = self._param.errorRotate0
+                                self.initPID = 1
+                        elif(self.dualArm == 2):
+                            if(self.rotateAng == self._param.errorRotate0):
+                                self._param.behavior = PLATFORM
+            
+                        
                     self.not_find = 0
-                    if(self.dualArm == 1):
-                        if(self.rotateAng == self._param.errorRotate0):
-                            self._param.behavior = ROTATE
-                            self.rotateAng = self._param.errorRotate90
-                        else:
-                            self._param.behavior = PLATFORM
-                            self.rotateAng = self._param.errorRotate0
+                else:
+                    print('CORRECTION not find')
+                    if(self.not_find < 100):
+                        self.not_find += 1
+                        self.Robot_Stop()
+                    else:
+                        self.not_find = 0
+                        if(self.dualArm == 1):
+                            if(self.rotateAng == self._param.errorRotate0):
+                                self._param.behavior = ROTATE
+                                self.rotateAng = self._param.errorRotate90
+                            else:
+                                self._param.behavior = PLATFORM
+                                self.rotateAng = self._param.errorRotate0
+                                self.initPID = 1
+                        elif(self.dualArm == 2):
+                            if(self.rotateAng == self._param.errorRotate0):
+                                self._param.behavior = PLATFORM  
                             self.initPID = 1
-                    elif(self.dualArm == 2):
-                        if(self.rotateAng == self._param.errorRotate0):
-                            self._param.behavior = PLATFORM  
-                        self.initPID = 1
-            self._param.qrTheta = 999
-        else:
-            # x = 0
-            yaw = 0
-            # y = 0
-            x = self.controlQRX.Process(self._param.qrY,self._param.qrTheta,self._param.minVel)
-            y = self.controlQRY.Process(self._param.qrX,self._param.qrTheta,self._param.minVel)
-            self.Robot_Vel([x,y,yaw])
-            print('CORRECTION','dis',x,y)
-            self._param.qrX = None
+                self._param.qrTheta = 999
+            else:
+                # x = 0
+                yaw = 0
+                # y = 0
+                x = self.controlQRX.Process(self._param.qrY,self._param.qrTheta,self._param.minVel)
+                y = self.controlQRY.Process(self._param.qrX,self._param.qrTheta,self._param.minVel)
+                self.Robot_Vel([x,y,yaw])
+                print('CORRECTION','dis',x,y)
+                self._param.qrX = None
     
     def Platform_Strategy(self):
         print('PLATFORM')

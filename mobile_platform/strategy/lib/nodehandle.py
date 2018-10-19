@@ -27,6 +27,7 @@ CROSS = 9
 INIT = 10
 DELIVERY = 11
 ORDER = 12
+COUNTER_MOVE = 13
 
 # FILENAME 
 # FILENAME = rospkg.RosPack().get_path('mobile_platform')+'/config/'+'stage_imu.yaml'

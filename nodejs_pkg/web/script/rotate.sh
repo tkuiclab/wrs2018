@@ -25,7 +25,8 @@ function do_rotate
     #if [ "$POINTER" != "" ] && [[ $POINTERNAME = *"TrackPoint"* ]]; then  # ==> uncomment to transform only trackpoints
     #if [ "$POINTER" != "" ] && [[ $POINTERNAME = *"Digitizer"* ]]; then   # ==> uncomment to transform only digitizers (touch)
     #if [ "$POINTER" != "" ] && [[ $POINTERNAME = *"MOUSE"* ]]; then       # ==> uncomment to transform only optical mice
-    if [ "$POINTER" != "" ] ; then                                         # ==> uncomment to transform all pointer devices
+    #if [ "$POINTER" != "" ] ; then                                         # ==> uncomment to transform all pointer devices
+    if [ "$POINTER" != "" ] && [[ $POINTERNAME != *"Microsoft"* ]]; then
         case "$2" in
             normal)
               [ ! -z "$POINTER" ]    && xinput set-prop "$POINTER" "$TRANSFORM" 1 0 0 0 1 0 0 0 1

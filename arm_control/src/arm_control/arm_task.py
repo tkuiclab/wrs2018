@@ -363,7 +363,36 @@ class ArmTask:
             euler,
             degrees(phi)
         )
-    
+
+    def move_to_vector_point(sef, mode='p2p', pos=_POS, vector=[1,0,0], phi=0) # This funthion will move arm and return suction angle 
+    # Only for left arm Euler (0 0 30)
+        goal_vec = -vector
+        a = 0.866
+        b = 0.5
+        x, y, z = goal_vec[0], goal_vec[1], goal_vec[2]
+        roll_angle = 0.0
+        suc_angle = -acos((b*y - a*z) / (a*a + b*b))
+        roll_angle_c = acos(x / sin(suc_angle))
+        roll_angle_s = asin(-((a*y + b*z)/(a*a + b*b)) / sin(suc_angle))
+        if (roll_angle_c*roll_angle_s) >= 0:
+            roll_angle = roll_angle_c
+        else:
+            roll_angle = -roll_angle_c
+
+        pos[0] += vector[0]*0.065
+        pos[1] += vector[1]*0.065
+        pos[2] += vector[2]*0.065
+        euler[0] = roll_angle
+        euler[1] = 0
+        euler[2] = 30
+        self.ikMove(
+            mode,
+            (pos[0], pos[1], pos[2]),
+            (euler[0], euler[1], euler[2]),
+            phi
+        )
+        return suc_angle
+
     def wait_busy(self):
         """This is blocking method."""
         while self.is_busy:

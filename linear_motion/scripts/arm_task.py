@@ -14,11 +14,7 @@ from robotis_controller_msgs.msg import StatusMsg
 from manipulator_h_base_module_msgs.msg import IK_Cmd
 from manipulator_h_base_module_msgs.srv import GetKinematicsPose, GetKinematicsPoseResponse
 
-_POS = (.3, 0, .15)  # x, y, z
-_ORI = (-40, 0, 0)  # pitch, roll, yaw
-
-
-class ArmTask:
+_POS = (.3, 0, .15)  # 
     """Running arm task class."""
 
     def __init__(self):
