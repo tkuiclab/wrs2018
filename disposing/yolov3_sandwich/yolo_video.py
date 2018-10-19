@@ -32,7 +32,7 @@ def clone_detect_video(yolo, video_path, output_path=""):
     print("yolo type = "+str(type(yolo)))
     import cv2
     # video_path = "/home/iclab/Downloads/Humans_HD_Stock_Video.mp4"
-    video_path = 1
+    video_path = 2
     vid = cv2.VideoCapture(video_path)
 
     if not vid.isOpened():
