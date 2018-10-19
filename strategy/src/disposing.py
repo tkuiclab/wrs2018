@@ -30,21 +30,28 @@ placeObject     = 13
 tracking        = 14
 Action1         = 15
 
-
-def start_callback(msg):
-    global is_start
-    if not is_start:
-        is_start = msg.data
-
-def Status_pub(msg):
+def ROS_publish_node():
+    global pub
+    global wheelpub
     pub = rospy.Publisher(
-        'scan_black/strategy_behavior',
+        '/scan_black/strategy_behavior',
         Int32,
         # latch=True,
-        queue_size=1
-    )
+        queue_size=1)
+    wheelpub = rospy.Publisher(
+        '/motion/cmd_vel',
+        Twist,
+        queue_size=1)
+
+def Status_pub(msg):
     if msg != 0:
         pub.publish(msg)
+
+def wheel_pub(speed):
+    msg =Twist()
+    msg.linear.x = speed
+    print("publish wheel speed " + str(msg))
+    wheelpub.publish(msg)
 
 def start_sub():
     global is_start
@@ -54,16 +61,11 @@ def start_sub():
         start_callback,
         queue_size=1
     )
-
-def wheel_pub():
-    wheelpub = rospy.Publisher(
-        'moyion/cmd_vel',
-        Twist,
-        queue_size=1)
-    if msg != 0:
-        wheelpub.publish(msg)
-
-
+    
+def start_callback(msg):
+    global is_start
+    if not is_start:
+        is_start = msg.data
 
 def ROI_listener():
     #rospy.init_node('disposing', anonymous=True)
@@ -71,28 +73,49 @@ def ROI_listener():
     #rospy.spin()  
 
 def ROI_callback(msg):
-    global x
-    global y
-    global z
-    global nx
-    global ny
-    global nz
-    global Vision_pos
+    global class_name
+    global score
+    global x_min
+    global x_Max
+    global y_min
+    global y_Max
+    global roi_pos
 
-    x = msg.x
-    y = msg.y
-    z = msg.z
-    nx = msg.normal_x
-    ny = msg.normal_y
-    nz = msg.normal_z
+    x_min= msg.x_min
+    x_Max= msg.x_Max
+    y_min= msg.y_min
+    y_Max = msg.y_Max
+    score = msg.score
+    class_name = msg.class_name
 
+    ROI_Pos = [class_name,score,x_min,x_Max,y_min,y_Max]
+    #VisiontoArm(Vision_pos)
+    #print (roi_pos[0])
+    print (ROI_Pos[1])
+    print (ROI_Pos[2])
+    print (ROI_Pos[3])
+    print (ROI_Pos[4])
 
-    Vision_pos = [x,y,z,nx,ny,nz]
-    VisiontoArm(Vision_pos)
-    # print(Vision_pos[0])
-    # print(Vision_pos[1])
-    # print(Vision_pos[2])
+    ROI_regulate(ROI_Pos)
 
+def ROI_regulate(ROI_Pos):
+    
+    Img_Obj_x = (ROI_Pos[0]+ROI_Pos[1])/2
+    Img_Obj_y = (ROI_Pos[1]+ROI_Pos[2])/2
+    Img_Obj_Center = (Img_Obj_x,Img_Obj_y) 
+    
+    if Img_Obj_Center[0]<320 and Img_Obj_Center[1]>240:
+        pos[0]+=0.01
+        pos[1]-=0.01
+    elif Img_Obj_Center[0]>320 and Img_Obj_Center[1]<240:
+        pos[0]-=0.01
+        pos[1]-=0.01
+    elif Img_Obj_Center[0]<320 and Img_Obj_Center[1]<240:
+        pos[0]+=0.01
+        pos[1]+=0.01
+    else:        
+        pos[0]-=0.01
+        pos[1]+=0.01
 
 def listener():
     #rospy.init_node('disposing', anonymous=True)
@@ -114,7 +137,6 @@ def disposing_vision_callback(msg):
     nx = msg.normal_x
     ny = msg.normal_y
     nz = msg.normal_z
-
 
     Vision_pos = [x,y,z,nx,ny,nz]
     VisiontoArm(Vision_pos)
@@ -337,21 +359,25 @@ class Task:
 if __name__ == '__main__':
     global Vision_pos    
     rospy.init_node('disposing')        # enable this node
+    ROS_publish_node()
     left  = Task('left')                # Set up left arm controller
     rospy.sleep(0.3)
     is_start = False
     is_stop = False
     print 'is_start',is_start
-    listener()                          # Open vision
+    listener()
+    ROI_listener()                      # Open vision
     start_sub()
     Status_pub(0)
+    Status_pub(5)
+    wheel_pub(11)
     print 'next pub'
     rate = rospy.Rate(30)               # 30hz
     while not rospy.is_shutdown()  and not is_stop:
         global is_start 
         if is_start:
             while not rospy.is_shutdown() and ( not left.finish):
-                left.proces()
+                #left.proces()
                 rate.sleep()
             is_start = False
             is_stop = True
