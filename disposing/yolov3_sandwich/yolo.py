@@ -165,7 +165,7 @@ class YOLO(object):
                 fill=self.colors[c])
             draw.text(text_origin, label, fill=(0, 0, 0), font=font)
             del draw
-            ROI = [predicted_class,score, left, right,bottom , top]
+            ROI = [predicted_class,score, left, right,top ,bottom ]
         end = timer()
         print(end - start)
         return image,ROI
