@@ -3,7 +3,8 @@
 
 TIMELIMIT = 12 *60
 
-TINEOUT   = False
+global TIMEOUT  
+TIMEOUT = False
 
 SPEED = 20
 
@@ -11,6 +12,9 @@ EXPIRED = ( 'A', 'C', 'D', 'G' )
 
 
 
+
+Y_MAX = 1.05
+Y_MIN = 9.05
 
 
 
@@ -133,6 +137,8 @@ class disposingTask:
         self.camMovePos = [0, 0]
         self.Qrcode     = ''
         self.checkCnt = 0
+        self.moveCnt  = 0
+        self.mode = 'p2p'
 
         self.ROI_Pos = [0, 640, 0, 480]
         self.Vision_pos = [0, 0, 0, 0, 0, 0]
@@ -185,23 +191,24 @@ class disposingTask:
         self.Qrcode = msg.data
 
     def disposing_vision_callback(self, msg):
-        self.Vision_pos = [msg.x,msg.y,msg.z,msg.normal_x,msg.normal_y,msg.normal_z]
+        if msg.normal_z < -0.5:
+            self.Vision_pos = [msg.x,msg.y,msg.z,msg.normal_x,msg.normal_y,msg.normal_z]
 
     def ROI_regulate(self):
         Img_Obj_x = (self.ROI_Pos[0]+self.ROI_Pos[1])/2
         Img_Obj_y = (self.ROI_Pos[2]+self.ROI_Pos[3])/2
         # Img_Obj_Center = (Img_Obj_x,Img_Obj_y) 
 
-        if Img_Obj_x < 310:
+        if Img_Obj_x < 250:
             self.camMovePos[0] = -1
-        elif Img_Obj_x > 330:
+        elif Img_Obj_x > 290:
             self.camMovePos[0] = 1
         else:
             self.camMovePos[0] = 0
 
-        if Img_Obj_y < 230:
+        if Img_Obj_y < 220:
             self.camMovePos[1] = 1
-        elif Img_Obj_y > 250:
+        elif Img_Obj_y > 260:
             self.camMovePos[1] = -1
         else:
             self.camMovePos[1] = 0
@@ -284,6 +291,7 @@ class disposingTask:
         return self.pickList == self.pickListAll
 
     def process(self): 
+        global TIMEOUT 
         if self.arm.is_stop:                                       # must be include in your strategy 
             self.finish = True                                     # must be include in your strategy 
             print "!!! Robot is stop !!!"                          # must be include in your strategy 
@@ -295,6 +303,8 @@ class disposingTask:
                 return 
             else: 
                 self.state = move2CamPos1 
+            if TIMEOUT:
+                self.finish = True
                  
          
         elif self.state == busy: 
@@ -309,57 +319,109 @@ class disposingTask:
             self.state = busy
             self.nextState = move2CamPos1 
             self.suction.gripper_suction_deg(0)
+            if TIMEOUT:
+                self.finish = True
 
         elif self.state == move2CamPos1:
             self.state = busy
             self.nextState = move2CamPos2
-            pos = (0, 0.4, -0.3)
-            euler = (0, 0, -40)
+            pos = (0, 0.45, -0.4)
+            euler = (0, 0, -35)
             phi = 0
-            self.arm.ikMove('p2p', pos, euler, phi)
+            if TIMEOUT:
+                self.finish = True
+                self.mode = 'line'
+            self.arm.ikMove(self.mode, pos, euler, phi)
             self.suction.gripper_suction_deg(0)
+            if TIMEOUT:
+                self.finish = True
 
         elif self.state == move2CamPos2:
+            self.state = busy
+            self.nextState = move2CamPos3
+            pos = (0, 0.86, -0.2)
+            euler = (0, 0, 90)
+            phi = 0
+            self.arm.ikMove('line', pos, euler, phi)
+            self.suction.gripper_suction_deg(-90)
+            if TIMEOUT:
+                self.arm.clear_cmd()
+                rospy.sleep(.1)
+                self.state = move2CamPos1
+
+        elif self.state == move2CamPos3:
             self.state = busy
             self.nextState = moveCam
             pos = (0, 0.96, -0.2)
             euler = (0, 0, 90)
             phi = 0
             self.arm.ikMove('line', pos, euler, phi)
-
+            self.suction.gripper_suction_deg(-90)
+            if TIMEOUT:
+                self.arm.clear_cmd()
+                rospy.sleep(.1)
+                self.state = move2CamPos2
 
         elif self.state == moveCam:
+            if self.checkCnt == 0:
+                self.ROI_Pos[0] = 99
+                self.checkCnt = 1
             self.mobileStade_pub.publish(5)
-
             self.ROI_regulate()
             wheelCmd = Twist()
             self.arm.set_speed(10)
-
-            if self.camMovePos[0] == 0 and self.camMovePos[1] == 0:
-                wheelCmd.linear.x = 0
-                wheelCmd.linear.y = 0
-                self.arm.clear_cmd()
-                self.moveWheel_pub.publish(wheelCmd)
-                rospy.sleep(.1)
-                self.state = watch
-                self.moveWheel_pub.publish(wheelCmd)
-                self.mobileStade_pub.publish(2)
-            else:
-                wheelCmd.linear.x = 12 * self.camMovePos[0]
-                wheelCmd.linear.y = 0
-                self.moveWheel_pub.publish(wheelCmd)
-                if not self.arm.is_busy and self.camMovePos[1] != 0:
-                    pos_y = 0.1 * self.camMovePos[1]
-                    self.arm.relative_move_pose('line', [0 ,pos_y , 0])
-                if self.camMovePos[1] == 0:
+            if self.ROI_Pos[0] != 99:
+                if self.camMovePos[0] == 0 and self.camMovePos[1] == 0:
+                    wheelCmd.linear.x = 0
+                    wheelCmd.linear.y = 0
                     self.arm.clear_cmd()
+                    self.moveWheel_pub.publish(wheelCmd)
                     rospy.sleep(.1)
+                    self.state = watch
+                    self.moveWheel_pub.publish(wheelCmd)
+                    self.mobileStade_pub.publish(2)
+                    self.checkCnt = 0
+                else:
+                    wheelCmd.linear.x = 12 * self.camMovePos[0]
+                    wheelCmd.linear.y = 0
+                    self.moveWheel_pub.publish(wheelCmd)
+                    if not self.arm.is_busy and self.camMovePos[1] != 0:
+                        pos_y = 0.1 * self.camMovePos[1]
+                        self.arm.relative_move_pose('line', [0 ,pos_y , 0])
+                    curr_y = self.arm.get_fb().group_pose.position.y
+                    if self.camMovePos[1] == 0 or curr_y > Y_MAX or curr_y < Y_MIN:
+                        self.arm.clear_cmd()
+                        rospy.sleep(.1)
+            else:
+                self.checkCnt += 1
+                if self.checkCnt > 50:
+                    self.checkCnt = 0
+                    wheelCmd.linear.x = 12
+                    wheelCmd.linear.y = 0
+                    self.moveWheel_pub.publish(wheelCmd)
+                    rospy.sleep(1)
+                    self.moveCnt += 1
+                    wheelCmd.linear.x = 0
+                    wheelCmd.linear.y = 0
+                    self.moveWheel_pub.publish(wheelCmd)
+                    print "self.moveCnt", self.moveCnt
+                    if self.moveCnt >= 15:
+                        TIMEOUT = True
+
+            if TIMEOUT:
+                self.arm.clear_cmd()
+                rospy.sleep(.1)
+                self.state = move2CamPos2
 
         elif self.state == watch:
             self.state = move2Object1
             rospy.sleep(1)
             self.VisiontoArm()
             self.move_to_vector_point(self.sandwitchPos, self.sandwitchVec)
+            if TIMEOUT:
+                self.arm.clear_cmd()
+                rospy.sleep(.1)
+                self.state = move2CamPos2
 
         elif self.state == move2Object1:
             self.state = busy
@@ -430,13 +492,14 @@ class disposingTask:
                 self.checkCnt += 1
                 self.arm.set_speed(20)
                 self.arm.move_euler('p2p', euler)
-            if self.Qrcode != '' and self.Qrcode in EXPIRED or self.checkCnt >= 8:
+            if self.Qrcode != '' and self.Qrcode in EXPIRED or self.checkCnt >= 8 or TIMEOUT:
                 self.arm.clear_cmd()
                 rospy.sleep(.1)
                 self.state = rearSafetyPos
                 self.checkCnt = 0
             elif self.Qrcode != '':
                 self.arm.clear_cmd()
+                self.checkCnt = 0
                 rospy.sleep(.1)
                 self.state = move2Shelf1
             if self.suction.is_grip is not True:
@@ -463,15 +526,14 @@ class disposingTask:
             self.state = busy
             self.nextState = move2Shelf2 
             self.getPlacePos()
-            self.pos[2] += 0.05
+            self.pos[0] -= 0.05
             self.arm.set_speed(SPEED)
-            self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, self.sucAngle, n=0, o=0, a=-0.05)
+            self.arm.noa_relative_pos('p2p', self.pos, self.euler, self.phi, self.sucAngle, n=0, o=0, a=-0.05)
 
         elif self.state == move2Shelf2:
             self.state = busy
             self.nextState = PlaceObject
             self.getPlacePos()
-            self.pos[0] -= 0.05
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == leaveShelfMiddle1:
@@ -482,6 +544,8 @@ class disposingTask:
             self.arm.set_speed(SPEED)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, self.sucAngle, n=0, o=0, a=-0.1)
             self.pickList += 1
+            if TIMEOUT:
+                self.finish = True
 
         elif self.state == move2Bin1:
             self.state = busy
@@ -507,6 +571,8 @@ class disposingTask:
             self.state = idle
             self.pickList += 1
             self.suction.gripper_vaccum_off()
+            if TIMEOUT:
+                self.finish = True
 
         # elif self.state == :
 
@@ -523,7 +589,7 @@ def count_time():
         if task_count %1 == 0:
             print(task_count)
         task_count = time.time()-task_start
-    TINEOUT = True
+    TIMEOUT = True
 
 
 if __name__ == '__main__':
@@ -570,5 +636,5 @@ if __name__ == '__main__':
 
     SuctionTask.switch_mode(False)
     # publish finish signal to wheels
-    pub.publish(3)
+    pub.publish(4)
         
