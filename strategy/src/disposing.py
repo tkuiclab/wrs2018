@@ -105,6 +105,7 @@ def ROI_regulate(ROI_Pos):
     Img_Obj_Center = (Img_Obj_x,Img_Obj_y) 
     
     if Img_Obj_Center[0]<320 and Img_Obj_Center[1]>240:
+        
         pos[0]+=0.01
         pos[1]-=0.01
     elif Img_Obj_Center[0]>320 and Img_Obj_Center[1]<240:
@@ -113,7 +114,7 @@ def ROI_regulate(ROI_Pos):
     elif Img_Obj_Center[0]<320 and Img_Obj_Center[1]<240:
         pos[0]+=0.01
         pos[1]+=0.01
-    else:        
+    elif Img_Obj_Center[0]>320 and Img_Obj_Center[1]>240:      
         pos[0]-=0.01
         pos[1]+=0.01
 
@@ -139,6 +140,7 @@ def disposing_vision_callback(msg):
     nz = msg.normal_z
 
     Vision_pos = [x,y,z,nx,ny,nz]
+    print 'Vision_pos',Vision_pos
     VisiontoArm(Vision_pos)
     # print(Vision_pos[0])
     # print(Vision_pos[1])
@@ -316,8 +318,8 @@ class Task:
             #gripper_deg
             self.state = busy
             #self.arm.relative_move_pose('line', [0, 0.1, -0.1])
-            self.suction.gripper_suction_deg(0)
-            self.suction.gripper_vaccum_on()
+            #self.suction.gripper_suction_deg(0)
+            #self.suction.gripper_vaccum_on()
             self.nextState = move2Bin
 
         elif self.state == leaveShelf:
@@ -369,7 +371,7 @@ if __name__ == '__main__':
     ROI_listener()                      # Open vision
     start_sub()
     Status_pub(0)
-    Status_pub(5)
+    Status_pub(5)Status_pub(5)
     wheel_pub(11)
     print 'next pub'
     rate = rospy.Rate(30)               # 30hz
