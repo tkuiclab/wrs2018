@@ -6,29 +6,70 @@ import os
 import sys
 import rospy
 import math
+import copy     #####
+import time     #####
 import numpy as np
+
+from math import degrees        #####
+
 from arm_control import ArmTask, SuctionTask
 from std_msgs.msg import String, Float64, Bool, Int32
 from disposing_vision.msg import coordinate_normal 
 from yolov3_sandwich.msg import ROI
 from geometry_msgs.msg import Twist
 
-idle            = 0
-busy            = 1
-initPose        = 2
-SafetyPos       = 3
-rearSafetyPos   = 4
-move2Bin        = 5
-move2Shelf      = 6
-moveIn2Shelf    = 7
-leaveBin        = 8
-leaveShelf      = 9
-move2Object     = 10
-move2PlacedPos  = 11
-pickObject      = 12
-placeObject     = 13
-tracking        = 14
-Action1         = 15
+"""  idle            = 0
+     busy            = 1
+     initPose        = 2
+     SafetyPos       = 3
+     rearSafetyPos   = 4
+     move2Bin        = 5
+     move2Shelf      = 6
+     moveIn2Shelf    = 7
+     leaveBin        = 8
+     leaveShelf      = 9
+     move2Object     = 10
+     move2PlacedPos  = 11
+     pickObject      = 12
+     placeObject     = 13
+     tracking        = 14
+     Action1         = 15 """
+
+idle              = 0
+busy              = 1
+initPose          = 2
+frontSafetyPos    = 3
+rearSafetyPos     = 4
+move2CamPos1      = 10
+move2CamPos2      = 11
+move2CamPos3      = 12
+move2CamPos4      = 13
+startCam          = 20
+moveCam           = 22
+watch             = 24
+move2Object1      = 30
+move2Object2      = 31
+move2Object3      = 32
+move2Object4      = 33
+pickObject        = 34
+leaveShelfTop1    = 40
+leaveShelfTop2    = 41
+leaveShelfTop3    = 42
+leaveShelfTop4    = 43
+move2QRcode       = 50
+move2Shelf1       = 60
+move2Shelf2       = 62
+move2Shelf3       = 63
+move2Shelf4       = 64
+move2PlacePos     = 65
+PlaceObject       = 66
+leaveShelfMiddle1 = 40
+leaveShelfMiddle2 = 40
+leaveShelfMiddle3 = 40
+leaveShelfMiddle4 = 40
+move2Bin1         = 50
+leaveBin1         = 60
+
 
 def ROS_publish_node():
     global pub
@@ -174,9 +215,10 @@ def VisiontoArm(Vision_pos):
     #print Mat_VecPos_ImgToBase
 
 class Task:
-    def __init__(self, _name = '/robotis'):
-        """Initial object."""
-        en_sim = False
+    """def __init__(self, _name = '/robotis'):
+        Initial object.
+        self.en_sim = False
+        #en_sim = False
         if len(sys.argv) >= 2:
             rospy.set_param('en_sim', sys.argv[1])
             en_sim = rospy.get_param('en_sim')
@@ -197,8 +239,42 @@ class Task:
             print "enable gazebo"
         else:
             self.suction = SuctionTask(self.name)
-            print "0"
- 
+            print "0"   
+    """
+
+    def __init__(self, _name = '/robotis'):
+        """Initial object."""
+        self.en_sim = False
+        if len(sys.argv) >= 2:
+            print(type(sys.argv[1]))
+            if sys.argv[1] == 'True':
+                rospy.set_param('self.en_sim', sys.argv[1])
+                self.en_sim = rospy.get_param('self.en_sim')
+        self.name = _name
+        self.state = initPose@property
+    def finish(self):
+        return self.pickList == self.pickListAll
+        self.nowState = initPose 
+        self.nextState = idle
+        self.reGripCnt = 0
+        self.arm = ArmTask(self.name + '_arm')
+        self.pos   = [0, 0, 0]
+        self.euler = [0, 0, 0]
+        self.phi   = 0
+        self.sucAngle = 0
+        self.sandwitchPos = [0, 0, 0]
+        self.sandwitchEu  = [0, 0, 0]
+        self.sandwitchSuc = 0
+        if self.name == 'right':
+            self.is_right = 1
+        if self.name == 'left':
+            self.is_right = -1
+        if self.en_sim:
+            self.suction = SuctionTask(self.name + '_gazebo')
+        else:
+            self.suction = SuctionTask(self.name)
+            rospy.on_shutdown(self.suction.gripper_vaccum_off)
+
     @property
     
     def finish(self):
@@ -371,7 +447,7 @@ if __name__ == '__main__':
     ROI_listener()                      # Open vision
     start_sub()
     Status_pub(0)
-    Status_pub(5)Status_pub(5)
+    Status_pub(5)
     wheel_pub(11)
     print 'next pub'
     rate = rospy.Rate(30)               # 30hz
