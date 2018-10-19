@@ -296,8 +296,8 @@ class disposingTask:
         elif self.state == move2CamPos1:
             self.state = busy
             self.nextState = move2CamPos2
-            pos = (0, 0.5, -0.3)
-            euler = (0, 0, -30)
+            pos = (0, 0.45, -0.3)
+            euler = (0, 0, -40)
             phi = 0
             self.arm.ikMove('p2p', pos, euler, phi)
             self.suction.gripper_suction_deg(0)
@@ -305,7 +305,7 @@ class disposingTask:
         elif self.state == move2CamPos2:
             self.state = busy
             self.nextState = moveCam
-            pos = (0, 0.86, -0.22)
+            pos = (0, 0.86, -0.2)
             euler = (0, 0, 90)
             phi = 0
             self.arm.ikMove('line', pos, euler, phi)
@@ -328,7 +328,7 @@ class disposingTask:
                 self.moveWheel_pub.publish(wheelCmd)
                 self.mobileStade_pub.publish(2)
             else:
-                wheelCmd.linear.x = 12 * camMovePos[0]
+                wheelCmd.linear.x = 12 * self.camMovePos[0]
                 wheelCmd.linear.y = 0
                 self.moveWheel_pub.publish(wheelCmd)
                 if not self.arm.is_busy and self.camMovePos[1] != 0:
