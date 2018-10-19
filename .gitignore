@@ -2,9 +2,8 @@
 
 *.swp
 *.pyc
-yolo.h5
-yolo_old.h5
-yolo_weights.h5
-yolov3.weights
+*.pcd
+*weights
+*.h5
 
 CATKIN_IGNORE

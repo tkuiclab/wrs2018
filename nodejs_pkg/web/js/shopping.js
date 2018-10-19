@@ -3,6 +3,7 @@ var btn = document.getElementById("myBtn");
 var order = document.getElementById("sendOrder");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+var modal1 = document.getElementById('myModal1');
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
@@ -22,12 +23,12 @@ order.onclick = function() {
   SendOrder();
   modal.style.display = "none";
 }
-// order.onclick = function() {
-//   console.log("Send Order");
-//   var request = new ROSLIB.ServiceRequest({
-//     state : 3
-//   });
-//   AssistantClient.callService(request, function(result) {
-//     console.log('Result from server: '+result.success+', '+result.info);
-//   });
-// }
+
+function PlasticPay(pic, name, product, price) {
+  document.getElementById('customPic').src      = pic;
+  document.getElementById('customName').value   = name;
+  document.getElementById('productName').value  = product;
+  document.getElementById('productPrice').value = price;
+  modal1.style.display = "block";
+  setTimeout(function () { modal1.style.display = "none"; }, 2000);
+}
