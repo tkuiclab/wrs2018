@@ -10,6 +10,7 @@ import numpy as np
 from arm_control import ArmTask, SuctionTask
 from std_msgs.msg import String, Float64, Bool, Int32
 from disposing_vision.msg import coordinate_normal 
+from yolov3_sandwich.msg import ROI
 from geometry_msgs.msg import Twist
 
 idle            = 0
@@ -29,11 +30,6 @@ placeObject     = 13
 tracking        = 14
 Action1         = 15
 
-
-def listener():
-    #rospy.init_node('disposing', anonymous=True)
-    rospy.Subscriber("/object/normal", coordinate_normal, disposing_vision_callback)
-    #rospy.spin()    
 
 def start_callback(msg):
     global is_start
@@ -66,6 +62,42 @@ def wheel_pub():
         queue_size=1)
     if msg != 0:
         wheelpub.publish(msg)
+
+
+
+def ROI_listener():
+    #rospy.init_node('disposing', anonymous=True)
+    rospy.Subscriber("/object/ROI", ROI, ROI_callback)
+    #rospy.spin()  
+
+def ROI_callback(msg):
+    global x
+    global y
+    global z
+    global nx
+    global ny
+    global nz
+    global Vision_pos
+
+    x = msg.x
+    y = msg.y
+    z = msg.z
+    nx = msg.normal_x
+    ny = msg.normal_y
+    nz = msg.normal_z
+
+
+    Vision_pos = [x,y,z,nx,ny,nz]
+    VisiontoArm(Vision_pos)
+    # print(Vision_pos[0])
+    # print(Vision_pos[1])
+    # print(Vision_pos[2])
+
+
+def listener():
+    #rospy.init_node('disposing', anonymous=True)
+    rospy.Subscriber("/object/normal", coordinate_normal, disposing_vision_callback)
+    #rospy.spin()    
 
 def disposing_vision_callback(msg):
     global x
