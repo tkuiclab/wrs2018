@@ -55,14 +55,14 @@
     </model>
 
     <model name="shelf1">
-      <pose>0.47 0.66 -0.05  0 0 1.5708</pose>
+      <pose>0.47 0.66 0  0 0 1.5708</pose>
       <static>true</static>
       <link name="shelf1">
         <visual name="visual">
           <geometry>
             <mesh>
                <scale>0.001 0.001 0.001</scale>
-               <uri>model://mobile_dual_arm/scene/meshes/shelf.STL</uri>
+               <uri>model://mobile_dual_arm/scene/meshes/shelf_dis.STL</uri>
             </mesh>
           </geometry>
         </visual>
@@ -71,7 +71,7 @@
           <geometry>
             <mesh>
                <scale>0.001 0.001 0.001</scale>
-               <uri>model://mobile_dual_arm/scene/meshes/shelfForColison.STL</uri>
+               <uri>model://mobile_dual_arm/scene/meshes/shelf_dis.STL</uri>
             </mesh>
           </geometry>
           <surface>
