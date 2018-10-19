@@ -364,7 +364,7 @@ class ArmTask:
             degrees(phi)
         )
 
-    def move_to_vector_point(sef, mode='p2p', pos=_POS, vector=[1,0,0], phi=0) # This funthion will move arm and return suction angle 
+    def move_to_vector_point(sef, mode='p2p', pos=_POS, vector=[1,0,0], phi=0): # This funthion will move arm and return suction angle 
     # Only for left arm Euler (0 0 30)
         goal_vec = -vector
         a = 0.866
