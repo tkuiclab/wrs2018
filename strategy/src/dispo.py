@@ -1,11 +1,60 @@
 #!/usr/bin/env python
-
 """Use to generate arm task and run."""
+
+TIMELIMIT = 12 *60
+
+TINEOUT   = False
+
+SPEED = 20
+
+EXPIRED = ( 'A', 'C', 'D', 'G' )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import os
 import sys
 import copy
 import time
+import threading
 from math import radians, degrees, sin, cos, pi, acos, asin
 import numpy as np
 import rospy
@@ -14,8 +63,6 @@ from arm_control import ArmTask, SuctionTask
 from disposing_vision.msg import coordinate_normal
 from yolov3_sandwich.msg import ROI
 from geometry_msgs.msg import Twist
-
-SPEED = 20
 
 QRCODEPOS = (0.06, 0.4, -0.45)
 
@@ -85,8 +132,9 @@ class disposingTask:
         self.sandwitchVec = [0, 0, 0]
         self.camMovePos = [0, 0]
         self.Qrcode     = ''
+        self.checkCnt = 0
 
-        self.ROI_Pos = [0, 0, 0, 0]
+        self.ROI_Pos = [0, 640, 0, 480]
         self.Vision_pos = [0, 0, 0, 0, 0, 0]
         if self.name == 'right':
             self.is_right = 1
@@ -103,25 +151,25 @@ class disposingTask:
             '/object/normal',
             coordinate_normal,
             self.disposing_vision_callback,
-            queue_size=2
+            queue_size=1
         )
         self.__ROI_sub = rospy.Subscriber(
             '/object/ROI',
             ROI,
             self.ROI_callback,
-            queue_size=2
+            queue_size=1
         )
         self.__Qrcode_sub =  rospy.Subscriber(
             '/barcode',
             String,
             self.Qrcode_callback,
-            queue_size=5
+            queue_size=1
         ) 
         #pub 2
         self.mobileStade_pub = rospy.Publisher(
             '/scan_black/strategy_behavior',
             Int32,
-            queue_size=2
+            queue_size=1
         )
         self.moveWheel_pub = rospy.Publisher(
             '/motion/cmd_vel',
@@ -136,6 +184,9 @@ class disposingTask:
     def Qrcode_callback(self, msg):
         self.Qrcode = msg.data
 
+    def disposing_vision_callback(self, msg):
+        self.Vision_pos = [msg.x,msg.y,msg.z,msg.normal_x,msg.normal_y,msg.normal_z]
+
     def ROI_regulate(self):
         Img_Obj_x = (self.ROI_Pos[0]+self.ROI_Pos[1])/2
         Img_Obj_y = (self.ROI_Pos[2]+self.ROI_Pos[3])/2
@@ -149,65 +200,23 @@ class disposingTask:
             self.camMovePos[0] = 0
 
         if Img_Obj_y < 230:
-            self.camMovePos[0] = 1
+            self.camMovePos[1] = 1
         elif Img_Obj_y > 250:
-            self.camMovePos[0] = -1
+            self.camMovePos[1] = -1
         else:
-            self.camMovePos[0] = 0
-            
-
-        
-        # if Img_Obj_Center[0]<320 and Img_Obj_Center[1]>240:
-        #     self.camMovePos[0]+=0.01
-        #     self.camMovePos[1]-=0.01
-        # elif Img_Obj_Center[0]>320 and Img_Obj_Center[1]<240:
-        #     self.camMovePos[0]-=0.01
-        #     self.camMovePos[1]-=0.01
-        # elif Img_Obj_Center[0]<320 and Img_Obj_Center[1]<240:
-        #     self.camMovePos[0]+=0.01
-        #     self.camMovePos[1]+=0.01
-        # elif Img_Obj_Center[0]>320 and Img_Obj_Center[1]>240:      
-        #     self.camMovePos[0]-=0.01
-        #     self.camMovePos[1]+=0.01
-
-    # def ROI_listener():
-    #     #rospy.init_node('disposing', anonymous=True)
-    #     rospy.Subscriber("/object/ROI", ROI, ROI_callback)
-
-    # def listener(self):
-    #     rospy.Subscriber("/object/normal", coordinate_normal, disposing_vision_callback)
-
-    def disposing_vision_callback(self, msg):
-        # global x
-        # global y
-        # global z
-        # global nx
-        # global ny
-        # global nz
-        # global Vision_pos
-
-        # x = msg.x
-        # y = msg.y
-        # z = msg.z
-        # nx = msg.normal_x
-        # ny = msg.normal_y
-        # nz = msg.normal_z
-
-        self.Vision_pos = [msg.x,msg.y,msg.z,msg.normal_x,msg.normal_y,msg.normal_z]
-        # print 'Vision_pos',Vision_pos
-        # VisiontoArm(Vision_pos)
+            self.camMovePos[1] = 0
 
     def VisiontoArm(self):
         Img_Pos = np.mat([[self.Vision_pos[0]],[self.Vision_pos[1]],[self.Vision_pos[2]],[1]])
         Img_nVec = np.mat([[self.Vision_pos[3]],[self.Vision_pos[4]],[self.Vision_pos[5]],[0]])
 
-        Img_PosForMove = Img_Pos + 0.08 * Img_nVec # unit vector (n-vector): 8 cm (for object catch)
+        Img_Pos = np.mat([[0], [0.01], [0.3]])
+        Img_nVec = np.mat([[0.86], [0], [-0.5]])
 
         dx = 0      # unit:meter
-        dy = -0.055 # unit:meter
-        dz = -0.12  # unit:meter   
-        
-        TransMat_EndToImg = np.mat([[-1,0,0,dx],[0,0,-1,dy],[0,-1,0,dz],[0,0,0,1]])
+        dy = 0.055 # unit:meter
+        dz = -0.12  # unit:meter 
+        TransMat_EndToImg = np.mat([[1,0,0,dx],[0,0,1,dy],[0,-1,0,dz],[0,0,0,1]])
         
         ori = left.arm.get_fb().orientation
         T0_7 = np.identity(4)
@@ -215,15 +224,17 @@ class disposingTask:
             for j in range(0,4):
                 T0_7[i][j] = ori[i*4+j]
 
-        Mat_nVec_Pos = np.mat([ [Img_nVec[0,0], Img_PosForMove[0,0]],
-                                [Img_nVec[1,0], Img_PosForMove[1,0]],
-                                [Img_nVec[2,0], Img_PosForMove[2,0]],
-                                [      0      ,        1          ]])
+        Mat_nVec_Pos = np.mat([ [Img_nVec[0,0], Img_Pos[0,0]],
+                                [Img_nVec[1,0], Img_Pos[1,0]],
+                                [Img_nVec[2,0], Img_Pos[2,0]],
+                                [      0      ,        1   ]])
     
         Mat_VecPos_ImgToBase = T0_7 * TransMat_EndToImg * Mat_nVec_Pos
         self.sandwitchPos = Mat_VecPos_ImgToBase[0:3, 1]
         self.sandwitchVec = Mat_VecPos_ImgToBase[0:3, 0]
-
+        print 'T0_7', T0_7
+        print 'self.sandwitchPos', self.sandwitchPos
+        print 'self.sandwitchVec', self.sandwitchVec
 
     @property
     def finish(self):
@@ -238,15 +249,21 @@ class disposingTask:
     def move_to_vector_point(self, pos, vector=[1,0,0]): # This funthion will move arm and return suction angle 
     # Only for left arm Euler (0 0 30)
         goal_vec = [0, 0, 0]
-        goal_vec[0], goal_vec[1], goal_vec[2] = -vector[0], -vector[1], -vector[2]
-        a = 0.866
-        b = 0.5
+        goal_vec[0], goal_vec[1], goal_vec[2] = -round(vector[0], 4), -round(vector[1], 4), -round(vector[2], 4)
+        
+        a = sin(pi/3)
+        b = sin(pi/6)
         x, y, z = goal_vec[0], goal_vec[1], goal_vec[2]
         roll_angle = 0.0
-        suc_angle = -acos(round((b*y - a*z) / (a*a + b*b), 4)) 
-        roll_angle_c = acos(round(x / sin(suc_angle), 4))
-        roll_angle_s = asin(round(-(a*y + b*z)/((a*a + b*b) * sin(suc_angle)), 4))
-        if (roll_angle_c*roll_angle_s) >= 0:
+        print 'goal_vec', goal_vec
+        suc_angle = -round(acos(round((b*y - a*z) / (a*a + b*b), 4)), 4)
+        print 'suc_angle', suc_angle
+        roll_angle_c = round(acos(round(x / sin(suc_angle), 4)), 4)
+        print 'asin', round(-(a*y + b*z)/((a*a + b*b) * sin(suc_angle)), 4)
+        roll_angle_s = round(asin(round(-(a*y + b*z) / ((a*a + b*b) * sin(suc_angle)), 4)), 4)
+        print 'roll_angle_c', roll_angle_c
+        print 'roll_angle_s', roll_angle_s
+        if roll_angle_s >= 0:
             roll_angle = roll_angle_c
         else:
             roll_angle = -roll_angle_c
@@ -296,7 +313,7 @@ class disposingTask:
         elif self.state == move2CamPos1:
             self.state = busy
             self.nextState = move2CamPos2
-            pos = (0, 0.45, -0.3)
+            pos = (0, 0.4, -0.3)
             euler = (0, 0, -40)
             phi = 0
             self.arm.ikMove('p2p', pos, euler, phi)
@@ -305,7 +322,7 @@ class disposingTask:
         elif self.state == move2CamPos2:
             self.state = busy
             self.nextState = moveCam
-            pos = (0, 0.86, -0.2)
+            pos = (0, 0.96, -0.2)
             euler = (0, 0, 90)
             phi = 0
             self.arm.ikMove('line', pos, euler, phi)
@@ -340,6 +357,7 @@ class disposingTask:
 
         elif self.state == watch:
             self.state = move2Object1
+            rospy.sleep(1)
             self.VisiontoArm()
             self.move_to_vector_point(self.sandwitchPos, self.sandwitchVec)
 
@@ -400,15 +418,30 @@ class disposingTask:
             self.state = busy
             self.nextState = checkDate
             pos = QRCODEPOS
-            euler = (0, 0, 0)
+            euler = (0, 0, -45)
             phi = 0
             self.arm.ikMove('p2p', pos, euler, phi)
 
         elif self.state == checkDate:
-            if self.pickList%2:
+            if self.checkCnt == 0:
+                self.Qrcode = ''
+            if self.arm.is_busy is not True:
+                euler = ((-40 + self.checkCnt*15), 0, 0)
+                self.checkCnt += 1
+                self.arm.set_speed(20)
+                self.arm.move_euler('p2p', euler)
+            if self.Qrcode != '' and self.Qrcode in EXPIRED or self.checkCnt >= 8:
+                self.arm.clear_cmd()
+                rospy.sleep(.1)
                 self.state = rearSafetyPos
-            else:
+                self.checkCnt = 0
+            elif self.Qrcode != '':
+                self.arm.clear_cmd()
+                rospy.sleep(.1)
                 self.state = move2Shelf1
+            if self.suction.is_grip is not True:
+                self.state == idle
+                self.pickList += 1
 
         elif self.state == frontSafetyPos:
             self.state = busy
@@ -483,8 +516,21 @@ def start_callback(msg):
         is_start = True
 
 
+def count_time():
+    task_start = time.time()
+    task_count = time.time()-task_start
+    while not rospy.is_shutdown() and task_count < TIMELIMIT:
+        if task_count %1 == 0:
+            print(task_count)
+        task_count = time.time()-task_start
+    TINEOUT = True
+
+
 if __name__ == '__main__':
     rospy.init_node('disopssing')        # enable this node
+
+    counter = threading.Thread(target = count_time)
+    counter.start()
 
     is_start = False
     rospy.Subscriber(
