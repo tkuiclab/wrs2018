@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 """Use to generate arm task and run."""
 
-TIMELIMIT = 12 *60
+TIMELIMIT = 6 *60
 
 global TIMEOUT  
 TIMEOUT = False
 
-SPEED = 20
+SPEED = 12
 
 EXPIRED = 'ABCD'
 
@@ -200,17 +200,17 @@ class disposingTask:
         Img_Obj_y = (self.ROI_Pos[2]+self.ROI_Pos[3])/2
         # Img_Obj_Center = (Img_Obj_x,Img_Obj_y) 
 
-        if Img_Obj_x < 250:
-            self.camMovePos[0] = -1
-        elif Img_Obj_x > 290:
+        if Img_Obj_x < 200:
             self.camMovePos[0] = 1
+        elif Img_Obj_x > 340:
+            self.camMovePos[0] = -1
         else:
             self.camMovePos[0] = 0
 
-        if Img_Obj_y < 220:
-            self.camMovePos[1] = 1
-        elif Img_Obj_y > 260:
+        if Img_Obj_y < 180:
             self.camMovePos[1] = -1
+        elif Img_Obj_y > 300:
+            self.camMovePos[1] = 1
         else:
             self.camMovePos[1] = 0
 
@@ -354,7 +354,7 @@ class disposingTask:
         elif self.state == move2CamPos3:
             self.state = busy
             self.nextState = moveCam
-            pos = (0, 0.96, -0.2)
+            pos = (0, 0.965, -0.2)
             euler = (0, 0, 90)
             phi = 0
             self.arm.ikMove('line', pos, euler, phi)
@@ -368,6 +368,7 @@ class disposingTask:
             if self.checkCnt == 0:
                 self.ROI_Pos[0] = 99
                 self.checkCnt = 1
+
             self.mobileStade_pub.publish(5)
             self.ROI_regulate()
             wheelCmd = Twist()
@@ -379,6 +380,7 @@ class disposingTask:
                     self.arm.clear_cmd()
                     self.moveWheel_pub.publish(wheelCmd)
                     rospy.sleep(.1)
+                    print 'state1',  wheelCmd
                     self.state = watch
                     self.moveWheel_pub.publish(wheelCmd)
                     self.mobileStade_pub.publish(2)
@@ -387,27 +389,40 @@ class disposingTask:
                     wheelCmd.linear.x = 12 * self.camMovePos[0]
                     wheelCmd.linear.y = 0
                     self.moveWheel_pub.publish(wheelCmd)
+                    print 'state2', wheelCmd
                     if not self.arm.is_busy and self.camMovePos[1] != 0:
-                        pos_y = 0.1 * self.camMovePos[1]
-                        self.arm.relative_move_pose('line', [0 ,pos_y , 0])
+                        # pos_y = 0.1 * self.camMovePos[1]
+                        if self.camMovePos[1] > 0:
+                            pos = (0, 1.035, -0.2)
+                            euler = (0, 0, 90)
+                            phi = 0
+                            self.arm.ikMove('line', pos, euler, phi)
+                        else:
+                            pos = (0, 0.965, -0.2)
+                            euler = (0, 0, 90)
+                            phi = 0
+                            self.arm.ikMove('line', pos, euler, phi)
+                        # self.arm.relative_move_pose('line', [0 ,pos_y , 0])
                     curr_y = self.arm.get_fb().group_pose.position.y
-                    if self.camMovePos[1] == 0 or curr_y > Y_MAX or curr_y < Y_MIN:
+                    if  self.arm.is_busy and self.camMovePos[1] == 0 or curr_y > Y_MAX or curr_y < Y_MIN:
                         self.arm.clear_cmd()
                         rospy.sleep(.1)
             else:
                 self.checkCnt += 1
                 if self.checkCnt > 30:
-                    self.checkCnt = 0
+                    self.checkCnt = 1
                     wheelCmd.linear.x = 12
                     wheelCmd.linear.y = 0
                     rate = rospy.Rate(30)
                     for i in range(60):
                         self.moveWheel_pub.publish(wheelCmd)
+                        print 'state3', wheelCmd
                         rate.sleep()
                     self.moveCnt += 1
                     wheelCmd.linear.x = 0
                     wheelCmd.linear.y = 0
                     self.moveWheel_pub.publish(wheelCmd)
+                    print 'state4', wheelCmd
                     print "self.moveCnt", self.moveCnt
                     if self.moveCnt >= 1:
                         TIMEOUT = True
@@ -472,7 +487,8 @@ class disposingTask:
                     self.state = busy
                     self.nextState = leaveShelfTop1
                 else:
-                    self.state = missObj
+                    self.suction.gripper_vaccum_off
+                    self.state = move2CamPos3
 
         elif self.state == leaveShelfTop1:
             self.state = busy
