@@ -222,8 +222,8 @@ class disposingTask:
         Img_Pos = np.mat([[self.Vision_pos[0]],[self.Vision_pos[1]],[self.Vision_pos[2]],[1]])
         Img_nVec = np.mat([[self.Vision_pos[3]],[self.Vision_pos[4]],[self.Vision_pos[5]],[0]])
 
-        Img_Pos = np.mat([[0], [0.01], [0.3]])
-        Img_nVec = np.mat([[0.86], [0], [-0.5]])
+        # Img_Pos = np.mat([[0], [0.01], [0.3]])
+        # Img_nVec = np.mat([[0.86], [0], [-0.5]])
 
         dx = 0      # unit:meter
         dy = 0.055 # unit:meter
