@@ -183,7 +183,11 @@ class disposingTask:
             Twist,
             queue_size=1
         )
-
+        self.mobileMove_pub = rospy.Publisher(
+            'scan_black/strategy_forward',
+            Int32,
+            queue_size=1
+        )
 
     def ROI_callback(self, msg):
         self.ROI_Pos = [msg.x_min,msg.x_Max,msg.y_min,msg.y_Max]
@@ -369,27 +373,31 @@ class disposingTask:
                 self.ROI_Pos[0] = 99
                 self.checkCnt = 1
 
-            self.mobileStade_pub.publish(5)
+            self.mobileStade_pub.publish(13)
             self.ROI_regulate()
             wheelCmd = Twist()
             self.arm.set_speed(10)
             if self.ROI_Pos[0] != 99:
                 if self.camMovePos[0] == 0 and self.camMovePos[1] == 0:
-                    wheelCmd.linear.x = 0
-                    wheelCmd.linear.y = 0
+                    # wheelCmd.linear.x = 0
+                    # wheelCmd.linear.y = 0
                     self.arm.clear_cmd()
-                    self.moveWheel_pub.publish(wheelCmd)
+                    # self.moveWheel_pub.publish(wheelCmd)
+                    self.mobileStade_pub.publish(2)
                     rospy.sleep(.1)
-                    print 'state1',  wheelCmd
+                    # print 'state1',  wheelCmd
                     self.state = watch
-                    self.moveWheel_pub.publish(wheelCmd)
+                    # self.moveWheel_pub.publish(wheelCmd)
                     self.mobileStade_pub.publish(2)
                     self.checkCnt = 0
                 else:
-                    wheelCmd.linear.x = 12 * self.camMovePos[0]
-                    wheelCmd.linear.y = 0
-                    self.moveWheel_pub.publish(wheelCmd)
-                    print 'state2', wheelCmd
+                    # wheelCmd.linear.x = 12 * self.camMovePos[0]
+                    # wheelCmd.linear.y = 0
+                    msg = Int32()
+                    msg.data = self.camMovePos[0]
+                    self.mobileMove_pub.publish(msg)
+                    # self.moveWheel_pub.publish(wheelCmd)
+                    # print 'state2', wheelCmd
                     if not self.arm.is_busy and self.camMovePos[1] != 0:
                         # pos_y = 0.1 * self.camMovePos[1]
                         if self.camMovePos[1] > 0:
@@ -415,14 +423,18 @@ class disposingTask:
                     wheelCmd.linear.y = 0
                     rate = rospy.Rate(30)
                     for i in range(60):
-                        self.moveWheel_pub.publish(wheelCmd)
-                        print 'state3', wheelCmd
+                        msg = Int32()
+                        msg.data = self.camMovePos[0]
+                        self.mobileMove_pub.publish(msg)
+                        # self.moveWheel_pub.publish(wheelCmd)
+                        # print 'state3', wheelCmd
                         rate.sleep()
                     self.moveCnt += 1
-                    wheelCmd.linear.x = 0
-                    wheelCmd.linear.y = 0
-                    self.moveWheel_pub.publish(wheelCmd)
-                    print 'state4', wheelCmd
+                    # wheelCmd.linear.x = 0
+                    # wheelCmd.linear.y = 0
+                    self.mobileStade_pub.publish(2)
+                    # self.moveWheel_pub.publish(wheelCmd)
+                    # print 'state4', wheelCmd
                     print "self.moveCnt", self.moveCnt
                     if self.moveCnt >= 1:
                         TIMEOUT = True

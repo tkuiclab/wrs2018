@@ -30,7 +30,7 @@ CROSS = 9
 INIT = 10
 DELIVERY = 11
 ORDER = 12
-COUNTER_MOVE = 13
+ARM_MOVE = 13
 
 # FLAG 
 CONTROL = 'PIDCONTROL'
@@ -169,11 +169,11 @@ class Strategy(object):
                 self.Change_Behavior()
             self.Init_Strategy()
             print('Init')
-        elif(self._param.behavior == COUNTER_MOVE):
+        elif(self._param.behavior == ARM_MOVE):
             if(self._param.loadParam):
                 self.Change_Behavior()
-            # self.Counter_Move_Strategy()
-            print('COUNTER_MOVE')
+            self.ARM_MOVE_Strategy()
+            print('ARM_MOVE')
         else:
             print("Don't have Behavior")
             self.Robot_Stop()
@@ -559,6 +559,14 @@ class Strategy(object):
                     self._param.behavior = CROSS
                 else:
                     self._param.behavior = MOBILE_ROBOT
+    
+    def ARM_MOVE_Strategy(self):
+        if(self._param.armMove == 1):
+            self.Robot_Vel([12,0,0])
+        elif(self._param.armMove == -1):
+            self.Robot_Vel([-12,0,0])
+        else:
+            print('arm move fuck !!!!')
 
             
     def Deg2Rad(self,deg):

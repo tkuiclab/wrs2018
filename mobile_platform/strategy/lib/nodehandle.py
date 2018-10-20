@@ -103,6 +103,8 @@ class NodeHandle(object):
 
         self.__stopPoint = 999
 
+        self.__armMove = 0
+
         self.Load_Param()
 
         """ topic pub """
@@ -118,6 +120,8 @@ class NodeHandle(object):
         rospy.Subscriber("scan_black/strategy_start",Bool,self.Sub_Start)
         rospy.Subscriber("scan_black/strategy_behavior",Int32,self.Sub_Behavior)
         rospy.Subscriber("scan_black/strategy_save",Bool,self.Save_Param)
+
+        rospy.Subscriber("scan_black/strategy_forward",Int32,self.Sub_Forward)
 
         rospy.Subscriber("scan_black/scaninfo",scaninfo,self.Sub_ScanInfo)
         rospy.Subscriber("scan_black/qrcode_angle",Pose2D,self.Sub_QRAngle)
@@ -144,6 +148,8 @@ class NodeHandle(object):
         self.__qrang = msg.data
     def Sub_RFID(self,msg):
         self.__stopPoint = msg.data
+    def Sub_Forward(self,msg):
+        self.__armMove = msg.data
 
     def Save_Param(self,msg):
         # self.Set_Param()
@@ -393,6 +399,16 @@ class NodeHandle(object):
     def stopPoint(self, value):
         self.__stopPoint = value
     
+
+
+    ''' ARM Move '''
+    @property
+    def armMove(self):
+        return self.__armMove
+
+    @armMove.setter
+    def armMove(self, value):
+        self.__armMove = value
     
     
 
