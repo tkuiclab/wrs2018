@@ -204,9 +204,9 @@ class disposingTask:
         Img_Obj_y = (self.ROI_Pos[2]+self.ROI_Pos[3])/2
         # Img_Obj_Center = (Img_Obj_x,Img_Obj_y) 
 
-        if Img_Obj_x < 200:
+        if Img_Obj_x < 180:
             self.camMovePos[0] = 1
-        elif Img_Obj_x > 340:
+        elif Img_Obj_x > 320:
             self.camMovePos[0] = -1
         else:
             self.camMovePos[0] = 0
@@ -361,7 +361,7 @@ class disposingTask:
             pos = (0, 0.965, -0.2)
             euler = (0, 0, 90)
             phi = 0
-            self.arm.ikMove('line', pos, euler, phi)
+            self.arm.ikMove('p2p', pos, euler, phi)
             self.suction.gripper_suction_deg(-90)
             if TIMEOUT:
                 self.arm.clear_cmd()
@@ -468,9 +468,9 @@ class disposingTask:
             self.nextState = move2Object2
             pos = self.sandwitchPos[:]
             pos[2] = -0.3
-            phi = -30
+            phi = -10
             self.arm.set_speed(SPEED)
-            self.arm.ikMove('line', pos, self.sandwitchEu, phi)
+            self.arm.ikMove('p2p', pos, self.sandwitchEu, phi)
             self.suction.gripper_suction_deg(self.sandwitchSuc)
 
         elif self.state == move2Object2:
@@ -478,13 +478,13 @@ class disposingTask:
             self.nextState = pickObject
             self.phi = -30
             self.arm.set_speed(SPEED)
-            self.arm.noa_relative_pos('line', self.sandwitchPos, self.sandwitchEu, self.phi, self.sandwitchSuc, n=0, o=0, a=-0.05)
+            self.arm.noa_relative_pos('line', self.sandwitchPos, self.sandwitchEu, self.phi, self.sandwitchSuc, n=0, o=0, a=-0.02)
 
         elif self.state == pickObject:
             self.state = grasping
             self.suction.gripper_vaccum_on()
             self.arm.set_speed(20)
-            self.arm.noa_move_suction('line', self.sandwitchSuc, n=0, o=0, a=0.1)
+            self.arm.noa_move_suction('line', self.sandwitchSuc, n=0, o=0, a=0.15)
             rospy.sleep(.1)
 
         elif self.state == grasping:

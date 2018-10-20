@@ -577,4 +577,4 @@ if __name__ == '__main__':
 
     SuctionTask.switch_mode(False)
     # publish finish signal to wheels
-    pub.publish(3)
+    pub.publish(4)
