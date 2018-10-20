@@ -8,12 +8,12 @@ TIMEOUT = False
 
 SPEED = 20
 
-EXPIRED = ( 'A', 'C', 'D', 'G' )
+EXPIRED = 'ABCD'
 
 
 
 
-Y_MAX = 1.05
+Y_MAX = 1.04
 Y_MIN = 9.05
 
 
@@ -398,14 +398,16 @@ class disposingTask:
                     self.checkCnt = 0
                     wheelCmd.linear.x = 12
                     wheelCmd.linear.y = 0
-                    self.moveWheel_pub.publish(wheelCmd)
-                    rospy.sleep(1)
+                    rate = rospy.Rate(30)
+                    for i in range(60):
+                        self.moveWheel_pub.publish(wheelCmd)
+                        rate.sleep()
                     self.moveCnt += 1
                     wheelCmd.linear.x = 0
                     wheelCmd.linear.y = 0
                     self.moveWheel_pub.publish(wheelCmd)
                     print "self.moveCnt", self.moveCnt
-                    if self.moveCnt >= 15:
+                    if self.moveCnt >= 10:
                         TIMEOUT = True
 
             if TIMEOUT:
