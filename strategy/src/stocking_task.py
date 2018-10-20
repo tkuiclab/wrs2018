@@ -12,8 +12,12 @@ from std_msgs.msg import Bool, Int32
 from arm_control import ArmTask, SuctionTask
 
 
+
+
+
 PICKORDER = 0
-SPEED     = 60
+SPEED_R     = 60
+SPEED_L     = 70
 LUNCHBOX_H = 0.045
 # The lesser one
 lunchQuan = 1              
@@ -137,8 +141,10 @@ class stockingTask:
         self.sucAngle = 0
         if self.name == 'right':
             self.is_right = 1
+            self.speed = SPEED_R
         if self.name == 'left':
             self.is_right = -1
+            self.speed = SPEED_L
         if self.en_sim:
             self.suction = SuctionTask(self.name + '_gazebo')
         else:
@@ -296,19 +302,19 @@ class stockingTask:
         elif self.state == safePose3:
             self.state = busy
             self.nextState = rearSafetyPos
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.jointMove(0, (0, -1.2, 0, 2.4, 0, -1.2, 0))
 
         elif self.state == safePose4:
             self.state = busy
             self.nextState = rearSafetyPos
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.jointMove(0, (0, -1.2, 0, 2.4, 0, -1.2, 0))
 
         elif self.state == initPose:
             self.state = busy
             self.nextState = idle
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.jointMove(0, (0, -1, 0, 1.57, 0, -0.57, 0))
             self.suction.gripper_suction_deg(0)
 
@@ -323,14 +329,14 @@ class stockingTask:
                 self.euler[1] = -25
             elif 'lunchbox' in objectName[self.pickList]:
                 self.pos[2] = -0.45
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == rearSafetyPos:
             self.state = busy
             self.nextState = move2Bin
             self.getRearSafetyPos()
-            # self.arm.set_speed(SPEED)
+            # self.arm.set_speed(self.speed)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == rearSafetyPos2:
@@ -338,7 +344,7 @@ class stockingTask:
             self.nextState = move2Shelf
             self.getRearSafetyPos()
             self.euler[0] = -180
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2Bin:
@@ -350,7 +356,7 @@ class stockingTask:
                 self.euler[1] = -16
             else:
                 self.euler[1] = -10
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
  
         elif self.state == move2Shelf:
@@ -369,7 +375,7 @@ class stockingTask:
                 self.pos[2] += 0.05
             else:
                 self.pos[2] += 0.1
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
             if 'riceball' not in objectName[self.pickList]:
                 self.suction.gripper_suction_deg(-60)
@@ -382,7 +388,7 @@ class stockingTask:
             self.nextState = moveIn2Shelf
             self.getPlacePos()
             self.pos[2] += 0.1
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             print 'euler = ', self.euler
             self.arm.move_euler('line', self.euler)
             self.suction.gripper_suction_deg(self.sucAngle)
@@ -398,7 +404,7 @@ class stockingTask:
             if self.pickList == 5:
                 self.arm.set_speed(10)
             else:    
-                self.arm.set_speed(SPEED)
+                self.arm.set_speed(self.speed)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
             if 'riceball' not in objectName[self.pickList]:
                 self.suction.gripper_suction_deg(-90)
@@ -406,7 +412,7 @@ class stockingTask:
         elif self.state == leaveBin:
             self.state = busy
             self.nextState = frontSafetyPos
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.getObjectPos()
             self.pos[2] = -0.47
             if 'drink' in objectName[self.pickList]:
@@ -422,7 +428,7 @@ class stockingTask:
         elif self.state == leaveShelf:
             self.state = busy
             self.nextState = idle
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             # if objectName[self.pickList] == 'riceballXX':
             #     self.arm.noa_move_suction('line', suction_angle=0, n=0.08, o=0, a=-0.22)
             # else:
@@ -437,7 +443,7 @@ class stockingTask:
                 self.euler[0] = 0
             self.pos[0] = 0.36
             self.pos[2] += 0.1
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, suction_angle=0, n=0, o=0, a=-0.15)
             self.pickList += 1
             self.suction.gripper_suction_deg(0)
@@ -446,7 +452,7 @@ class stockingTask:
             self.state = busy
             self.nextState = pickObject
             self.getObjectPos()
-            self.arm.set_speed(SPEED)
+            self.arm.set_speed(self.speed)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == move2PlacedPos:
@@ -460,7 +466,7 @@ class stockingTask:
             if 'lunchbox' in objectName[self.pickList]:
                 self.arm.set_speed(80)
             else:    
-                self.arm.set_speed(SPEED)
+                self.arm.set_speed(self.speed)
             self.arm.ikMove('line', self.pos, self.euler, self.phi)
 
         elif self.state == pickObject:
