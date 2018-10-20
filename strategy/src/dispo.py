@@ -86,6 +86,7 @@ move2Object1      = 30
 move2Object2      = 31
 move2Object3      = 32
 move2Object4      = 33
+move2Object0      = 36
 pickObject        = 34
 grasping          = 35
 leaveShelfTop1    = 40
@@ -298,14 +299,13 @@ class disposingTask:
             self.suction.gripper_vaccum_off()                      # must be include in your strategy 
             return                                                 # must be include in your strategy 
  
-        if self.state == idle: 
+        if self.state == idle:
+            if TIMEOUT:
+                self.finish = True 
             if self.finish: 
                 return 
             else: 
                 self.state = move2CamPos1 
-            if TIMEOUT:
-                self.finish = True
-                 
          
         elif self.state == busy: 
             if self.arm.is_busy: 
@@ -319,7 +319,9 @@ class disposingTask:
             self.state = busy
             self.nextState = move2CamPos1 
             self.suction.gripper_suction_deg(0)
+            self.arm.set_speed(SPEED)
             if TIMEOUT:
+                self.nextState = idle
                 self.finish = True
 
         elif self.state == move2CamPos1:
@@ -329,11 +331,11 @@ class disposingTask:
             euler = (0, 0, -35)
             phi = 0
             if TIMEOUT:
-                self.finish = True
                 self.mode = 'line'
             self.arm.ikMove(self.mode, pos, euler, phi)
             self.suction.gripper_suction_deg(0)
             if TIMEOUT:
+                self.nextState = idle
                 self.finish = True
 
         elif self.state == move2CamPos2:
@@ -347,7 +349,7 @@ class disposingTask:
             if TIMEOUT:
                 self.arm.clear_cmd()
                 rospy.sleep(.1)
-                self.state = move2CamPos1
+                self.state = move2Object0
 
         elif self.state == move2CamPos3:
             self.state = busy
@@ -360,7 +362,7 @@ class disposingTask:
             if TIMEOUT:
                 self.arm.clear_cmd()
                 rospy.sleep(.1)
-                self.state = move2CamPos2
+                self.state = move2Object0
 
         elif self.state == moveCam:
             if self.checkCnt == 0:
@@ -394,7 +396,7 @@ class disposingTask:
                         rospy.sleep(.1)
             else:
                 self.checkCnt += 1
-                if self.checkCnt > 50:
+                if self.checkCnt > 30:
                     self.checkCnt = 0
                     wheelCmd.linear.x = 12
                     wheelCmd.linear.y = 0
@@ -407,24 +409,33 @@ class disposingTask:
                     wheelCmd.linear.y = 0
                     self.moveWheel_pub.publish(wheelCmd)
                     print "self.moveCnt", self.moveCnt
-                    if self.moveCnt >= 10:
+                    if self.moveCnt >= 1:
                         TIMEOUT = True
 
             if TIMEOUT:
                 self.arm.clear_cmd()
                 rospy.sleep(.1)
-                self.state = move2CamPos2
+                self.state = move2Object0
 
         elif self.state == watch:
-            self.state = move2Object1
+            self.state = move2Object0
             rospy.sleep(1)
             self.VisiontoArm()
             self.move_to_vector_point(self.sandwitchPos, self.sandwitchVec)
             if TIMEOUT:
                 self.arm.clear_cmd()
                 rospy.sleep(.1)
-                self.state = move2CamPos2
-
+                self.state = move2Object0
+        
+        elif self.state == move2Object0:
+            self.state = busy
+            self.nextState = move2Object1
+            # self.arm.singleJointMove(index=0, pos=0)
+            self.arm.set_speed(SPEED)
+            self.arm.jointMove(0, (0, radians(-110), 0, radians(84), 0, radians(-50), 0))
+            if TIMEOUT:
+                self.nextState = move2CamPos1
+            
         elif self.state == move2Object1:
             self.state = busy
             self.nextState = move2Object2
@@ -547,6 +558,7 @@ class disposingTask:
             self.arm.noa_relative_pos('line', self.pos, self.euler, self.phi, self.sucAngle, n=0, o=0, a=-0.1)
             self.pickList += 1
             if TIMEOUT:
+                self.nextState = idle
                 self.finish = True
 
         elif self.state == move2Bin1:
@@ -574,6 +586,7 @@ class disposingTask:
             self.pickList += 1
             self.suction.gripper_vaccum_off()
             if TIMEOUT:
+                self.nextState = idle
                 self.finish = True
 
         # elif self.state == :
