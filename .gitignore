@@ -4,3 +4,4 @@
 *.pyc
 
 CATKIN_IGNORE
+node_modules
